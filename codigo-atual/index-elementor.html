@@ -1845,13 +1845,27 @@
    Para trocar onde os frames ficam hospedados, mexa só em FRAME_BASE.
    Para ajustar o quanto aparece, mexa em --portrait-opacity / --hero-veil no CSS. */
 (function () {
-  /* Onde os frames moram. Em produção vêm do CDN do jsDelivr, que serve
-     direto do repositório público do GitHub — de graça e com cache global.
-     Rodando local (preview.html), usa a pasta ao lado, para poder testar
-     sem internet. Trocar @main por uma tag (@v1) congela a versão. */
-  var FRAME_BASE = /^(localhost|127\.0\.0\.1|)$/.test(location.hostname)
-    ? "./assets/frames/"
-    : "https://cdn.jsdelivr.net/gh/SkotAlexsander/pixelmartins-site@main/assets/frames/";
+  /* ---- Onde os frames moram ----------------------------------------------
+     Três endereços possíveis, escolhidos automaticamente:
+
+       LOCAL  quando roda em preview.html (localhost ou file://)
+       WP     o próprio domínio — preferido, porque não depende de terceiro
+       CDN    jsDelivr servindo o repo público do GitHub — a rede de segurança
+
+     O código testa o WP baixando um frame. Se responder, usa o WP daí em
+     diante; se der 404 (ainda não subiu) ou demorar, cai no CDN. Ou seja:
+     dá para subir as imagens pro WordPress quando quiser, sem tocar no código
+     de novo — e enquanto não subir, o site não fica sem o efeito.
+
+     Se você subir pela BIBLIOTECA DE MÍDIA em vez do gerenciador de arquivos,
+     o caminho tem pasta de ano/mês: troque WP_BASE por algo como
+     "https://pixelmartins.com/wp-content/uploads/2026/08/". */
+  var LOCAL_BASE = "./assets/frames/";
+  var WP_BASE    = "https://pixelmartins.com/wp-content/uploads/retrato/";
+  var CDN_BASE   = "https://cdn.jsdelivr.net/gh/SkotAlexsander/pixelmartins-site@main/assets/frames/";
+  var TESTE_MS   = 2500;    // se o teste do WP não responder nisso, usa o CDN
+
+  var FRAME_BASE  = LOCAL_BASE;   // definido de verdade lá embaixo, antes de iniciar
   var FRAME_COUNT = 150;
   var EASING      = 0.10;   // 0.05 = bem preguiçoso · 0.25 = mais colado no scroll
   var MOBILE_MAX  = 820;    // até esta largura, mostra 1 frame parado (economia de dados)
@@ -1955,11 +1969,14 @@
   function carregar(i, aoTerminar) {
     var img = new Image();
     img.decoding = "async";
-    /* O jsDelivr manda Access-Control-Allow-Origin: *, então dá para marcar como
-       anônimo. Sem isso o canvas ficaria "tainted" e não daria mais para ler os
-       pixels — que é justamente como o dev/verificar-animacao.js prova que a
-       animação está viva. */
-    img.crossOrigin = "anonymous";
+    /* crossOrigin só quando a imagem vem de OUTRO domínio (o CDN). Serve para o
+       canvas não ficar "tainted" — é assim que o dev/verificar-animacao.js
+       consegue ler os pixels e provar que a animação está viva.
+       Em imagem do próprio domínio, pedir CORS é inútil e, se o servidor não
+       mandar o cabeçalho, a imagem simplesmente não carrega. */
+    if (FRAME_BASE.indexOf("//") >= 0 && FRAME_BASE.indexOf(location.origin) !== 0) {
+      img.crossOrigin = "anonymous";
+    }
     img.onload = function () {
       carregado[i] = true;
       if (aoTerminar) aoTerminar();
@@ -1978,40 +1995,74 @@
 
   medir();
 
-  if (leve) {
-    // Sem animação: um único frame do meio, parado. 13 KB em vez de 1,9 MB.
-    // Presença fixa no meio-termo, já que aqui não há scroll para modular.
-    document.documentElement.style.setProperty("--portrait-now", "0.22");
-    carregar(Math.floor(FRAME_COUNT / 2));
-    window.addEventListener("resize", function () {
-      medir();
-      var i = maisProximoPronto(0);
-      if (i >= 0) desenhar(i);
-    });
-    return;
-  }
+  /* Só roda depois que o endereço dos frames estiver decidido. */
+  function iniciar(base, origem) {
+    FRAME_BASE = base;
+    if (window.console && console.info) console.info("[retrato] frames via " + origem);
 
-  /* Baixa em duas ondas: primeiro um esqueleto espaçado (a animação já roda
-     inteira, só que grosseira), depois preenche o resto. Evita 150 requisições
-     simultâneas brigando por banda. */
-  var pendentes = 0;
-  function segundaOnda() {
-    if (--pendentes > 0) return;
-    for (var i = 0; i < FRAME_COUNT; i++) if (!frames[i]) carregar(i);
-  }
-  for (var i = 0; i < FRAME_COUNT; i += 6) pendentes++;
-  for (var j = 0; j < FRAME_COUNT; j += 6) carregar(j, segundaOnda);
-
-  window.addEventListener("scroll", aoRolar, { passive: true });
-  window.addEventListener("resize", function () { medir(); acordar(); });
-  document.addEventListener("visibilitychange", function () {
-    if (document.hidden) {
-      if (loop !== null) { cancelAnimationFrame(loop); loop = null; }
-    } else {
-      aoRolar();
+    if (leve) {
+      // Sem animação: um único frame do meio, parado. 13 KB em vez de 1,9 MB.
+      // Presença fixa no meio-termo, já que aqui não há scroll para modular.
+      document.documentElement.style.setProperty("--portrait-now", "0.22");
+      carregar(Math.floor(FRAME_COUNT / 2));
+      window.addEventListener("resize", function () {
+        medir();
+        var i = maisProximoPronto(0);
+        if (i >= 0) desenhar(i);
+      });
+      return;
     }
-  });
-  aoRolar();
+
+    /* Baixa em duas ondas: primeiro um esqueleto espaçado (a animação já roda
+       inteira, só que grosseira), depois preenche o resto. Evita 150 requisições
+       simultâneas brigando por banda. */
+    var pendentes = 0;
+    function segundaOnda() {
+      if (--pendentes > 0) return;
+      for (var i = 0; i < FRAME_COUNT; i++) if (!frames[i]) carregar(i);
+    }
+    for (var i = 0; i < FRAME_COUNT; i += 6) pendentes++;
+    for (var j = 0; j < FRAME_COUNT; j += 6) carregar(j, segundaOnda);
+
+    window.addEventListener("scroll", aoRolar, { passive: true });
+    window.addEventListener("resize", function () { medir(); acordar(); });
+    document.addEventListener("visibilitychange", function () {
+      if (document.hidden) {
+        if (loop !== null) { cancelAnimationFrame(loop); loop = null; }
+      } else {
+        aoRolar();
+      }
+    });
+    aoRolar();
+  }
+
+  /* ---- Escolha do endereço -------------------------------------------------
+     Local resolve na hora. Em produção, testa o WordPress baixando um frame:
+     se vier, o site passa a servir as próprias imagens; se der 404 ou demorar,
+     usa o CDN. Custa uma requisição de ~13 KB, e ela não é desperdiçada — vira
+     o frame 1, que já fica no cache do navegador para o carregamento seguinte. */
+  if (/^(localhost|127\.0\.0\.1|)$/.test(location.hostname)) {
+    iniciar(LOCAL_BASE, "pasta local");
+  } else {
+    var decidido = false;
+    function decidir(base, origem) {
+      if (decidido) return;
+      decidido = true;
+      clearTimeout(prazo);
+      iniciar(base, origem);
+    }
+    var prazo = setTimeout(function () {
+      decidir(CDN_BASE, "CDN (o teste do WordPress demorou)");
+    }, TESTE_MS);
+
+    /* Sem crossOrigin: a sonda só quer saber se o arquivo existe, e imagem
+       comum não precisa de CORS para carregar. Pedir CORS aqui geraria erro
+       no console e falso negativo se o servidor não mandasse o cabeçalho. */
+    var teste = new Image();
+    teste.onload  = function () { decidir(WP_BASE,  "WordPress"); };
+    teste.onerror = function () { decidir(CDN_BASE, "CDN (WordPress não tem os frames)"); };
+    teste.src = WP_BASE + "frame-001.jpg";
+  }
 })();
 </script>
 
