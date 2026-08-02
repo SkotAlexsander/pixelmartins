@@ -1845,7 +1845,13 @@
    Para trocar onde os frames ficam hospedados, mexa só em FRAME_BASE.
    Para ajustar o quanto aparece, mexa em --portrait-opacity / --hero-veil no CSS. */
 (function () {
-  var FRAME_BASE  = "./assets/frames/";  // precisa terminar com /
+  /* Onde os frames moram. Em produção vêm do CDN do jsDelivr, que serve
+     direto do repositório público do GitHub — de graça e com cache global.
+     Rodando local (preview.html), usa a pasta ao lado, para poder testar
+     sem internet. Trocar @main por uma tag (@v1) congela a versão. */
+  var FRAME_BASE = /^(localhost|127\.0\.0\.1|)$/.test(location.hostname)
+    ? "./assets/frames/"
+    : "https://cdn.jsdelivr.net/gh/SkotAlexsander/pixelmartins-site@main/assets/frames/";
   var FRAME_COUNT = 150;
   var EASING      = 0.10;   // 0.05 = bem preguiçoso · 0.25 = mais colado no scroll
   var MOBILE_MAX  = 820;    // até esta largura, mostra 1 frame parado (economia de dados)

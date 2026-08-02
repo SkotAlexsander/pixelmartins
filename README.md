@@ -24,10 +24,25 @@ acelerando o repetitivo.
 ```
 portfolio-pixelmartins/
 ├── README.md          ← este arquivo
-├── codigo-atual/      ← o fonte que está NO AR (fonte da verdade)
+├── codigo-atual/      ← o fonte que se cola no widget (fonte da verdade)
+├── assets/frames/     ← 150 frames do retrato do fundo (servidos via jsDelivr)
 ├── backup/            ← cópia datada antes de cada alteração — NUNCA sobrescrever
-└── docs/              ← decisões, plano de conexão com o WordPress, laudos
+├── dev/               ← ferramentas de teste local (não vão pro site)
+└── docs/              ← decisões, conexão com o WordPress, animação
 ```
+
+**Este é um repositório git próprio**, separado do repo-mãe do agente (que o
+ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-site`.
+
+## Como publicar uma alteração
+
+1. Editar `codigo-atual/index-elementor.html` (backup datado antes, em `backup/`).
+2. `node dev/montar-preview.js` + `node dev/verificar-animacao.js` → tem de dar **PASSOU**.
+3. `git commit` + `git push` — isso **já atualiza os frames** servidos pelo jsDelivr.
+4. Colar o conteúdo de `codigo-atual/index-elementor.html` no widget HTML do Elementor.
+
+> O passo 4 continua manual: o Elementor guarda a página em `_elementor_data`,
+> um postmeta que a REST API não expõe. Ver [docs/conexao-wordpress.md](docs/conexao-wordpress.md).
 
 **Regra de ouro:** antes de mexer em qualquer arquivo de `codigo-atual/`, copiar
 pra `backup/` com data no nome (`AAAA-MM-DD-nome.html`). Não há build nem git
