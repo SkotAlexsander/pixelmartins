@@ -1955,6 +1955,11 @@
   function carregar(i, aoTerminar) {
     var img = new Image();
     img.decoding = "async";
+    /* O jsDelivr manda Access-Control-Allow-Origin: *, então dá para marcar como
+       anônimo. Sem isso o canvas ficaria "tainted" e não daria mais para ler os
+       pixels — que é justamente como o dev/verificar-animacao.js prova que a
+       animação está viva. */
+    img.crossOrigin = "anonymous";
     img.onload = function () {
       carregado[i] = true;
       if (aoTerminar) aoTerminar();

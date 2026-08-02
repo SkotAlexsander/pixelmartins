@@ -10,3 +10,4 @@ dev/capturas/
 node_modules/
 Thumbs.db
 .DS_Store
+preview-cdn.html
