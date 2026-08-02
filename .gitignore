@@ -1,0 +1,12 @@
+# Gerado pelo dev/montar-preview.js — não é fonte, se refaz com um comando
+preview.html
+
+# Capturas de verificação (regeradas a cada rodada do Playwright)
+dev/capturas/
+
+# Credenciais — nunca, em hipótese alguma
+.env
+
+node_modules/
+Thumbs.db
+.DS_Store
