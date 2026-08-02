@@ -46,6 +46,31 @@ para não haver um canto perceptível na virada.
 
 ---
 
+## De onde vêm as imagens
+
+O endereço não é fixo. O código decide sozinho, nesta ordem:
+
+| Situação | Usa |
+|---|---|
+| Rodando `preview.html` (localhost / `file://`) | `./assets/frames/` |
+| No ar, e `pixelmartins.com/wp-content/uploads/retrato/` responde | **o próprio domínio** |
+| No ar, e o WordPress não tem os frames (ou demorou +2,5 s) | jsDelivr (CDN) |
+
+A escolha custa **uma** requisição de ~13 KB — e ela não é desperdiçada: vira o
+frame 1 no cache do navegador.
+
+**Para migrar do CDN para o WordPress, não se mexe no código.** Basta subir a
+pasta `assets/frames` para `/wp-content/uploads/retrato/` (por FTP ou pelo
+gerenciador de arquivos da hospedagem). No próximo carregamento o site já usa as
+suas imagens. Para voltar atrás, apague a pasta lá.
+
+> Se subir pela **biblioteca de mídia** em vez do gerenciador de arquivos, o
+> caminho ganha pasta de ano/mês (`/uploads/2026/08/`) — aí sim é preciso trocar
+> `WP_BASE` no código. E o WordPress gera miniaturas de cada imagem: 150 fotos
+> viram ~750 arquivos na biblioteca. Por isso o FTP é a rota limpa.
+
+---
+
 ## Desempenho
 
 | Cenário | O que baixa |
