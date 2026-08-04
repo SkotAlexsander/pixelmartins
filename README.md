@@ -111,3 +111,24 @@ ar. Comentário normal (`<!-- ... -->`) continua passando.
 nomeada `skot.dev`, com CSS/JS quebrados em arquivos e `_headers` de segurança.
 É o **ancestral**, não o que está no ar. A modularização dele já foi absorvida
 aqui (03/08/2026, ver [docs/estrutura.md](docs/estrutura.md)).
+
+---
+
+## Licença
+
+**O código é [MIT](LICENSE)** — pode copiar, estudar, adaptar e usar em
+trabalho seu, inclusive comercial. Se a animação do retrato no scroll ou o
+esquema de build para o widget do Elementor te servirem, leve.
+
+**O que a licença MIT não cobre**, e fica dito aqui porque um repositório de
+portfólio mistura as duas coisas:
+
+| Não coberto | O que é |
+|---|---|
+| `assets/frames/` | 150 fotos do rosto do autor. São a imagem de uma pessoa, não código |
+| Os textos do site | o conteúdo em `src/html/secoes/` — a redação é o trabalho, não o andaime |
+| Nome, logo e marca | "pixelmartins", "Alex Martins" e o logotipo |
+
+Ou seja: clonar a estrutura, sim. Republicar com o rosto e os textos do autor,
+não. Se for reaproveitar, troque as imagens pelas suas e escreva o seu texto —
+que é a parte que faz o site ser de alguém.
