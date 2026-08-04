@@ -10,6 +10,12 @@
 Site pessoal publicado em **WordPress + Elementor Pro**. A página inteira é um
 **único widget HTML** colado numa página com template "Elementor Canvas".
 
+**No ar em <https://pixelmartins.com/portifolio/>** — página de id `13`, slug
+`portifolio`. Repare que **não é a raiz do domínio**: `pixelmartins.com` ainda
+serve a home padrão do WordPress. Nada no código depende do caminho (os links
+são âncoras e os endereços dos frames são absolutos), então mover a página para
+a raiz não exige alteração nenhuma aqui.
+
 **Posicionamento (definido em 2026-08-01):** *"site e vídeo, feitos pela mesma
 pessoa"* — o diferencial é ser as duas frentes num profissional só, com IA
 acelerando o repetitivo.
