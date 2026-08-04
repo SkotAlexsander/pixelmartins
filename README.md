@@ -1,7 +1,7 @@
 # Portfólio — pixelmartins.com
 
 > Criado em 2026-08-02. Casa oficial do código do site pessoal do Alex Martins.
-> Status: **aguardando o código atual** (o usuário vai enviar).
+> Modularizado em 2026-08-03: o fonte agora é `src/`, o arquivo que se cola é `dist/`.
 
 ---
 
@@ -21,32 +21,52 @@ acelerando o repetitivo.
 
 ## Estrutura desta pasta
 
+```text
+pixelmartins-site/
+├── src/               ← O FONTE. É aqui que se edita.
+│   ├── html/
+│   │   ├── index.html      esqueleto: a ordem da página + marcadores
+│   │   ├── parciais/       fontes, fundo, navbar
+│   │   └── secoes/         hero, servicos, projetos, sobre, ia,
+│   │                       trajetoria, depoimentos, contato
+│   ├── css/           16 arquivos — o prefixo numérico É a ordem da cascata
+│   └── js/            8 módulos, cada um uma IIFE independente
+├── build/build.js     junta src/ num fragmento único
+├── dist/              ← GERADO. É isto que se cola no Elementor. Não editar.
+├── assets/frames/     150 frames do retrato do fundo (servidos via jsDelivr)
+├── backup/            cópia datada antes de cada alteração — NUNCA sobrescrever
+├── dev/               ferramentas de teste local (não vão pro site)
+└── docs/              decisões, estrutura, conexão com o WordPress, animação
 ```
-portfolio-pixelmartins/
-├── README.md          ← este arquivo
-├── codigo-atual/      ← o fonte que se cola no widget (fonte da verdade)
-├── assets/frames/     ← 150 frames do retrato do fundo (servidos via jsDelivr)
-├── backup/            ← cópia datada antes de cada alteração — NUNCA sobrescrever
-├── dev/               ← ferramentas de teste local (não vão pro site)
-└── docs/              ← decisões, conexão com o WordPress, animação
-```
+
+**Por que src/ e dist/ separados?** O Elementor exige um fragmento único com
+CSS e JS embutidos, mas 2.000 linhas num arquivo só são impossíveis de manter.
+A separação vive no fonte; o build refaz o arquivo único. O porquê completo, o
+mapa dos arquivos e as regras de ordem estão em
+**[docs/estrutura.md](docs/estrutura.md)** — leia antes de mexer no CSS.
 
 **Este é um repositório git próprio**, separado do repo-mãe do agente (que o
 ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-site`.
 
 ## Como publicar uma alteração
 
-1. Editar `codigo-atual/index-elementor.html` (backup datado antes, em `backup/`).
-2. `node dev/montar-preview.js` + `node dev/verificar-animacao.js` → tem de dar **PASSOU**.
-3. `git commit` + `git push` — isso **já atualiza os frames** servidos pelo jsDelivr.
-4. Colar o conteúdo de `codigo-atual/index-elementor.html` no widget HTML do Elementor.
+1. Editar o arquivo certo em **`src/`** (backup datado antes, em `backup/`).
+2. `npm run checar` → build + validação sem navegador. Tem de dar **PASSOU**.
+3. `npm run preview`, `npm run servir` noutra aba, `npm run verificar`
+   → o teste em navegador de verdade. Também tem de dar **PASSOU**.
+4. `git commit` + `git push` — isso **já atualiza os frames** servidos pelo jsDelivr.
+5. Colar o conteúdo de **`dist/index-elementor.html`** no widget HTML do Elementor.
 
-> O passo 4 continua manual: o Elementor guarda a página em `_elementor_data`,
+> O passo 3 precisa do Playwright (`npm i -D playwright && npx playwright install
+> chromium`). Sem ele, o passo 2 sozinho já pega erro de sintaxe, tag esquecida,
+> ID órfão e classe sem estilo.
+
+> O passo 5 continua manual: o Elementor guarda a página em `_elementor_data`,
 > um postmeta que a REST API não expõe. Ver [docs/conexao-wordpress.md](docs/conexao-wordpress.md).
 
-**Regra de ouro:** antes de mexer em qualquer arquivo de `codigo-atual/`, copiar
-pra `backup/` com data no nome (`AAAA-MM-DD-nome.html`). Não há build nem git
-remote — o backup é a única rede de segurança.
+**Regra de ouro:** antes de mexer em qualquer arquivo de `src/`, copiar o
+`dist/index-elementor.html` atual pra `backup/` com data no nome
+(`AAAA-MM-DD-nome.html`). O backup é a rede de segurança do que já está no ar.
 
 ---
 
@@ -54,11 +74,12 @@ remote — o backup é a única rede de segurança.
 
 - **`projetos_futuros/portifolio web/`** — versão modular anterior (21/07/2026),
   nomeada `skot.dev`, com CSS/JS quebrados em arquivos e `_headers` de segurança.
-  É o **ancestral**, não o que está no ar. Decidir com o usuário: absorver as
-  boas partes (CSP, `_headers`, checklist) aqui e arquivar aquela pasta, ou
-  manter as duas separadas.
-- **`C:\Users\alexs\Downloads\pixelmartins-elementor.html`** — arquivo solto
-  (~61 KB) que foi colado no widget do Elementor. Deve virar `codigo-atual/`.
+  É o **ancestral**, não o que está no ar. A modularização dele já foi absorvida
+  aqui (03/08/2026, ver `docs/estrutura.md`); **falta absorver** o `_headers` de
+  segurança e o checklist — depois disso aquela pasta pode ser arquivada.
+- **`codigo-atual/`** — não existe mais. Virou `src/` (fonte) + `dist/` (gerado)
+  em 03/08/2026. O último monolito está em
+  `backup/2026-08-03-antes-modularizar.html`.
 
 ---
 

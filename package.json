@@ -1,0 +1,15 @@
+{
+  "name": "pixelmartins-site",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Portfolio pixelmartins.com — fonte modular do widget HTML do Elementor",
+  "scripts": {
+    "build": "node build/build.js",
+    "checar": "node build/build.js && node dev/checar-build.js",
+    "preview": "node build/build.js && node dev/montar-preview.js",
+    "servir": "python -m http.server 8099",
+    "verificar": "node dev/verificar-animacao.js",
+    "verificar:mobile": "node dev/checar-mobile.js",
+    "verificar:wp": "node dev/checar-rota-wp.js"
+  }
+}

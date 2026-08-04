@@ -1,0 +1,8 @@
+# Quebra de linha sempre LF no repositório. Sem isto, um checkout no Windows
+# reescreve o arquivo inteiro em CRLF e o próximo commit vira um diff de 2.000
+# linhas onde nada mudou de verdade.
+* text=auto eol=lf
+
+# Frames do retrato: binário, git não deve tentar converter nada.
+*.jpg binary
+*.png binary

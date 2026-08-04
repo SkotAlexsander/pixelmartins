@@ -1,0 +1,14 @@
+/* ---------- Ajustes específicos WordPress / Elementor ---------- */
+#pm-site {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+}
+.elementor-widget-html .elementor-widget-container { padding: 0 !important; margin: 0 !important; }
+.elementor-section .elementor-container,
+.e-con,
+.e-con-inner { max-width: 100% !important; padding: 0 !important; }
+body { overflow-x: hidden; }
+body, #page, .site, .site-content, main { margin: 0 !important; padding: 0 !important; }
+html { margin-top: 0 !important; }
+#wpadminbar { display: none !important; }

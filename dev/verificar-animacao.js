@@ -10,7 +10,7 @@
  */
 
 const path = require("path");
-const { chromium } = require(path.resolve(__dirname, "../../../node_modules/playwright"));
+const { chromium } = require("./playwright");
 
 const URL = process.argv[2] || "http://127.0.0.1:8099/preview.html";
 const PARADAS = [0, 0.25, 0.5, 0.75, 1];

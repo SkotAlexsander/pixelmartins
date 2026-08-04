@@ -1,0 +1,53 @@
+/* -------------------- Trajetória -------------------- */
+.timeline {
+  position: relative;
+  margin-top: 4rem;
+  padding-left: 2rem;
+}
+.timeline::before {
+  content: "";
+  position: absolute;
+  left: 5px;
+  top: 0.4rem;
+  bottom: 0.4rem;
+  width: 1px;
+  background: var(--border);
+}
+.timeline-item {
+  position: relative;
+  padding-bottom: 2.5rem;
+}
+.timeline-item:last-child { padding-bottom: 0; }
+.timeline-marker {
+  position: absolute;
+  left: -2rem;
+  top: 0.4rem;
+  width: 11px;
+  height: 11px;
+  border-radius: 9999px;
+  background: var(--bg);
+  border: 2px solid var(--accent-2);
+}
+.timeline-content {
+  border-radius: 1rem;
+  padding: 1.25rem 1.5rem;
+}
+.timeline-date {
+  font-family: var(--font-mono);
+  font-size: 12px;
+  letter-spacing: 0.05em;
+  color: var(--accent-2);
+}
+.timeline-content h3 {
+  font-family: var(--font-display);
+  margin: 0.5rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.timeline-content p {
+  margin: 0.5rem 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}

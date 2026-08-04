@@ -2,7 +2,7 @@
    com os arquivos locais. Prova que, no dia em que as imagens subirem, o site
    passa a usá-las — e que NENHUMA requisição vai para o jsDelivr. */
 const path = require("path"), fs = require("fs");
-const { chromium } = require(path.resolve(__dirname, "../../../node_modules/playwright"));
+const { chromium } = require("./playwright");
 const FRAMES = path.resolve(__dirname, "../assets/frames");
 
 (async () => {

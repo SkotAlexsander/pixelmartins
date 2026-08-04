@@ -1,0 +1,96 @@
+/* -------------------- Projetos -------------------- */
+.projects-grid {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 640px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .projects-grid { grid-template-columns: repeat(3, 1fr); } }
+
+/* Com UM projeto só, o card não deve ficar espremido no primeiro terço.
+   Volta sozinho ao grid de 3 colunas assim que entrar o segundo. */
+.projects-grid:has(> *:only-child) {
+  grid-template-columns: 1fr;
+  max-width: 26rem;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.project-card {
+  overflow: hidden;
+  border-radius: 1rem;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
+}
+.project-card:hover { transform: translateY(-6px); border-color: var(--accent-2); }
+.project-card.placeholder { border-style: dashed; opacity: 0.7; }
+.project-card.placeholder:hover { transform: none; border-color: var(--border); }
+
+.project-thumb {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+  border-bottom: 1px solid var(--border);
+  background-color: var(--surface-2);
+  background-image:
+    radial-gradient(circle at 30% 20%, rgba(0,207,255,0.14) 0%, transparent 55%),
+    radial-gradient(circle at 80% 80%, rgba(0,207,255,0.08) 0%, transparent 50%);
+}
+.project-card.placeholder .project-thumb { border-bottom-style: dashed; }
+.project-thumb .initials {
+  font-family: var(--font-display);
+  font-size: 2.25rem;
+  font-weight: 800;
+  color: var(--text-primary);
+  opacity: 0.15;
+  user-select: none;
+  transition: transform 0.5s ease;
+}
+.project-card:hover .project-thumb .initials { transform: scale(1.1); }
+.placeholder-tag {
+  position: absolute;
+  top: 0.75rem; right: 0.75rem;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.15rem 0.5rem;
+  color: var(--text-secondary);
+}
+.project-body { padding: 1.25rem; }
+.project-body h3 {
+  font-family: var(--font-display);
+  margin: 0;
+  font-size: 1.125rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.project-body p {
+  margin: 0.5rem 0 0;
+  font-size: 0.875rem;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.project-stack {
+  margin: 1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  padding: 0;
+}
+.project-stack li {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  color: var(--text-secondary);
+  border: 1px solid var(--border);
+  border-radius: 9999px;
+  padding: 0.25rem 0.65rem;
+}

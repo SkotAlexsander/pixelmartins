@@ -1,5 +1,4 @@
-const path = require("path");
-const { chromium } = require(path.resolve(__dirname, "../../../node_modules/playwright"));
+const { chromium } = require("./playwright");
 (async () => {
   const b = await chromium.launch();
   for (const [nome, vp, tema] of [["mobile-390", {width:390,height:844}, "dark"],

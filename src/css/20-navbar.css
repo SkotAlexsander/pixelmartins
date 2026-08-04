@@ -1,0 +1,91 @@
+/* -------------------- Navbar -------------------- */
+#navbar {
+  position: fixed;
+  inset-inline: 0;
+  top: 0;
+  z-index: 40;
+  opacity: 0;
+  transform: translateY(-16px);
+  transition: opacity 0.6s cubic-bezier(0.16,1,0.3,1), transform 0.6s cubic-bezier(0.16,1,0.3,1);
+}
+#navbar.visible { opacity: 1; transform: translateY(0); }
+
+.nav-inner {
+  position: relative; /* referência para centralizar .nav-links */
+  margin: 1rem 1rem 0; /* respiro lateral no mobile */
+  max-width: 64rem;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  border-radius: 9999px;
+  padding: 0.65rem 1.25rem;
+}
+@media (min-width: 1024px) { .nav-inner { margin-inline: auto; } }
+
+.nav-actions {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+}
+.logo img {
+  display: block;
+  height: 30px;      /* controla o tamanho do logo na navbar */
+  width: auto;       /* mantém a proporção da imagem */
+}
+@media (min-width: 768px) { .logo img { height: 34px; } }
+
+.nav-links { display: none; }
+@media (min-width: 768px) {
+  /* Centralização real: os links ficam ancorados no centro do pill
+     (e portanto no centro do conteúdo do site), independente da largura
+     do logo à esquerda e do botão de tema à direita */
+  .nav-links {
+    display: block;
+    position: absolute;
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}
+.nav-links ul {
+  display: flex;
+  align-items: center;
+  gap: 1.75rem;
+  list-style: none;
+  margin: 0; padding: 0;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 13px;
+  color: var(--text-secondary);
+  transition: color 0.2s ease;
+}
+.nav-links a:hover { color: var(--text-primary); }
+
+#theme-toggle {
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem; height: 2.25rem;
+  border-radius: 9999px;
+  border: 1px solid var(--border);
+  background: transparent;
+  color: var(--text-secondary);
+  cursor: pointer;
+  transition: color 0.2s ease, border-color 0.2s ease;
+}
+#theme-toggle:hover { border-color: var(--accent-2); color: var(--text-primary); }
+#theme-toggle svg {
+  position: absolute;
+  width: 16px; height: 16px;
+  transition: transform 0.3s ease, opacity 0.3s ease;
+}
+.icon-sun { transform: scale(0); opacity: 0; }
+.icon-moon { transform: scale(1); opacity: 1; }
+html.light .icon-sun { transform: scale(1); opacity: 1; }
+html.light .icon-moon { transform: scale(0); opacity: 0; }

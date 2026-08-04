@@ -1,0 +1,93 @@
+/* -------------------- Serviços & processo -------------------- */
+.services-grid {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 768px) { .services-grid { grid-template-columns: repeat(3, 1fr); } }
+
+.service-card {
+  height: 100%;
+  border-radius: 1rem;
+  padding: 1.75rem 1.5rem;
+  transition: border-color 0.3s ease, transform 0.3s cubic-bezier(0.16,1,0.3,1);
+}
+.service-card:hover { border-color: var(--accent-2); transform: translateY(-4px); }
+.service-card svg { width: 22px; height: 22px; color: var(--accent-2); }
+.service-card h3 {
+  font-family: var(--font-display);
+  margin: 1rem 0 0;
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.service-card > p {
+  margin: 0.6rem 0 0;
+  font-size: 14px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+.service-list {
+  margin: 1rem 0 0;
+  padding: 0;
+  list-style: none;
+}
+.service-list li {
+  position: relative;
+  padding-left: 1.1rem;
+  font-size: 13px;
+  line-height: 1.9;
+  color: var(--text-secondary);
+}
+.service-list li::before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0.75em;
+  width: 5px; height: 5px;
+  border-radius: 9999px;
+  background: var(--accent-2);
+}
+
+.process {
+  margin-top: 5rem;
+}
+.process-title {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.25em;
+  text-align: center;
+  color: var(--text-secondary);
+}
+.process-steps {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 560px) { .process-steps { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .process-steps { grid-template-columns: repeat(4, 1fr); } }
+.process-step {
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+.process-step .step-num {
+  font-family: var(--font-mono);
+  font-size: 0.8rem;
+  color: var(--accent-2);
+}
+.process-step h4 {
+  font-family: var(--font-display);
+  margin: 0.6rem 0 0;
+  font-size: 0.9rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.process-step p {
+  margin: 0.4rem 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}

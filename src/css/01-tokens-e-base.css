@@ -1,0 +1,126 @@
+/* ---------------------------------------------------
+   Design tokens — dark é a paleta base (padrão do site).
+   A classe `.light` (alternada pelo JS em <html>) sobrescreve
+   as mesmas variáveis para o modo claro.
+--------------------------------------------------- */
+:root {
+  --bg: #000000;
+  --surface: #0c0e10;
+  --surface-2: #141619;
+  --accent: #00a8d8;
+  --accent-2: #00cfff;
+  --text-primary: #e6eaee;
+  --text-secondary: #8f9aa5;
+  --border: #23272c;
+  --glow-opacity: 0.22;
+  --noise-opacity: 0.035;
+
+  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "Manrope", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", monospace;
+}
+
+html.light {
+  --bg: #f8fafc;
+  --surface: #f1f5f9;
+  --surface-2: #e2e8f0;
+  --accent: #0891b2;
+  --accent-2: #06b6d4;
+  --text-primary: #0f172a;
+  --text-secondary: #64748b;
+  --border: #dde3ea;
+  --glow-opacity: 0.22;
+  --noise-opacity: 0.02;
+}
+
+* { box-sizing: border-box; border-color: var(--border); }
+
+html { scroll-behavior: smooth; }
+
+@media (prefers-reduced-motion: reduce) {
+  html { scroll-behavior: auto; }
+  *, *::before, *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--text-primary);
+  font-family: var(--font-sans);
+  transition: background-color 0.4s ease, color 0.4s ease;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+img, svg { display: block; }
+
+a { color: inherit; text-decoration: none; }
+
+:focus-visible {
+  outline: 2px solid var(--accent-2);
+  outline-offset: 3px;
+  border-radius: 2px;
+}
+
+.sr-only {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+/* Skip-link: escondido fora da tela até receber foco de teclado.
+   position:fixed + translate é imune a wrappers com position:relative
+   (como os containers do Elementor), diferente do top negativo */
+.skip-link {
+  position: fixed;
+  left: 1rem;
+  top: 1rem;
+  z-index: 100;
+  background: var(--surface);
+  color: var(--text-primary);
+  padding: 0.6rem 1rem;
+  border-radius: 6px;
+  border: 1px solid var(--border);
+  transform: translateY(calc(-100% - 2rem));
+  transition: transform 0.2s ease;
+}
+.skip-link:focus { transform: translateY(0); }
+
+/* Superfície "glass", usada por cards/nav */
+.glass {
+  background: color-mix(in srgb, var(--surface-2) 60%, transparent);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid var(--border);
+}
+
+.noise-layer {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  opacity: var(--noise-opacity);
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+@keyframes caret-blink {
+  0%, 45% { opacity: 1; }
+  50%, 95% { opacity: 0; }
+  100% { opacity: 1; }
+}
+.caret-blink { animation: caret-blink 1.1s step-end infinite; }
+
+@keyframes drift {
+  0%, 100% { transform: translate(-50%, 0); }
+  50% { transform: translate(calc(-50% + 2%), -3%); }
+}
+.animate-drift { animation: drift 14s ease-in-out infinite; }

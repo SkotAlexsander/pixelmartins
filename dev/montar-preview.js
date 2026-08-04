@@ -2,9 +2,12 @@
  * montar-preview.js — embrulha o fragmento do Elementor num documento HTML
  * completo para dar pra abrir no navegador e testar.
  *
- * O arquivo de codigo-atual/ é um FRAGMENTO (sem <html>/<head>/<body>), porque
- * é isso que se cola no widget HTML do Elementor. Ele sozinho não renderiza
- * igual ao site. Este script recria o mínimo do que o WordPress põe em volta.
+ * O arquivo de dist/ é um FRAGMENTO (sem <html>/<head>/<body>), porque é isso
+ * que se cola no widget HTML do Elementor. Ele sozinho não renderiza igual ao
+ * site. Este script recria o mínimo do que o WordPress põe em volta.
+ *
+ * Lê dist/, não src/ — o preview tem de testar exatamente o que vai ser colado.
+ * Se dist/ estiver velho, rode `node build/build.js` antes.
  *
  * USO:  node dev/montar-preview.js
  * SAÍDA: preview.html na raiz do projeto (fica ao lado de assets/, então o
@@ -15,8 +18,13 @@ const fs = require("fs");
 const path = require("path");
 
 const RAIZ = path.resolve(__dirname, "..");
-const FONTE = path.join(RAIZ, "codigo-atual", "index-elementor.html");
+const FONTE = path.join(RAIZ, "dist", "index-elementor.html");
 const SAIDA = path.join(RAIZ, "preview.html");
+
+if (!fs.existsSync(FONTE)) {
+  console.error("dist/index-elementor.html não existe. Rode antes:  node build/build.js");
+  process.exit(1);
+}
 
 const fragmento = fs.readFileSync(FONTE, "utf8");
 
@@ -42,4 +50,4 @@ ${fragmento}
 
 fs.writeFileSync(SAIDA, documento, "utf8");
 console.log(`preview.html gerado (${(documento.length / 1024).toFixed(1)} KB)`);
-console.log(`Servir com:  python -m http.server 8080  (na pasta ${RAIZ})`);
+console.log(`Servir com:  python -m http.server 8099  (na pasta ${RAIZ})`);

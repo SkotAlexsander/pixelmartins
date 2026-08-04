@@ -1,0 +1,7 @@
+/* -------------------- Layout helpers -------------------- */
+.container-lg { max-width: 64rem; margin: 0 auto; padding: 0 1.5rem; }
+.container-md { max-width: 56rem; margin: 0 auto; padding: 0 1.5rem; }
+
+section { position: relative; padding: 5rem 1.25rem; }
+@media (min-width: 640px) { section { padding: 7rem 1.5rem; } }
+@media (min-width: 1024px) { section { padding: 9rem 1.5rem; } }

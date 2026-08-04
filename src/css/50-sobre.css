@@ -1,0 +1,39 @@
+/* -------------------- Sobre -------------------- */
+#sobre .intro-text {
+  max-width: 42rem;
+  margin: 2rem auto 0;
+  text-align: center;
+  font-size: 15px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
+#sobre .intro-text .highlight { color: var(--text-primary); }
+
+.capabilities-grid {
+  margin-top: 4rem;
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1rem;
+}
+@media (min-width: 640px) { .capabilities-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 1024px) { .capabilities-grid { grid-template-columns: repeat(4, 1fr); } }
+
+.capability-card {
+  height: 100%;
+  border-radius: 1rem;
+  padding: 1.25rem;
+}
+.capability-card svg { width: 20px; height: 20px; color: var(--accent-2); }
+.capability-card h3 {
+  font-family: var(--font-display);
+  margin: 1rem 0 0;
+  font-size: 0.875rem;
+  font-weight: 700;
+  color: var(--text-primary);
+}
+.capability-card p {
+  margin: 0.5rem 0 0;
+  font-size: 13px;
+  line-height: 1.7;
+  color: var(--text-secondary);
+}
