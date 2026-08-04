@@ -730,6 +730,33 @@
     padding: 0.25rem 0.65rem;
   }
 
+  /* Ver rodando / ver o código. Um projeto que o visitante não consegue abrir
+     é uma afirmação; um que ele abre é uma prova. */
+  .project-links {
+    margin: 1.1rem 0 0;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.1rem;
+  }
+  .project-links a {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--accent-2);
+    border-bottom: 1px solid transparent;
+    transition: border-color 0.2s ease;
+  }
+  .project-links a:hover,
+  .project-links a:focus-visible { border-bottom-color: var(--accent-2); }
+  .project-links svg {
+    width: 13px;
+    height: 13px;
+    transition: transform 0.2s ease;
+  }
+  .project-links a:hover svg { transform: translate(2px, -2px); }
+
   /* -------------------- IA & Automação -------------------- */
   .ia-grid {
     display: grid;
@@ -1227,10 +1254,24 @@
             </div>
             <div class="project-body">
               <h3>Explorador do Sistema Solar</h3>
-              <p>Simulação 3D do sistema solar em escala orbital logarítmica, com física planetária. Roda no celular com bottom-sheet e tem um modo infravermelho que mapeia temperatura em falsa cor.</p>
+              <p>Simulação 3D com 100 corpos catalogados, em escala orbital logarítmica — porque na escala real o usuário passa a viagem toda atravessando vazio. Tem um modo infravermelho que mapeia temperatura em falsa cor.</p>
               <ul class="project-stack">
                 <li>Three.js</li><li>JavaScript</li><li>HTML/CSS</li>
               </ul>
+              <p class="project-links">
+                <a href="https://skotalexsander.github.io/solarsys/" target="_blank" rel="noopener noreferrer">
+                  ver rodando
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+                  </svg>
+                </a>
+                <a href="https://github.com/SkotAlexsander/solarsys" target="_blank" rel="noopener noreferrer">
+                  ver o código
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+                    <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
+                  </svg>
+                </a>
+              </p>
             </div>
           </article>
         </div>

@@ -94,3 +94,30 @@
   border-radius: 9999px;
   padding: 0.25rem 0.65rem;
 }
+
+/* Ver rodando / ver o código. Um projeto que o visitante não consegue abrir
+   é uma afirmação; um que ele abre é uma prova. */
+.project-links {
+  margin: 1.1rem 0 0;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1.1rem;
+}
+.project-links a {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--accent-2);
+  border-bottom: 1px solid transparent;
+  transition: border-color 0.2s ease;
+}
+.project-links a:hover,
+.project-links a:focus-visible { border-bottom-color: var(--accent-2); }
+.project-links svg {
+  width: 13px;
+  height: 13px;
+  transition: transform 0.2s ease;
+}
+.project-links a:hover svg { transform: translate(2px, -2px); }
