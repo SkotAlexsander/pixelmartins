@@ -1,3 +1,23 @@
+<!--# ESQUELETO — a ordem da página mora aqui, e só aqui.
+     Trocar duas seções de lugar é trocar duas linhas. Nenhuma seção depende de
+     vir depois de outra; o CSS não se importa.
+
+     A ordem atual (Hero → Serviços → Projetos → Sobre → IA → Trajetória →
+     Contato) não é a de um portfólio comum, que põe Sobre logo após o Hero.
+     O motivo: a primeira pergunta do visitante é "o que você faz por mim", não
+     "quem é você". Sobre vem em quarto, depois de ele já saber o que pode
+     contratar e já ter visto trabalho — aí deixa de ser apresentação e vira
+     confirmação.
+
+     Marcadores que o build resolve — ver docs/estrutura.md:
+       @js-critico   o script do tema, que roda antes do CSS pintar
+       @estilos      os 15 CSS na ordem de ORDEM_CSS (a ordem É a cascata)
+       @incluir X    o conteúdo do arquivo, na indentação do próprio marcador
+       @scripts      os 7 módulos de JS
+       <!--# ...     comentário só-do-fonte, como este: some no build
+
+     O que cada seção faz e quais efeitos rodam nela: docs/secoes.md -->
+
 <!-- @js-critico -->
 
 <!-- @incluir parciais/fontes.html -->

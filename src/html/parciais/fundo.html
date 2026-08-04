@@ -1,3 +1,16 @@
+<!--# FUNDO — sete camadas fixas atrás de tudo.
+     Estilo: css/10-fundo.css (e .noise-layer em css/01-tokens-e-base.css)
+     Efeitos: js/70-retrato-scroll.js (retrato), js/60-particulas.js
+
+     position:fixed, z-index:-10, pointer-events:none — não rolam com a página
+     e nunca interceptam clique.
+
+     A ORDEM AQUI É A PILHA. Não há z-index entre as camadas: quem vem depois
+     fica na frente. Mover uma linha deste arquivo muda o que aparece por cima.
+
+     O retrato é o primeiro filho de propósito, para ficar ATRÁS de todas as
+     outras. Ele é foto — sem os pontos, o ruído e a vinheta por cima, ele
+     competiria com o texto em vez de ambientar. -->
 <!-- ===================== Background atmosphere ===================== -->
 <div id="bg-atmosphere" aria-hidden="true">
   <canvas id="portrait-canvas"></canvas>

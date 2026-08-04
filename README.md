@@ -42,9 +42,19 @@ pixelmartins-site/
 
 **Por que src/ e dist/ separados?** O Elementor exige um fragmento único com
 CSS e JS embutidos, mas 2.000 linhas num arquivo só são impossíveis de manter.
-A separação vive no fonte; o build refaz o arquivo único. O porquê completo, o
-mapa dos arquivos e as regras de ordem estão em
-**[docs/estrutura.md](docs/estrutura.md)** — leia antes de mexer no CSS.
+A separação vive no fonte; o build refaz o arquivo único.
+
+Dois documentos, e a diferença entre eles é o que você está tentando fazer:
+
+| Se você quer saber | Leia |
+|---|---|
+| como o código é montado, e por que a ordem do CSS importa | **[docs/estrutura.md](docs/estrutura.md)** — antes de mexer no CSS |
+| o que cada seção faz, quais efeitos rodam nela e qual arquivo abrir para mudar X | **[docs/secoes.md](docs/secoes.md)** — antes de mexer no conteúdo |
+| como funciona o retrato de 150 frames no fundo | **[docs/animacao-scroll.md](docs/animacao-scroll.md)** |
+
+Cada arquivo de `src/html/` também abre com um resumo do que ele é e de quais
+efeitos o tocam. Esses cabeçalhos usam `<!--# ... -->`, o comentário
+só-do-fonte: o build os remove, então explicar bastante ali não pesa no site.
 
 **Este é um repositório git próprio**, separado do repo-mãe do agente (que o
 ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-site`.

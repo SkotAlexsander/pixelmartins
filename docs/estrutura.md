@@ -1,6 +1,10 @@
 # Estrutura do código — por que src/ e dist/
 
 > Modularizado em 2026-08-03. Antes disso era um arquivo só, de 2.070 linhas.
+>
+> Este documento é sobre **como o código é montado**. Se o que você quer é
+> saber o que cada seção da página faz e quais efeitos rodam nela, o documento
+> é o [secoes.md](secoes.md).
 
 ---
 

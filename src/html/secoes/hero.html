@@ -1,3 +1,18 @@
+<!--# HERO — a primeira tela.
+     Estilo: css/30-hero.css  ·  Efeito: js/40-typewriter.js
+
+     O .hero-dark-bg é um fundo PRÓPRIO, por cima do fundo global. Ele é o véu
+     que segura o retrato (--hero-veil, em css/10-fundo.css) — por isso ali o
+     retrato pode aparecer mais forte que no resto da página.
+
+     Ao acabar de digitar, o typewriter solta três coisas de uma vez: o cursor
+     para de piscar, o indicador de scroll entra e A NAVBAR APARECE. Ela não
+     está lá desde o começo — a primeira tela é só a frase.
+
+     A frase existe DUAS vezes: no .sr-only (para leitor de tela) e no
+     #typewriter-text (animada, aria-hidden). Trocar uma sem a outra faz o site
+     dizer uma coisa e o leitor de tela dizer outra. O texto animado mora em
+     js/40-typewriter.js, na constante HERO_TEXT. -->
 <!-- ===================== Hero ===================== -->
 <section id="top">
   <!-- Fundo "elegant dark pattern" (convertido do componente React DarkGradientBg) -->

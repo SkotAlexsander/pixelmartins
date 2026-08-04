@@ -126,8 +126,12 @@ saida = saida.replace(/^([ \t]*)<!--\s*@incluir\s+(\S+)\s*-->/gm, (linha, ind, r
    O dist é colado num site público — quem abre o código-fonte da página lê todo
    comentário que estiver lá. Nota de bastidor ("esta seção está desativada
    porque ainda não há cliente") não é para o visitante. Comentário normal
-   (`<!-- ... -->`) continua passando: serve para orientar quem lê o código. */
-saida = saida.replace(/^[ \t]*<!--#[\s\S]*?-->[ \t]*\r?\n?/gm, "");
+   (`<!-- ... -->`) continua passando: serve para orientar quem lê o código.
+
+   Leva junto UMA linha em branco logo depois, quando houver: ela existia para
+   separar a nota do que vem a seguir, e sem a nota fica órfã. Sem isso, o dist
+   ganha um buraco a cada comentário removido. */
+saida = saida.replace(/^[ \t]*<!--#[\s\S]*?-->[ \t]*\r?\n(?:[ \t]*\r?\n)?/gm, "");
 
 const restante = saida.match(/<!--\s*@\w[^>]*-->/g);
 if (restante) {
