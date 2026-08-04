@@ -45,8 +45,8 @@ src/
 │   ├── index.html            ← ESQUELETO: a ordem da página e os marcadores
 │   ├── parciais/             fontes (Google Fonts), fundo (canvas), navbar
 │   └── secoes/               hero, servicos, projetos, sobre, ia,
-│                             trajetoria, depoimentos, contato
-├── css/                      16 arquivos, com prefixo numérico = ordem da cascata
+│                             trajetoria, contato
+├── css/                      15 arquivos, com prefixo numérico = ordem da cascata
 └── js/                       8 módulos, cada um uma IIFE independente
 
 build/build.js                junta tudo
@@ -55,26 +55,36 @@ dist/index-elementor.html     GERADO — não edite
 
 ### O esqueleto e os marcadores
 
-`src/html/index.html` não tem conteúdo: tem a ordem da página e quatro
-marcadores que o build substitui.
+`src/html/index.html` não tem conteúdo: tem a ordem da página e os marcadores
+que o build substitui.
 
 | Marcador | Vira |
 |---|---|
 | `<!-- @js-critico -->` | `<script>` com `js/00-tema-antiflash.js` |
-| `<!-- @estilos -->` | `<style>` com os 16 CSS na ordem de `ORDEM_CSS` |
+| `<!-- @estilos -->` | `<style>` com os 15 CSS na ordem de `ORDEM_CSS` |
 | `<!-- @incluir secoes/hero.html -->` | o conteúdo do arquivo |
 | `<!-- @scripts -->` | `<script>` com os 7 módulos de `ORDEM_JS` |
+| `<!--# nota interna -->` | **nada** — some no build |
 
 `@incluir` **respeita a indentação do próprio marcador**. Por isso os arquivos
 de `secoes/` começam na coluna 0 e mesmo assim saem alinhados dentro do
 `<main>` — nenhum arquivo carrega indentação morta.
+
+`<!--# ... -->` existe porque aqui **tudo é público duas vezes**: o fonte, no
+GitHub, e o `dist`, no código-fonte da página no ar. Nota do tipo "esta seção
+está desativada porque ainda não há cliente" não deveria viajar para nenhum dos
+dois. Comentário normal continua passando — ele orienta quem lê o código, e isso
+é bom.
 
 ### CSS: o prefixo numérico é a cascata
 
 `01-tokens-e-base` → `10-fundo` → `15-layout` → `20-navbar` →
 `25-menu-mobile` → `30-hero` → `35-revelar` → `40-titulo-secao` →
 `50-sobre` → `55-projetos` → `60-ia` → `65-trajetoria` → `70-servicos` →
-`75-depoimentos` → `80-contato` → `99-wordpress-elementor`
+`80-contato` → `99-wordpress-elementor`
+
+(O `75-depoimentos` não está aqui de propósito: a seção saiu do repositório
+até haver um depoimento real, com CSS e tudo. O número segue reservado.)
 
 A ordem é **exatamente a do arquivo monolítico anterior** — foi preservada de
 propósito, para a modularização não mudar um pixel do site. Não reordene sem
@@ -137,6 +147,8 @@ mostra o efeito real de cada mudança no que foi pro ar.
 
 - **Backup datado antes de mexer** em qualquer fonte (`backup/AAAA-MM-DD-nome.html`).
 - **A publicação continua manual:** copiar `dist/index-elementor.html` e colar no
-  widget. Ver [conexao-wordpress.md](conexao-wordpress.md) para o porquê.
+  widget. O Elementor guarda a página num postmeta que a REST API não expõe por
+  padrão — as rotas possíveis estão em `privado/conexao-wordpress.md`, fora
+  deste repositório.
 - Os frames em `assets/frames/` não se mexeram — o link do jsDelivr no
   `70-retrato-scroll.js` continua válido.

@@ -28,15 +28,16 @@ pixelmartins-site/
 │   │   ├── index.html      esqueleto: a ordem da página + marcadores
 │   │   ├── parciais/       fontes, fundo, navbar
 │   │   └── secoes/         hero, servicos, projetos, sobre, ia,
-│   │                       trajetoria, depoimentos, contato
-│   ├── css/           16 arquivos — o prefixo numérico É a ordem da cascata
+│   │                       trajetoria, contato
+│   ├── css/           15 arquivos — o prefixo numérico É a ordem da cascata
 │   └── js/            8 módulos, cada um uma IIFE independente
 ├── build/build.js     junta src/ num fragmento único
 ├── dist/              ← GERADO. É isto que se cola no Elementor. Não editar.
 ├── assets/frames/     150 frames do retrato do fundo (servidos via jsDelivr)
 ├── backup/            cópia datada antes de cada alteração — NUNCA sobrescrever
 ├── dev/               ferramentas de teste local (não vão pro site)
-└── docs/              decisões, estrutura, conexão com o WordPress, animação
+├── docs/              estrutura do código e a animação do retrato
+└── privado/           notas internas — no .gitignore, não vem no clone
 ```
 
 **Por que src/ e dist/ separados?** O Elementor exige um fragmento único com
@@ -61,8 +62,9 @@ ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-s
 > chromium`). Sem ele, o passo 2 sozinho já pega erro de sintaxe, tag esquecida,
 > ID órfão e classe sem estilo.
 
-> O passo 5 continua manual: o Elementor guarda a página em `_elementor_data`,
-> um postmeta que a REST API não expõe. Ver [docs/conexao-wordpress.md](docs/conexao-wordpress.md).
+> O passo 5 continua manual: o Elementor guarda a página num postmeta que a REST
+> API não expõe por padrão, então não há como publicar por script sem mexer no
+> servidor. As rotas possíveis estão em `privado/conexao-wordpress.md`.
 
 **Regra de ouro:** antes de mexer em qualquer arquivo de `src/`, copiar o
 `dist/index-elementor.html` atual pra `backup/` com data no nome
@@ -70,45 +72,26 @@ ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-s
 
 ---
 
-## Pastas relacionadas (não duplicar código)
+## Notas internas ficam fora deste repositório
 
-- **`projetos_futuros/portifolio web/`** — versão modular anterior (21/07/2026),
-  nomeada `skot.dev`, com CSS/JS quebrados em arquivos e `_headers` de segurança.
-  É o **ancestral**, não o que está no ar. A modularização dele já foi absorvida
-  aqui (03/08/2026, ver `docs/estrutura.md`); **falta absorver** o `_headers` de
-  segurança e o checklist — depois disso aquela pasta pode ser arquivada.
-- **`codigo-atual/`** — não existe mais. Virou `src/` (fonte) + `dist/` (gerado)
-  em 03/08/2026. O último monolito está em
-  `backup/2026-08-03-antes-modularizar.html`.
+Este repo é **público** — e por ora precisa ser: o jsDelivr só serve repositório
+público, e é ele que entrega os frames do retrato do fundo enquanto eles não
+sobem para o WordPress.
 
----
+Então tudo que é escrito para dentro — pendências, levantamento do servidor,
+rascunho de seção — mora em `privado/`, que está no `.gitignore` e nunca é
+commitado. Se você clonou este repositório, essa pasta não vem junto: ela é só
+da máquina de quem mantém o site.
 
-## Conexão com o WordPress — o que já foi verificado
-
-**2026-08-02 — a REST API do site está aberta e responde.**
-`GET https://pixelmartins.com/wp-json/` retornou JSON válido:
-
-- Site: "Alexsander Martins de Menezes Junior" · descrição ainda no padrão
-  ("My WordPress Blog" — vale trocar).
-- Namespaces ativos: `wp/v2`, `elementor/v1`, `elementor-pro/v1`,
-  `elementor-one/v1`, `elementor-ai/v1`, `image-optimizer/v1`, `ea11y/v1`,
-  `wp-site-health/v1`, `wp-block-editor/v1`, `oembed/1.0`, `tmpcoder/ajaxselect2`.
-
-**O que falta pra escrever (não só ler):** uma **Senha de Aplicativo** do
-WordPress (WP-Admin → Usuários → Perfil → Senhas de aplicativo), guardada num
-`.env` na raiz do projeto — **nunca commitada**.
-
-**A pegadinha do Elementor:** conteúdo de página feita no Elementor **não** fica
-em `post_content`. Fica no postmeta `_elementor_data` (um JSON), que a REST API
-**não expõe por padrão**. Ou seja: autenticar não basta pra atualizar o widget.
-Ver `docs/conexao-wordpress.md` para as rotas possíveis e o trade-off de cada uma.
+No código vale a mesma regra: **`<!--# ... -->` é comentário só-do-fonte** — o
+build o remove, então ele não chega ao `dist` nem ao código-fonte da página no
+ar. Comentário normal (`<!-- ... -->`) continua passando.
 
 ---
 
-## Pendências conhecidas (herdadas da revisão de 01/08/2026)
+## Ancestral (não duplicar código)
 
-- [ ] Só 1 projeto real no ar. Os cards "em breve" e a seção de depoimentos estão
-      **comentados, não apagados** — voltam em um passo quando houver conteúdo real.
-- [ ] Links de **GitHub e LinkedIn** ainda são `href="#"` — precisam da URL real.
-- [ ] Descrição do site no WordPress ainda é "My WordPress Blog".
-- [ ] Decidir a rota de deploy (ver `docs/conexao-wordpress.md`).
+**`projetos_futuros/portifolio web/`** — versão modular anterior (21/07/2026),
+nomeada `skot.dev`, com CSS/JS quebrados em arquivos e `_headers` de segurança.
+É o **ancestral**, não o que está no ar. A modularização dele já foi absorvida
+aqui (03/08/2026, ver [docs/estrutura.md](docs/estrutura.md)).

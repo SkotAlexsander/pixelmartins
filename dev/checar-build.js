@@ -66,6 +66,10 @@ ok(abertas === (semComentario.match(/}/g) || []).length, `chaves do CSS balancea
       pelo build e vai parar no site como comentário HTML). */
 ok(!/@incluir|@estilos|@scripts|@js-critico/.test(html), "nenhum marcador de build sobrou");
 
+/* 5b. Nenhum comentário só-do-fonte vazou. O dist vai pro site no ar: quem abre
+       o código-fonte da página lê tudo que estiver em <!-- -->. */
+ok(!html.includes("<!--#"), "nenhum comentário só-do-fonte (<!--#) vazou pro dist");
+
 /* 6. Classe usada no HTML sem regra no CSS = arquivo de CSS que ficou de fora
       da ORDEM_CSS do build, ou seção colada sem o estilo dela. */
 const classes = new Set();

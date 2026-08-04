@@ -7,6 +7,12 @@ dev/capturas/
 # Credenciais — nunca, em hipótese alguma
 .env
 
+# Notas internas. O repositório é PÚBLICO (tem de ser: o jsDelivr só serve repo
+# público, e é ele que entrega os frames do retrato hoje). Então tudo que é
+# escrito pra dentro — pendências, levantamento do servidor, rascunho de seção —
+# mora aqui e não sai da máquina. Ver privado/README.md.
+privado/
+
 node_modules/
 Thumbs.db
 .DS_Store

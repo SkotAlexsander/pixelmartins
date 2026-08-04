@@ -930,68 +930,6 @@
     color: var(--text-secondary);
   }
 
-  /* -------------------- Depoimentos -------------------- */
-  .testimonials-grid {
-    margin-top: 4rem;
-    display: grid;
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
-  }
-  @media (min-width: 768px) { .testimonials-grid { grid-template-columns: repeat(2, 1fr); } }
-
-  .testimonial-card {
-    position: relative;
-    height: 100%;
-    border-radius: 1rem;
-    padding: 1.75rem 1.5rem;
-  }
-  .testimonial-card .quote-mark {
-    font-family: var(--font-display);
-    font-size: 3rem;
-    line-height: 1;
-    color: var(--accent-2);
-    opacity: 0.35;
-    user-select: none;
-  }
-  .testimonial-card blockquote {
-    margin: 0.5rem 0 0;
-    font-size: 15px;
-    line-height: 1.8;
-    color: var(--text-secondary);
-    font-style: italic;
-  }
-  .testimonial-author {
-    margin-top: 1.25rem;
-    display: flex;
-    align-items: center;
-    gap: 0.75rem;
-  }
-  .testimonial-author .avatar {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    width: 2.5rem; height: 2.5rem;
-    border-radius: 9999px;
-    border: 1px solid var(--border);
-    background: var(--surface-2);
-    font-family: var(--font-display);
-    font-size: 0.8rem;
-    font-weight: 700;
-    color: var(--accent-2);
-  }
-  .testimonial-author .who strong {
-    display: block;
-    font-family: var(--font-display);
-    font-size: 0.875rem;
-    font-weight: 700;
-    color: var(--text-primary);
-  }
-  .testimonial-author .who span {
-    font-family: var(--font-mono);
-    font-size: 11px;
-    color: var(--text-secondary);
-  }
-
   /* -------------------- Contato -------------------- */
   .contact-cta { margin-top: 2.5rem; text-align: center; }
   .contact-email {
@@ -1297,42 +1235,6 @@
           </article>
         </div>
 
-        <!-- DESATIVADO: cards "em breve" saem do ar até existir um case real.
-             Um projeto bem contado convence mais que um + dois placeholders.
-             Pra reativar, tire estas duas linhas de comentário.
-
-        <div class="reveal" style="transition-delay:0.18s">
-          <article class="project-card placeholder">
-            <div class="project-thumb">
-              <span class="initials" aria-hidden="true">NO</span>
-              <span class="placeholder-tag">placeholder</span>
-            </div>
-            <div class="project-body">
-              <h3>Próximo projeto</h3>
-              <p>Em breve — um case real de código ou edição: o problema, a decisão mais interessante e o resultado.</p>
-              <ul class="project-stack">
-                <li>Em breve</li>
-              </ul>
-            </div>
-          </article>
-        </div>
-
-        <div class="reveal" style="transition-delay:0.26s">
-          <article class="project-card placeholder">
-            <div class="project-thumb">
-              <span class="initials" aria-hidden="true">NO</span>
-              <span class="placeholder-tag">placeholder</span>
-            </div>
-            <div class="project-body">
-              <h3>Próximo projeto</h3>
-              <p>Em breve — um case real de código ou edição: o problema, a decisão mais interessante e o resultado.</p>
-              <ul class="project-stack">
-                <li>Em breve</li>
-              </ul>
-            </div>
-          </article>
-        </div>
-        -->
       </div>
     </div>
   </section>
@@ -1462,53 +1364,6 @@
     </div>
   </section>
 
-  <!-- ===================== Depoimentos ===================== -->
-  <!-- DESATIVADO: seção sai do ar até haver um depoimento REAL.
-       Vitrine de depoimentos vazia diz ao visitante que ninguém te contratou.
-       Peça duas frases a um cliente recente, cole no lugar do texto entre
-       colchetes e tire estas duas linhas de comentário.
-
-  <section id="depoimentos">
-    <div class="container-lg">
-      <div class="reveal">
-        <div class="section-heading center">
-          <span class="eyebrow">Depoimentos</span>
-          <h2>Quem já trabalhou comigo</h2>
-        </div>
-      </div>
-
-      <div class="testimonials-grid">
-        <div class="reveal" style="transition-delay:0.1s">
-          <div class="testimonial-card glass">
-            <span class="quote-mark" aria-hidden="true">&ldquo;</span>
-            <blockquote>[Espaço reservado — cole aqui o depoimento real de um cliente: o que ele precisava, como foi trabalhar com você e o resultado que teve.]</blockquote>
-            <div class="testimonial-author">
-              <span class="avatar" aria-hidden="true">?</span>
-              <div class="who">
-                <strong>Nome do cliente</strong>
-                <span>Empresa ou projeto</span>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <div class="reveal" style="transition-delay:0.18s">
-          <div class="testimonial-card glass">
-            <span class="quote-mark" aria-hidden="true">&ldquo;</span>
-            <blockquote>[Espaço reservado — um segundo depoimento. Se ainda não tiver, peça a um cliente recente: duas frases sinceras valem mais que um parágrafo genérico.]</blockquote>
-            <div class="testimonial-author">
-              <span class="avatar" aria-hidden="true">?</span>
-              <div class="who">
-                <strong>Nome do cliente</strong>
-                <span>Empresa ou projeto</span>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-  -->
 
   <!-- ===================== Contato ===================== -->
   <section id="contato">

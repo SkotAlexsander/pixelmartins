@@ -38,7 +38,8 @@ const ORDEM_CSS = [
   "60-ia.css",
   "65-trajetoria.css",
   "70-servicos.css",
-  "75-depoimentos.css",
+  /* 75-depoimentos.css: fora do repo até haver um depoimento real.
+     Ver privado/depoimentos/COMO-VOLTAR.md */
   "80-contato.css",
   "99-wordpress-elementor.css",
 ];
@@ -120,6 +121,13 @@ saida = saida.replace(/^([ \t]*)<!--\s*@incluir\s+(\S+)\s*-->/gm, (linha, ind, r
   }
   return indentar(ler(arq), ind.length);
 });
+
+/* Comentário só-do-fonte: `<!--# ... -->` fica em src/ e NÃO chega ao dist.
+   O dist é colado num site público — quem abre o código-fonte da página lê todo
+   comentário que estiver lá. Nota de bastidor ("esta seção está desativada
+   porque ainda não há cliente") não é para o visitante. Comentário normal
+   (`<!-- ... -->`) continua passando: serve para orientar quem lê o código. */
+saida = saida.replace(/^[ \t]*<!--#[\s\S]*?-->[ \t]*\r?\n?/gm, "");
 
 const restante = saida.match(/<!--\s*@\w[^>]*-->/g);
 if (restante) {
