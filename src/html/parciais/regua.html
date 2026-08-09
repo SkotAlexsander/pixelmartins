@@ -19,6 +19,18 @@
     <span class="total" id="tc-total">de 00:02:24:00</span>
   </div>
 
+  <!--# O botão de som fica aqui porque é aqui que ele fica num editor de
+       vídeo: ao lado do timecode, na barra de transporte. Começa DESLIGADO
+       e nunca toca sozinho — ver js/85-som-ambiente.js. -->
+  <button type="button" id="som-btn" class="regua-som" aria-pressed="false" aria-label="Ligar o som ambiente" data-dica="som ambiente">
+    <svg class="i-mudo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="m23 9-6 6M17 9l6 6"/>
+    </svg>
+    <svg class="i-som" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+      <path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>
+    </svg>
+  </button>
+
   <div class="regua-pista" id="regua-pista">
     <div class="faixas">
       <div class="faixa-linha">

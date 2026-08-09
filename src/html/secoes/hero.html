@@ -5,11 +5,13 @@
      A frase é a página inteira em uma linha, e não se mexe nela sem motivo
      forte: foi ela que resolveu o hero abstrato da versão de julho.
 
-     O título aparece DUAS vezes de propósito:
+     O título aparece TRÊS vezes, e cada uma tem um motivo:
        .sr-only        a frase inteira, para leitor de tela
-       [data-frase]    a mesma frase, aria-hidden, que o JS pica em palavras
-     Assim a revelação por palavra nunca chega picada a quem usa leitor de
-     tela. Se o JS não rodar, o segundo span aparece normal e ninguém percebe.
+       .hero-medida    cópia invisível que RESERVA a altura das três linhas
+                       desde o primeiro quadro — sem ela o bloco cresce
+                       enquanto digita e empurra a página para baixo
+       [data-escreve]  a que o JS escreve letra a letra, aria-hidden
+     Se o JS não rodar, a de escrever aparece pronta e as outras somem.
 
      A fita de ferramentas embaixo é aria-hidden porque é movimento; a lista
      de verdade está no .sr-only logo depois dela, em texto corrido. -->
@@ -21,7 +23,8 @@
 
     <h1 class="hero-h1">
       <span class="sr-only">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
-      <span data-frase aria-hidden="true">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
+      <span class="hero-medida" aria-hidden="true">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
+      <span class="hero-escreve" aria-hidden="true"><span data-escreve>Seu site e seu vídeo, feitos pela mesma pessoa.</span><span class="cursor"></span></span>
     </h1>
 
     <p class="hero-sub" data-anim>Você contrata uma pessoa em vez de duas — e a conta de compatibilizar

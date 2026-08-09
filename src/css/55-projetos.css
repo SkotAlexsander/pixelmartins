@@ -75,7 +75,7 @@ html.js .orbitas .gira { animation: girar var(--dur) linear infinite; }
 .clipe {
   background: var(--painel); padding: clamp(1.2rem, 2.6vw, 1.6rem);
   display: flex; flex-direction: column; gap: .7rem;
-  transition: background .2s ease;
+  transition: background var(--dur-ui) var(--ease-ui);
 }
 .clipe:hover { background: var(--faixa); }
 .clipe-topo { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
@@ -91,8 +91,24 @@ html.js .orbitas .gira { animation: girar var(--dur) linear infinite; }
 .clipe .pilha { font-family: var(--mono); font-size: .64rem; color: var(--texto-3); letter-spacing: .04em; }
 .clipe .abrir {
   display: inline-flex; align-items: center; gap: .35rem;
+  min-height: 40px; padding-inline-start: .2rem;
   font-family: var(--mono); font-size: .66rem; letter-spacing: .1em;
   text-transform: uppercase; color: var(--playhead);
 }
 .clipe .abrir svg { width: 12px; height: 12px; }
 .clipe .abrir:hover { text-decoration: underline; text-underline-offset: 3px; }
+
+/* A linha do resultado. Fica separada da descrição por um filete e ganha um
+   rótulo em mono, porque é outro tipo de informação: a descrição conta o que
+   é, o resultado conta o que aconteceu. Quem escaneia a página lê só esta. */
+.resultado {
+  font-size: .85rem; line-height: 1.5; color: var(--texto-2);
+  padding-block-start: .6rem;
+  border-block-start: var(--fio) solid var(--linha);
+}
+.resultado b {
+  display: block;
+  font-family: var(--mono); font-size: .62rem; font-weight: 500;
+  letter-spacing: .14em; text-transform: uppercase;
+  color: var(--ok); margin-block-end: .25rem;
+}

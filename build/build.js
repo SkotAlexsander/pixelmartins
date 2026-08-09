@@ -26,6 +26,7 @@ const SAIDA = path.join(RAIZ, "dist", "index-elementor.html");
    integração com o WordPress por último (precisam vencer o tema). */
 const ORDEM_CSS = [
   "01-tokens-e-base.css",
+  "05-atmosfera.css",
   "10-regua.css",
   "15-layout.css",
   "20-navbar.css",
@@ -56,11 +57,12 @@ const ORDEM_JS = [
   "10-tema.js",
   "20-menu-mobile.js",
   "30-discord-copiar.js",
-  "40-titulo-revelar.js",
+  "40-hero-datilografa.js",
   "50-revelar-ao-rolar.js",
   "60-onda.js",
   "70-regua.js",
   "80-fita.js",
+  "85-som-ambiente.js",
   "90-retrato.js",
   "95-ano.js",
 ];

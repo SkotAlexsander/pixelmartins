@@ -71,6 +71,11 @@ async function rolarTudo(p) {
     console.log(`\n== ${cenario.nome} ==`);
     const { ctx, p, erros } = await novaAba(b, cenario.cfg);
     await p.goto(URL, { waitUntil: "load" });
+    /* O cold open segura a barra e a régua fora de cena por ~2,5s enquanto a
+       frase é digitada. Medir no meio disso acusa a régua "68px abaixo da
+       janela", que é o estado correto naquele instante — e um falso alarme
+       aqui. Quem testa o cold open em si é o bloco próprio, mais abaixo. */
+    await p.evaluate(`document.documentElement.classList.remove("cold-open")`);
     await p.waitForTimeout(1600);
 
     const antes = await p.evaluate(`({
@@ -78,7 +83,16 @@ async function rolarTudo(p) {
       tc: document.getElementById("tc-agora").textContent,
       externas: performance.getEntriesByType("resource")
         .filter(function (r) { return !/127\\.0\\.0\\.|localhost/.test(r.name); })
-        .filter(function (r) { return r.transferSize > 0; }).length
+        .filter(function (r) { return r.transferSize > 0; }).length,
+      /* A régua já descolou do rodapé uma vez, por especificidade de seletor:
+         um "#pm-site > *:not(#atmosfera)", que tem DOIS IDs, venceu o
+         "position: fixed" dela, que tem um. Nada quebrava nos outros testes —
+         os blocos continuavam no DOM e o playhead continuava andando. */
+      reguaPos: getComputedStyle(document.getElementById("regua")).position,
+      reguaBottom: Math.round(document.getElementById("regua").getBoundingClientRect().bottom),
+      janela: window.innerHeight,
+      reguaFixa: getComputedStyle(document.getElementById("regua")).position === "fixed"
+        && Math.abs(document.getElementById("regua").getBoundingClientRect().bottom - window.innerHeight) < 2
     })`);
 
     await rolarTudo(p);
@@ -92,6 +106,7 @@ async function rolarTudo(p) {
     })`);
 
     ok(antes.blocos === 7, `a régua montou os 7 clipes (${antes.blocos})`);
+    ok(antes.reguaFixa, `a régua está fixa no rodapé da janela (${antes.reguaPos}, bottom ${antes.reguaBottom} de ${antes.janela})`);
     ok(depois.escondidos === 0, `todo bloco revelou ao rolar (${depois.total - depois.escondidos}/${depois.total})`);
     ok(antes.tc !== depois.tc, `o timecode andou (${antes.tc} → ${depois.tc})`);
     ok(depois.ativo === "contato", `no fim, o clipe selecionado é o contato (${depois.ativo})`);

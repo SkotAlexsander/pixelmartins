@@ -82,7 +82,7 @@ dois. Comentário normal continua passando — ele orienta quem lê o código, e
 
 ### CSS: o prefixo numérico é a cascata
 
-`01-tokens-e-base` → `10-regua` → `15-layout` → `20-navbar` →
+`01-tokens-e-base` → `05-atmosfera` → `10-regua` → `15-layout` → `20-navbar` →
 `25-menu-mobile` → `30-hero` → `35-revelar` → `50-sobre` → `55-projetos` →
 `60-ia` → `65-trajetoria` → `70-servicos` → `80-contato` →
 `99-wordpress-elementor`
@@ -109,13 +109,19 @@ tema do WordPress.
 | `10-tema.js` | botão claro/escuro |
 | `20-menu-mobile.js` | abre/fecha, Escape, clique fora, volta ao desktop |
 | `30-discord-copiar.js` | copia o usuário do Discord |
-| `40-titulo-revelar.js` | o título do hero entrando palavra por palavra |
+| `40-hero-datilografa.js` | a frase escrita letra a letra, e o cold open que ela comanda |
 | `50-revelar-ao-rolar.js` | `IntersectionObserver` que revela as seções |
 | `60-onda.js` | a forma de onda do hero **e** a da régua (os dois canvas) |
 | `70-regua.js` | playhead, timecode, clipes e a navegação por âncora |
 | `80-fita.js` | monta a fita de ferramentas (duas vezes, para o laço não saltar) |
+| `85-som-ambiente.js` | o lofi gerado no navegador — desligado por padrão |
 | `90-retrato.js` | o retrato de 150 frames (ver [animacao-retrato.md](animacao-retrato.md)) |
 | `95-ano.js` | o ano do rodapé |
+
+O `05-atmosfera.css` guarda duas coisas que parecem soltas e não são: as três
+camadas de fundo (luz de monitor, grão, vinheta) e o estado inicial do **cold
+open**. Estão juntas porque são a mesma decisão — o que a página mostra antes
+de estar montada.
 
 Antes eram todos uma IIFE gigante compartilhando variáveis. Agora **cada um é
 uma IIFE fechada, sem nenhuma variável em comum** — o preço é que os que
@@ -142,7 +148,8 @@ npm run checar     # build + validação SEM navegador — é o mínimo antes de
 npm run preview    # build + gera preview.html na raiz
 npm run servir     # python -m http.server 8099  (noutra aba)
                    # porta ocupada? PORTA=8123 em servir E verificar
-npm run verificar  # Playwright: PASSOU/REPROVOU
+npm run verificar  # Playwright: página + retrato + auditoria visual
+npm run auditar    # só a auditoria: contraste, alvo de toque, medida de linha
 ```
 
 O `npm run checar` existe por causa desta reestruturação: com o HTML, o CSS e o

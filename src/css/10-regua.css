@@ -37,6 +37,24 @@
   .regua-tc .total { font-size: .62rem; }
 }
 
+/* O botão de som, ao lado do timecode — é onde ele fica numa barra de
+   transporte. Discreto por padrão; acende no ciano quando está tocando. */
+.regua-som {
+  flex: none; width: 34px;
+  display: grid; place-items: center;
+  background: var(--faixa); color: var(--texto-3);
+  border: 0; border-inline-end: var(--fio) solid var(--linha);
+  cursor: pointer;
+  transition: color var(--dur-ui) var(--ease-ui);
+}
+.regua-som svg { width: 15px; height: 15px; }
+.regua-som:hover { color: var(--texto); }
+.regua-som[aria-pressed="true"] { color: var(--playhead); }
+#pm-site .regua-som .i-som { display: none; }
+#pm-site .regua-som[aria-pressed="true"] .i-som { display: block; }
+#pm-site .regua-som[aria-pressed="true"] .i-mudo { display: none; }
+@media (min-width: 48rem) { .regua-som { width: 40px; } }
+
 /* --rot é a canaleta dos rótulos V1/A1. O playhead precisa respeitar a MESMA
    canaleta, senão ele anda 28px adiantado no desktop. */
 .regua-pista { position: relative; flex: 1; min-width: 0; overflow: hidden; --rot: 0px; }
@@ -65,7 +83,7 @@
   color: var(--texto-3); font-family: var(--mono); font-size: .58rem;
   letter-spacing: .08em; text-transform: uppercase; text-align: start;
   white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-  cursor: pointer; transition: background .18s ease, color .18s ease;
+  cursor: pointer; transition: background var(--dur-ui) var(--ease-ui), color var(--dur-ui) var(--ease-ui);
 }
 .bloco::before {
   content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;

@@ -15,7 +15,7 @@
 .servico {
   background: var(--painel); padding: clamp(1.4rem, 3vw, 2rem);
   display: flex; flex-direction: column; gap: 1rem;
-  transition: background .2s ease;
+  transition: background var(--dur-ui) var(--ease-ui);
 }
 .servico:hover { background: var(--faixa); }
 .servico-n { font-family: var(--mono); font-size: .72rem; font-weight: 600; color: var(--playhead); letter-spacing: .1em; }

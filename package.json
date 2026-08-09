@@ -8,10 +8,11 @@
     "checar": "node build/build.js && node dev/checar-build.js",
     "preview": "node build/build.js && node dev/montar-preview.js",
     "servir": "python -m http.server 8099",
-    "verificar": "node dev/verificar-pagina.js && node dev/verificar-animacao.js",
+    "verificar": "node dev/verificar-pagina.js && node dev/verificar-animacao.js && node dev/auditar-visual.js",
     "verificar:pagina": "node dev/verificar-pagina.js",
     "verificar:retrato": "node dev/verificar-animacao.js",
     "verificar:mobile": "node dev/checar-mobile.js",
-    "verificar:wp": "node dev/checar-rota-wp.js"
+    "verificar:wp": "node dev/checar-rota-wp.js",
+    "auditar": "node dev/auditar-visual.js"
   }
 }

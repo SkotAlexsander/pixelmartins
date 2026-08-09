@@ -23,4 +23,6 @@
   text-transform: uppercase; color: var(--marcador);
 }
 .log-item h3 { font-size: 1.1rem; margin-block-start: .35rem; text-transform: uppercase; }
-.log-item p { color: var(--texto-2); margin-block-start: .4rem; font-size: .92rem; }
+/* sem limite, este bloco chegava a 91 caracteres por linha em tela larga —
+   o olho perde o começo da linha seguinte acima de ~75 */
+.log-item p { color: var(--texto-2); margin-block-start: .4rem; font-size: .92rem; max-width: 68ch; }

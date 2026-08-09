@@ -40,4 +40,9 @@
   display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
   gap: .6rem; font-family: var(--mono); font-size: .68rem; color: var(--texto-3);
 }
+/* o "voltar ao topo" tinha 14px de altura: alvo impossível no polegar */
+.rodape a {
+  display: inline-flex; align-items: center; min-height: 40px;
+  transition: color var(--dur-ui) var(--ease-ui);
+}
 .rodape a:hover { color: var(--texto); }

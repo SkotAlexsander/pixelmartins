@@ -21,7 +21,12 @@
 /* A logo é um monograma quadrado (900×700). Os atributos width/height do HTML
    declaram a proporção REAL — declarar 140×32 fazia o navegador reservar o
    espaço errado e a página pulava ao carregar. */
-.marca { display: flex; align-items: center; gap: .7rem; flex: none; }
+.marca {
+  display: flex; align-items: center; gap: .7rem; flex: none;
+  /* a imagem tem 26px de altura; o padding é o que dá alvo de toque à volta
+     dela sem aumentar a logo */
+  padding-block: .55rem; margin-block: -.55rem;
+}
 .marca img { height: 26px; width: auto; }
 @media (min-width: 48rem) { .marca img { height: 30px; } }
 .marca-txt {
@@ -34,22 +39,26 @@
 @media (min-width: 62rem) { .links { display: block; } }
 .links ul { display: flex; align-items: center; gap: 1.4rem; list-style: none; margin: 0; padding: 0; }
 .links a {
+  display: inline-flex; align-items: center; min-height: 40px;
   font-family: var(--mono); font-size: .72rem; letter-spacing: .08em;
   text-transform: uppercase; color: var(--texto-2);
-  padding-block: .3rem; border-block-end: 2px solid transparent;
-  transition: color .16s ease, border-color .16s ease;
+  border-block-end: 2px solid transparent;
+  transition: color var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui);
 }
 .links a:hover { color: var(--texto); }
 .links a[aria-current="true"] { color: var(--texto); border-block-end-color: var(--playhead); }
 
 .acoes { display: flex; align-items: center; gap: .5rem; flex: none; }
+/* 44px é o mínimo de alvo de toque (WCAG 2.5.5 e as diretrizes da Apple e do
+   Google concordam nisso). Estava 34, que erra o dedo em celular. */
 .quadrado {
-  width: 34px; height: 34px; display: grid; place-items: center;
+  width: 44px; height: 44px; display: grid; place-items: center;
   border: var(--fio) solid var(--linha); border-radius: var(--r-sm);
   background: var(--faixa); color: var(--texto-2); cursor: pointer;
-  transition: color .16s ease, border-color .16s ease;
+  transition: color var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui);
 }
 .quadrado:hover { color: var(--texto); border-color: var(--linha-forte); }
+.quadrado { transition: color var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui); }
 .quadrado svg { width: 16px; height: 16px; }
 
 /* Prefixados com #pm-site de propósito: a regra base "#pm-site svg { display:

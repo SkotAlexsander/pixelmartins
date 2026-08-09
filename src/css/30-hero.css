@@ -51,13 +51,37 @@
   max-width: 18ch;
 }
 
-/* A revelação por palavra: cada palavra é um span dentro de uma máscara.
-   O texto acessível continua inteiro num .sr-only — leitor de tela nunca
-   recebe a frase picada. */
-.pal { display: inline-block; overflow: hidden; vertical-align: bottom; }
-.pal > span { display: inline-block; will-change: transform; transition: transform .62s cubic-bezier(.16, 1, .3, 1); }
-html.js .pal > span { transform: translateY(102%); }
-html.js .pal.pronta > span { transform: translateY(0); }
+/* A DATILOGRAFIA
+   A frase é escrita letra a letra, como era na versão de julho. Não é
+   nostalgia: é a coisa certa para um cold open — o texto aparecendo no tempo
+   de quem fala, não no tempo de quem projeta.
+
+   A caixa reserva a altura da frase inteira desde o primeiro quadro
+   (`.hero-medida`, uma cópia invisível). Sem isso, o bloco cresce de uma
+   linha para três enquanto digita e empurra meia página para baixo — que era
+   o defeito da versão antiga. */
+.hero-h1 { position: relative; }
+.hero-medida { visibility: hidden; display: block; }
+.hero-escreve {
+  position: absolute; inset: 0;
+  display: block;
+}
+.cursor {
+  display: inline-block;
+  width: .06em; height: .78em;
+  margin-inline-start: .06em;
+  background: var(--playhead);
+  vertical-align: -.06em;
+}
+html.js .cursor { animation: pisca-cursor 1.05s steps(1, end) infinite; }
+.cursor.parado { animation: none; opacity: 0; }
+@keyframes pisca-cursor { 0%, 50% { opacity: 1 } 51%, 100% { opacity: 0 } }
+
+/* Sem JavaScript o absoluto não serve: a frase visível vira a única, no
+   fluxo normal, e a cópia de medida some. */
+html:not(.js) .hero-escreve { position: static; }
+html:not(.js) .hero-medida { display: none; }
+html:not(.js) .cursor { display: none; }
 
 .hero-sub {
   margin-block-start: 1.4rem; max-width: 52ch;

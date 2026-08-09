@@ -1,0 +1,106 @@
+/* ==========================================================================
+   ATMOSFERA — o ar da sala
+
+   A v5 acertou em tirar o brilho genérico, mas foi longe demais: ficou seca.
+   Faltava o que existe numa sala de edição de verdade e não aparecia em lugar
+   nenhum — o grão da imagem e a luz do monitor batendo no ambiente escuro.
+
+   Três camadas, todas em opacidade baixíssima, todas PARADAS. É essa a
+   diferença para o brilho de landing de IA que foi rejeitado: aquilo era
+   colorido, saturado e animado (blob que deriva em 14 s); isto é neutro,
+   quase invisível e imóvel. Atmosfera se sente, não se olha.
+
+   Fica atrás de tudo (z-index: 0, o conteúdo é 1) e não intercepta clique.
+   ========================================================================== */
+/* z-index NEGATIVO, e o #pm-site isolando o contexto de empilhamento.
+
+   A primeira versão disto empurrava todos os irmãos para position:relative
+   com `#pm-site > *:not(#atmosfera)` — e esse seletor tem DOIS IDs de
+   especificidade (o #pm-site e o #atmosfera dentro do :not). Ele vencia
+   `#regua { position: fixed }`, que tem um só, e a régua descolava do rodapé
+   e ia parar no fim do documento. Bug silencioso: nenhum teste de conteúdo
+   percebe, porque tudo continua no DOM e funcionando.
+
+   Assim é mais simples e não briga com ninguém: `isolation: isolate` faz o
+   #pm-site criar o contexto, e dentro dele o -1 fica acima do fundo do
+   próprio #pm-site e abaixo de todo o conteúdo. */
+#atmosfera {
+  position: fixed; inset: 0; z-index: -1;
+  pointer-events: none;
+  overflow: hidden;
+}
+
+/* 1. A LUZ DO MONITOR
+   Um monitor grande num quarto escuro joga luz fria no teto e nas paredes.
+   É isso — não um "blob de gradiente". Vem de cima, é frio, e a 5% de
+   opacidade você não a vê: você só sente que o topo da página respira. */
+.luz-monitor {
+  position: absolute; inset-inline: -20%; top: -35vh;
+  height: 90vh;
+  background: radial-gradient(ellipse 55% 50% at 50% 100%,
+    color-mix(in srgb, var(--playhead) 22%, transparent) 0%,
+    transparent 70%);
+  opacity: .22;
+}
+html.light .luz-monitor { opacity: .12; }
+
+/* 2. O GRÃO
+   Textura de vídeo, gerada por SVG (feTurbulence) — não é imagem baixada,
+   não é canvas rodando a 60fps. É um único data URI que o navegador
+   rasteriza uma vez e repete. Custo praticamente zero.
+
+   No claro ele fica mais fraco: grão sobre papel branco vira sujeira. */
+.grao {
+  position: absolute; inset: 0;
+  opacity: .16;
+  mix-blend-mode: overlay;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='.55'/%3E%3C/svg%3E");
+  background-size: 140px 140px;
+}
+html.light .grao { opacity: .07; mix-blend-mode: multiply; }
+
+/* 3. A VINHETA
+   Escurece os cantos e centraliza o olho. É o mesmo que um colorista faz na
+   última etapa de uma finalização, e pelo mesmo motivo. */
+.vinheta {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse 78% 68% at 50% 45%,
+    transparent 55%,
+    color-mix(in srgb, var(--bg) 90%, #000) 100%);
+  opacity: .8;
+}
+html.light .vinheta { opacity: .35; }
+
+/* ==========================================================================
+   COLD OPEN — a primeira tela é SÓ a frase
+
+   Um filme não abre com o menu do DVD na tela. Enquanto a frase está sendo
+   escrita, a barra do topo e a régua do rodapé ainda não entraram: existe a
+   cartela e nada mais. Quando a frase termina, as duas deslizam para o lugar.
+
+   O estado inicial vive em `html.cold-open`, e quem tira a classe é
+   js/40-hero-datilografa.js ao acabar de escrever. Se o JavaScript não
+   rodar, a classe nunca é posta (ela é adicionada pelo próprio JS) e a
+   página aparece montada — que é o comportamento certo.
+   ========================================================================== */
+html.cold-open #barra {
+  opacity: 0;
+  transform: translateY(-100%);
+  pointer-events: none;
+}
+html.cold-open #regua {
+  transform: translateY(100%);
+  pointer-events: none;
+}
+#barra, #regua {
+  transition: transform var(--dur-cena) var(--ease-entra),
+              opacity   var(--dur-cena) var(--ease-entra);
+}
+
+/* Sob "menos movimento" não há cold open: tudo já está no lugar. */
+@media (prefers-reduced-motion: reduce) {
+  html.cold-open #barra, html.cold-open #regua {
+    opacity: 1; transform: none; pointer-events: auto;
+  }
+  #barra, #regua { transition: none; }
+}

@@ -27,12 +27,20 @@
 
   --texto:         #EDEDEF;
   --texto-2:       #9A9AA2;
-  --texto-3:       #6A6A72;
+  /* Era #6A6A72 e reprovava contraste (2,81 sobre a faixa da régua). É a cor
+     de TODO rótulo pequeno da página — timecode, faixa, ficha, rodapé — e
+     texto pequeno é justamente o que menos perdoa contraste baixo. */
+  --texto-3:       #8E8E96;
 
   --playhead:      #00CFFF;
   --playhead-fraco:#0E4A5C;
   --marcador:      #FF9F1C;
   --ok:            #3DDC97;
+  /* A cor do texto DENTRO do botão cheio. É um token porque muda de tema:
+     no escuro o botão é ciano claro e o texto é quase preto; no claro o
+     botão é azul escuro e o texto é branco. Fixar um dos dois reprovaria
+     contraste no outro tema. */
+  --botao-txt:     #04161C;
 
   --r:      3px;      /* nada aqui é cápsula: é painel de software */
   --r-sm:   2px;
@@ -45,6 +53,31 @@
   --secao-y: clamp(4.5rem, 10vw, 8rem);
   --gutter:  clamp(1.15rem, 4.5vw, 2.5rem);
   --regua-h: 52px;    /* altura da régua do rodapé — o JS lê este valor */
+
+  /* ---- MOVIMENTO ----------------------------------------------------------
+     Um vocabulário só para a página inteira. Antes cada componente inventava
+     a própria duração (.12s aqui, .38s ali, .62s acolá) e o resultado era um
+     site em que nada se movia no mesmo compasso.
+
+     A escala vem do que o movimento COMUNICA, não do tamanho do elemento:
+       micro   confirma que você tocou em algo (hover, press)
+       ui      um estado mudou (tema, menu, seleção)
+       entra   um bloco chegou (revelação de seção)
+       cena    um momento composto (o cold open)
+
+     As curvas são duas, e a diferença importa: o que entra desacelera até
+     parar (out); o que sai acelera para fora (in). Nada de bounce — isto é
+     um instrumento de trabalho, não um brinquedo. */
+  --dur-micro: 140ms;
+  --dur-ui:    220ms;
+  --dur-entra: 420ms;
+  --dur-cena:  700ms;
+
+  --ease-entra: cubic-bezier(.16, 1, .3, 1);    /* desacelera e assenta */
+  --ease-sai:   cubic-bezier(.4, 0, 1, 1);      /* acelera para fora */
+  --ease-ui:    cubic-bezier(.25, .8, .3, 1);
+
+  --sobe: 14px;    /* o quanto um bloco sobe ao entrar */
 }
 
 @media (min-width: 48rem) { :root { --regua-h: 68px; } }
@@ -59,12 +92,18 @@ html.light {
 
   --texto:         #17171A;
   --texto-2:       #5A5A64;
-  --texto-3:       #83838E;
+  --texto-3:       #656570;   /* era #83838E: 3,09 de contraste, reprovava */
 
-  --playhead:      #0086AD;
+  /* Os três acentos são mais escuros aqui do que a versão anterior. O motivo
+     é medido, não estético: sobre papel claro, #0086AD dava 3,46 de contraste
+     como TEXTO (o timecode é texto), #C46A00 dava 3,20 e #1E8F5F, 3,37 — os
+     três reprovavam AA. Escurecidos, ficam em 5,4 a 5,9 e o matiz da marca
+     continua o mesmo. */
+  --playhead:      #006D8E;
   --playhead-fraco:#B9E4F2;
-  --marcador:      #C46A00;
-  --ok:            #1E8F5F;
+  --marcador:      #975100;
+  --ok:            #18754E;
+  --botao-txt:     #FFFFFF;   /* branco sobre o azul escuro: 5,87 */
 }
 
 /* ---- base ---------------------------------------------------------------- */
@@ -77,6 +116,9 @@ html.light {
   -webkit-font-smoothing: antialiased;
   /* clip, não hidden: hidden num eixo força rolagem no outro */
   overflow-x: clip;
+  /* cria o contexto de empilhamento em que a atmosfera vive com z-index -1
+     (ver css/05-atmosfera.css) */
+  isolation: isolate;
   padding-block-end: var(--regua-h);
 }
 #pm-site *, #pm-site *::before, #pm-site *::after { box-sizing: border-box; }
@@ -85,6 +127,11 @@ html.light {
 #pm-site img, #pm-site svg, #pm-site canvas { display: block; max-width: 100%; }
 #pm-site a { color: inherit; text-decoration: none; }
 
+/* Todo dado monoespaçado da página é número que muda sozinho (timecode,
+   contagem de frames). Sem tabular-nums, a largura do 1 é menor que a do 8 e
+   o texto inteiro treme a cada quadro. */
+.dado, .tc, .regua-tc, .clipe-topo .id, .monitor-pe, .rec { font-variant-numeric: tabular-nums; }
+
 #pm-site :focus-visible {
   outline: 2px solid var(--playhead);
   outline-offset: 3px;
@@ -92,7 +139,7 @@ html.light {
 
 .skip-link {
   position: absolute; left: -9999px; top: 0; z-index: 999;
-  background: var(--playhead); color: #05161C;
+  background: var(--playhead); color: var(--botao-txt);
   padding: .7rem 1.1rem; font-family: var(--mono); font-size: .8rem;
 }
 .skip-link:focus { left: .5rem; top: .5rem; }
@@ -106,6 +153,8 @@ html.light {
 h1, h2, h3, h4 {
   font-family: var(--display); font-weight: 800;
   line-height: 1.02; letter-spacing: -.02em;
+  /* distribui as linhas em vez de deixar uma palavra sozinha embaixo */
+  text-wrap: balance;
 }
 h2 { font-size: clamp(1.9rem, 5.4vw, 3.4rem); text-transform: uppercase; }
 h3 { font-size: clamp(1.15rem, 2.4vw, 1.5rem); letter-spacing: -.01em; }
@@ -113,15 +162,17 @@ h3 { font-size: clamp(1.15rem, 2.4vw, 1.5rem); letter-spacing: -.01em; }
 /* ---- botões -------------------------------------------------------------- */
 .botao {
   display: inline-flex; align-items: center; gap: .6rem;
+  min-height: 44px;
   padding: .85rem 1.3rem; border-radius: var(--r);
-  background: var(--playhead); color: #04161C;
+  background: var(--playhead); color: var(--botao-txt);
   font-family: var(--mono); font-size: .8rem; font-weight: 600;
   letter-spacing: .06em; text-transform: uppercase;
   border: var(--fio) solid var(--playhead);
-  transition: transform .12s ease, background .18s ease;
+  transition: transform var(--dur-micro) var(--ease-ui), background var(--dur-ui) var(--ease-ui);
 }
 .botao svg { width: 15px; height: 15px; }
 .botao:hover { transform: translateY(-1px); background: color-mix(in srgb, var(--playhead) 84%, #fff); }
+.botao, .botao-fantasma { transition: transform var(--dur-micro) var(--ease-ui), background var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui); }
 .botao:active { transform: translateY(0); }
 .botao-fantasma { background: transparent; color: var(--texto); border-color: var(--linha-forte); }
 .botao-fantasma:hover { background: var(--faixa); border-color: var(--playhead); color: var(--texto); }

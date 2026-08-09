@@ -69,20 +69,12 @@
 
     --texto:         #EDEDEF;
     --texto-2:       #9A9AA2;
-    /* Era #6A6A72 e reprovava contraste (2,81 sobre a faixa da régua). É a cor
-       de TODO rótulo pequeno da página — timecode, faixa, ficha, rodapé — e
-       texto pequeno é justamente o que menos perdoa contraste baixo. */
-    --texto-3:       #8E8E96;
+    --texto-3:       #6A6A72;
 
     --playhead:      #00CFFF;
     --playhead-fraco:#0E4A5C;
     --marcador:      #FF9F1C;
     --ok:            #3DDC97;
-    /* A cor do texto DENTRO do botão cheio. É um token porque muda de tema:
-       no escuro o botão é ciano claro e o texto é quase preto; no claro o
-       botão é azul escuro e o texto é branco. Fixar um dos dois reprovaria
-       contraste no outro tema. */
-    --botao-txt:     #04161C;
 
     --r:      3px;      /* nada aqui é cápsula: é painel de software */
     --r-sm:   2px;
@@ -95,31 +87,6 @@
     --secao-y: clamp(4.5rem, 10vw, 8rem);
     --gutter:  clamp(1.15rem, 4.5vw, 2.5rem);
     --regua-h: 52px;    /* altura da régua do rodapé — o JS lê este valor */
-
-    /* ---- MOVIMENTO ----------------------------------------------------------
-       Um vocabulário só para a página inteira. Antes cada componente inventava
-       a própria duração (.12s aqui, .38s ali, .62s acolá) e o resultado era um
-       site em que nada se movia no mesmo compasso.
-
-       A escala vem do que o movimento COMUNICA, não do tamanho do elemento:
-         micro   confirma que você tocou em algo (hover, press)
-         ui      um estado mudou (tema, menu, seleção)
-         entra   um bloco chegou (revelação de seção)
-         cena    um momento composto (o cold open)
-
-       As curvas são duas, e a diferença importa: o que entra desacelera até
-       parar (out); o que sai acelera para fora (in). Nada de bounce — isto é
-       um instrumento de trabalho, não um brinquedo. */
-    --dur-micro: 140ms;
-    --dur-ui:    220ms;
-    --dur-entra: 420ms;
-    --dur-cena:  700ms;
-
-    --ease-entra: cubic-bezier(.16, 1, .3, 1);    /* desacelera e assenta */
-    --ease-sai:   cubic-bezier(.4, 0, 1, 1);      /* acelera para fora */
-    --ease-ui:    cubic-bezier(.25, .8, .3, 1);
-
-    --sobe: 14px;    /* o quanto um bloco sobe ao entrar */
   }
 
   @media (min-width: 48rem) { :root { --regua-h: 68px; } }
@@ -134,18 +101,12 @@
 
     --texto:         #17171A;
     --texto-2:       #5A5A64;
-    --texto-3:       #656570;   /* era #83838E: 3,09 de contraste, reprovava */
+    --texto-3:       #83838E;
 
-    /* Os três acentos são mais escuros aqui do que a versão anterior. O motivo
-       é medido, não estético: sobre papel claro, #0086AD dava 3,46 de contraste
-       como TEXTO (o timecode é texto), #C46A00 dava 3,20 e #1E8F5F, 3,37 — os
-       três reprovavam AA. Escurecidos, ficam em 5,4 a 5,9 e o matiz da marca
-       continua o mesmo. */
-    --playhead:      #006D8E;
+    --playhead:      #0086AD;
     --playhead-fraco:#B9E4F2;
-    --marcador:      #975100;
-    --ok:            #18754E;
-    --botao-txt:     #FFFFFF;   /* branco sobre o azul escuro: 5,87 */
+    --marcador:      #C46A00;
+    --ok:            #1E8F5F;
   }
 
   /* ---- base ---------------------------------------------------------------- */
@@ -158,9 +119,6 @@
     -webkit-font-smoothing: antialiased;
     /* clip, não hidden: hidden num eixo força rolagem no outro */
     overflow-x: clip;
-    /* cria o contexto de empilhamento em que a atmosfera vive com z-index -1
-       (ver css/05-atmosfera.css) */
-    isolation: isolate;
     padding-block-end: var(--regua-h);
   }
   #pm-site *, #pm-site *::before, #pm-site *::after { box-sizing: border-box; }
@@ -169,11 +127,6 @@
   #pm-site img, #pm-site svg, #pm-site canvas { display: block; max-width: 100%; }
   #pm-site a { color: inherit; text-decoration: none; }
 
-  /* Todo dado monoespaçado da página é número que muda sozinho (timecode,
-     contagem de frames). Sem tabular-nums, a largura do 1 é menor que a do 8 e
-     o texto inteiro treme a cada quadro. */
-  .dado, .tc, .regua-tc, .clipe-topo .id, .monitor-pe, .rec { font-variant-numeric: tabular-nums; }
-
   #pm-site :focus-visible {
     outline: 2px solid var(--playhead);
     outline-offset: 3px;
@@ -181,7 +134,7 @@
 
   .skip-link {
     position: absolute; left: -9999px; top: 0; z-index: 999;
-    background: var(--playhead); color: var(--botao-txt);
+    background: var(--playhead); color: #05161C;
     padding: .7rem 1.1rem; font-family: var(--mono); font-size: .8rem;
   }
   .skip-link:focus { left: .5rem; top: .5rem; }
@@ -195,8 +148,6 @@
   h1, h2, h3, h4 {
     font-family: var(--display); font-weight: 800;
     line-height: 1.02; letter-spacing: -.02em;
-    /* distribui as linhas em vez de deixar uma palavra sozinha embaixo */
-    text-wrap: balance;
   }
   h2 { font-size: clamp(1.9rem, 5.4vw, 3.4rem); text-transform: uppercase; }
   h3 { font-size: clamp(1.15rem, 2.4vw, 1.5rem); letter-spacing: -.01em; }
@@ -204,17 +155,15 @@
   /* ---- botões -------------------------------------------------------------- */
   .botao {
     display: inline-flex; align-items: center; gap: .6rem;
-    min-height: 44px;
     padding: .85rem 1.3rem; border-radius: var(--r);
-    background: var(--playhead); color: var(--botao-txt);
+    background: var(--playhead); color: #04161C;
     font-family: var(--mono); font-size: .8rem; font-weight: 600;
     letter-spacing: .06em; text-transform: uppercase;
     border: var(--fio) solid var(--playhead);
-    transition: transform var(--dur-micro) var(--ease-ui), background var(--dur-ui) var(--ease-ui);
+    transition: transform .12s ease, background .18s ease;
   }
   .botao svg { width: 15px; height: 15px; }
   .botao:hover { transform: translateY(-1px); background: color-mix(in srgb, var(--playhead) 84%, #fff); }
-  .botao, .botao-fantasma { transition: transform var(--dur-micro) var(--ease-ui), background var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui); }
   .botao:active { transform: translateY(0); }
   .botao-fantasma { background: transparent; color: var(--texto); border-color: var(--linha-forte); }
   .botao-fantasma:hover { background: var(--faixa); border-color: var(--playhead); color: var(--texto); }
@@ -224,113 +173,6 @@
     font-family: var(--mono); font-size: .68rem; letter-spacing: .06em;
     color: var(--texto-2); border: var(--fio) solid var(--linha);
     border-radius: var(--r-sm); padding: .32rem .6rem; background: var(--painel);
-  }
-
-  /* ==========================================================================
-     ATMOSFERA — o ar da sala
-
-     A v5 acertou em tirar o brilho genérico, mas foi longe demais: ficou seca.
-     Faltava o que existe numa sala de edição de verdade e não aparecia em lugar
-     nenhum — o grão da imagem e a luz do monitor batendo no ambiente escuro.
-
-     Três camadas, todas em opacidade baixíssima, todas PARADAS. É essa a
-     diferença para o brilho de landing de IA que foi rejeitado: aquilo era
-     colorido, saturado e animado (blob que deriva em 14 s); isto é neutro,
-     quase invisível e imóvel. Atmosfera se sente, não se olha.
-
-     Fica atrás de tudo (z-index: 0, o conteúdo é 1) e não intercepta clique.
-     ========================================================================== */
-  /* z-index NEGATIVO, e o #pm-site isolando o contexto de empilhamento.
-
-     A primeira versão disto empurrava todos os irmãos para position:relative
-     com `#pm-site > *:not(#atmosfera)` — e esse seletor tem DOIS IDs de
-     especificidade (o #pm-site e o #atmosfera dentro do :not). Ele vencia
-     `#regua { position: fixed }`, que tem um só, e a régua descolava do rodapé
-     e ia parar no fim do documento. Bug silencioso: nenhum teste de conteúdo
-     percebe, porque tudo continua no DOM e funcionando.
-
-     Assim é mais simples e não briga com ninguém: `isolation: isolate` faz o
-     #pm-site criar o contexto, e dentro dele o -1 fica acima do fundo do
-     próprio #pm-site e abaixo de todo o conteúdo. */
-  #atmosfera {
-    position: fixed; inset: 0; z-index: -1;
-    pointer-events: none;
-    overflow: hidden;
-  }
-
-  /* 1. A LUZ DO MONITOR
-     Um monitor grande num quarto escuro joga luz fria no teto e nas paredes.
-     É isso — não um "blob de gradiente". Vem de cima, é frio, e a 5% de
-     opacidade você não a vê: você só sente que o topo da página respira. */
-  .luz-monitor {
-    position: absolute; inset-inline: -20%; top: -35vh;
-    height: 90vh;
-    background: radial-gradient(ellipse 55% 50% at 50% 100%,
-      color-mix(in srgb, var(--playhead) 22%, transparent) 0%,
-      transparent 70%);
-    opacity: .22;
-  }
-  html.light .luz-monitor { opacity: .12; }
-
-  /* 2. O GRÃO
-     Textura de vídeo, gerada por SVG (feTurbulence) — não é imagem baixada,
-     não é canvas rodando a 60fps. É um único data URI que o navegador
-     rasteriza uma vez e repete. Custo praticamente zero.
-
-     No claro ele fica mais fraco: grão sobre papel branco vira sujeira. */
-  .grao {
-    position: absolute; inset: 0;
-    opacity: .16;
-    mix-blend-mode: overlay;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='g'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.85' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='saturate' values='0'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23g)' opacity='.55'/%3E%3C/svg%3E");
-    background-size: 140px 140px;
-  }
-  html.light .grao { opacity: .07; mix-blend-mode: multiply; }
-
-  /* 3. A VINHETA
-     Escurece os cantos e centraliza o olho. É o mesmo que um colorista faz na
-     última etapa de uma finalização, e pelo mesmo motivo. */
-  .vinheta {
-    position: absolute; inset: 0;
-    background: radial-gradient(ellipse 78% 68% at 50% 45%,
-      transparent 55%,
-      color-mix(in srgb, var(--bg) 90%, #000) 100%);
-    opacity: .8;
-  }
-  html.light .vinheta { opacity: .35; }
-
-  /* ==========================================================================
-     COLD OPEN — a primeira tela é SÓ a frase
-
-     Um filme não abre com o menu do DVD na tela. Enquanto a frase está sendo
-     escrita, a barra do topo e a régua do rodapé ainda não entraram: existe a
-     cartela e nada mais. Quando a frase termina, as duas deslizam para o lugar.
-
-     O estado inicial vive em `html.cold-open`, e quem tira a classe é
-     js/40-hero-datilografa.js ao acabar de escrever. Se o JavaScript não
-     rodar, a classe nunca é posta (ela é adicionada pelo próprio JS) e a
-     página aparece montada — que é o comportamento certo.
-     ========================================================================== */
-  html.cold-open #barra {
-    opacity: 0;
-    transform: translateY(-100%);
-    pointer-events: none;
-  }
-  html.cold-open #regua {
-    transform: translateY(100%);
-    pointer-events: none;
-  }
-  #barra, #regua {
-    transition: transform var(--dur-cena) var(--ease-entra),
-                opacity   var(--dur-cena) var(--ease-entra);
-  }
-
-  /* Sob "menos movimento" não há cold open: tudo já está no lugar. */
-  @media (prefers-reduced-motion: reduce) {
-    html.cold-open #barra, html.cold-open #regua {
-      opacity: 1; transform: none; pointer-events: auto;
-    }
-    #barra, #regua { transition: none; }
   }
 
   /* ==========================================================================
@@ -372,24 +214,6 @@
     .regua-tc .total { font-size: .62rem; }
   }
 
-  /* O botão de som, ao lado do timecode — é onde ele fica numa barra de
-     transporte. Discreto por padrão; acende no ciano quando está tocando. */
-  .regua-som {
-    flex: none; width: 34px;
-    display: grid; place-items: center;
-    background: var(--faixa); color: var(--texto-3);
-    border: 0; border-inline-end: var(--fio) solid var(--linha);
-    cursor: pointer;
-    transition: color var(--dur-ui) var(--ease-ui);
-  }
-  .regua-som svg { width: 15px; height: 15px; }
-  .regua-som:hover { color: var(--texto); }
-  .regua-som[aria-pressed="true"] { color: var(--playhead); }
-  #pm-site .regua-som .i-som { display: none; }
-  #pm-site .regua-som[aria-pressed="true"] .i-som { display: block; }
-  #pm-site .regua-som[aria-pressed="true"] .i-mudo { display: none; }
-  @media (min-width: 48rem) { .regua-som { width: 40px; } }
-
   /* --rot é a canaleta dos rótulos V1/A1. O playhead precisa respeitar a MESMA
      canaleta, senão ele anda 28px adiantado no desktop. */
   .regua-pista { position: relative; flex: 1; min-width: 0; overflow: hidden; --rot: 0px; }
@@ -418,7 +242,7 @@
     color: var(--texto-3); font-family: var(--mono); font-size: .58rem;
     letter-spacing: .08em; text-transform: uppercase; text-align: start;
     white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
-    cursor: pointer; transition: background var(--dur-ui) var(--ease-ui), color var(--dur-ui) var(--ease-ui);
+    cursor: pointer; transition: background .18s ease, color .18s ease;
   }
   .bloco::before {
     content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
@@ -493,11 +317,6 @@
     display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
     gap: .6rem; font-family: var(--mono); font-size: .68rem; color: var(--texto-3);
   }
-  /* o "voltar ao topo" tinha 14px de altura: alvo impossível no polegar */
-  .rodape a {
-    display: inline-flex; align-items: center; min-height: 40px;
-    transition: color var(--dur-ui) var(--ease-ui);
-  }
   .rodape a:hover { color: var(--texto); }
 
   /* ==========================================================================
@@ -523,12 +342,7 @@
   /* A logo é um monograma quadrado (900×700). Os atributos width/height do HTML
      declaram a proporção REAL — declarar 140×32 fazia o navegador reservar o
      espaço errado e a página pulava ao carregar. */
-  .marca {
-    display: flex; align-items: center; gap: .7rem; flex: none;
-    /* a imagem tem 26px de altura; o padding é o que dá alvo de toque à volta
-       dela sem aumentar a logo */
-    padding-block: .55rem; margin-block: -.55rem;
-  }
+  .marca { display: flex; align-items: center; gap: .7rem; flex: none; }
   .marca img { height: 26px; width: auto; }
   @media (min-width: 48rem) { .marca img { height: 30px; } }
   .marca-txt {
@@ -541,26 +355,22 @@
   @media (min-width: 62rem) { .links { display: block; } }
   .links ul { display: flex; align-items: center; gap: 1.4rem; list-style: none; margin: 0; padding: 0; }
   .links a {
-    display: inline-flex; align-items: center; min-height: 40px;
     font-family: var(--mono); font-size: .72rem; letter-spacing: .08em;
     text-transform: uppercase; color: var(--texto-2);
-    border-block-end: 2px solid transparent;
-    transition: color var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui);
+    padding-block: .3rem; border-block-end: 2px solid transparent;
+    transition: color .16s ease, border-color .16s ease;
   }
   .links a:hover { color: var(--texto); }
   .links a[aria-current="true"] { color: var(--texto); border-block-end-color: var(--playhead); }
 
   .acoes { display: flex; align-items: center; gap: .5rem; flex: none; }
-  /* 44px é o mínimo de alvo de toque (WCAG 2.5.5 e as diretrizes da Apple e do
-     Google concordam nisso). Estava 34, que erra o dedo em celular. */
   .quadrado {
-    width: 44px; height: 44px; display: grid; place-items: center;
+    width: 34px; height: 34px; display: grid; place-items: center;
     border: var(--fio) solid var(--linha); border-radius: var(--r-sm);
     background: var(--faixa); color: var(--texto-2); cursor: pointer;
-    transition: color var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui);
+    transition: color .16s ease, border-color .16s ease;
   }
   .quadrado:hover { color: var(--texto); border-color: var(--linha-forte); }
-  .quadrado { transition: color var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui); }
   .quadrado svg { width: 16px; height: 16px; }
 
   /* Prefixados com #pm-site de propósito: a regra base "#pm-site svg { display:
@@ -656,37 +466,13 @@
     max-width: 18ch;
   }
 
-  /* A DATILOGRAFIA
-     A frase é escrita letra a letra, como era na versão de julho. Não é
-     nostalgia: é a coisa certa para um cold open — o texto aparecendo no tempo
-     de quem fala, não no tempo de quem projeta.
-
-     A caixa reserva a altura da frase inteira desde o primeiro quadro
-     (`.hero-medida`, uma cópia invisível). Sem isso, o bloco cresce de uma
-     linha para três enquanto digita e empurra meia página para baixo — que era
-     o defeito da versão antiga. */
-  .hero-h1 { position: relative; }
-  .hero-medida { visibility: hidden; display: block; }
-  .hero-escreve {
-    position: absolute; inset: 0;
-    display: block;
-  }
-  .cursor {
-    display: inline-block;
-    width: .06em; height: .78em;
-    margin-inline-start: .06em;
-    background: var(--playhead);
-    vertical-align: -.06em;
-  }
-  html.js .cursor { animation: pisca-cursor 1.05s steps(1, end) infinite; }
-  .cursor.parado { animation: none; opacity: 0; }
-  @keyframes pisca-cursor { 0%, 50% { opacity: 1 } 51%, 100% { opacity: 0 } }
-
-  /* Sem JavaScript o absoluto não serve: a frase visível vira a única, no
-     fluxo normal, e a cópia de medida some. */
-  html:not(.js) .hero-escreve { position: static; }
-  html:not(.js) .hero-medida { display: none; }
-  html:not(.js) .cursor { display: none; }
+  /* A revelação por palavra: cada palavra é um span dentro de uma máscara.
+     O texto acessível continua inteiro num .sr-only — leitor de tela nunca
+     recebe a frase picada. */
+  .pal { display: inline-block; overflow: hidden; vertical-align: bottom; }
+  .pal > span { display: inline-block; will-change: transform; transition: transform .62s cubic-bezier(.16, 1, .3, 1); }
+  html.js .pal > span { transform: translateY(102%); }
+  html.js .pal.pronta > span { transform: translateY(0); }
 
   .hero-sub {
     margin-block-start: 1.4rem; max-width: 52ch;
@@ -828,9 +614,7 @@
     font-family: var(--display); font-weight: 600; letter-spacing: -.01em;
   }
   .bio-lead em { font-style: normal; color: var(--playhead); }
-  /* 65ch é o ponto em que o olho ainda acha o começo da linha seguinte sem
-     se perder. Em 768px este bloco chegava a 87ch. */
-  .bio-texto { color: var(--texto-2); margin-block-start: 1rem; max-width: 65ch; }
+  .bio-texto { color: var(--texto-2); margin-block-start: 1rem; }
 
   .habilidades {
     display: grid; gap: 1px; background: var(--linha);
@@ -923,7 +707,7 @@
   .clipe {
     background: var(--painel); padding: clamp(1.2rem, 2.6vw, 1.6rem);
     display: flex; flex-direction: column; gap: .7rem;
-    transition: background var(--dur-ui) var(--ease-ui);
+    transition: background .2s ease;
   }
   .clipe:hover { background: var(--faixa); }
   .clipe-topo { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
@@ -939,27 +723,11 @@
   .clipe .pilha { font-family: var(--mono); font-size: .64rem; color: var(--texto-3); letter-spacing: .04em; }
   .clipe .abrir {
     display: inline-flex; align-items: center; gap: .35rem;
-    min-height: 40px; padding-inline-start: .2rem;
     font-family: var(--mono); font-size: .66rem; letter-spacing: .1em;
     text-transform: uppercase; color: var(--playhead);
   }
   .clipe .abrir svg { width: 12px; height: 12px; }
   .clipe .abrir:hover { text-decoration: underline; text-underline-offset: 3px; }
-
-  /* A linha do resultado. Fica separada da descrição por um filete e ganha um
-     rótulo em mono, porque é outro tipo de informação: a descrição conta o que
-     é, o resultado conta o que aconteceu. Quem escaneia a página lê só esta. */
-  .resultado {
-    font-size: .85rem; line-height: 1.5; color: var(--texto-2);
-    padding-block-start: .6rem;
-    border-block-start: var(--fio) solid var(--linha);
-  }
-  .resultado b {
-    display: block;
-    font-family: var(--mono); font-size: .62rem; font-weight: 500;
-    letter-spacing: .14em; text-transform: uppercase;
-    color: var(--ok); margin-block-end: .25rem;
-  }
 
   /* ==========================================================================
      IA & AUTOMAÇÃO — o log de render
@@ -1029,9 +797,7 @@
     text-transform: uppercase; color: var(--marcador);
   }
   .log-item h3 { font-size: 1.1rem; margin-block-start: .35rem; text-transform: uppercase; }
-  /* sem limite, este bloco chegava a 91 caracteres por linha em tela larga —
-     o olho perde o começo da linha seguinte acima de ~75 */
-  .log-item p { color: var(--texto-2); margin-block-start: .4rem; font-size: .92rem; max-width: 68ch; }
+  .log-item p { color: var(--texto-2); margin-block-start: .4rem; font-size: .92rem; }
 
   /* ==========================================================================
      SERVIÇOS — três frentes e o processo
@@ -1050,7 +816,7 @@
   .servico {
     background: var(--painel); padding: clamp(1.4rem, 3vw, 2rem);
     display: flex; flex-direction: column; gap: 1rem;
-    transition: background var(--dur-ui) var(--ease-ui);
+    transition: background .2s ease;
   }
   .servico:hover { background: var(--faixa); }
   .servico-n { font-family: var(--mono); font-size: .72rem; font-weight: 600; color: var(--playhead); letter-spacing: .1em; }
@@ -1097,7 +863,7 @@
     color: var(--texto); border: var(--fio) solid var(--linha-forte);
     border-radius: var(--r); padding: .9rem 1.3rem; background: var(--painel);
     word-break: break-all;
-    transition: border-color var(--dur-ui) var(--ease-ui), color var(--dur-ui) var(--ease-ui);
+    transition: border-color .18s ease, color .18s ease;
   }
   .email svg { width: 16px; height: 16px; flex: none; color: var(--playhead); }
   .email:hover { border-color: var(--playhead); color: var(--playhead); }
@@ -1107,7 +873,7 @@
     position: relative; width: 42px; height: 42px; display: grid; place-items: center;
     border: var(--fio) solid var(--linha); border-radius: var(--r-sm);
     background: var(--painel); color: var(--texto-2); cursor: pointer;
-    transition: color var(--dur-ui) var(--ease-ui), border-color var(--dur-ui) var(--ease-ui);
+    transition: color .16s ease, border-color .16s ease;
   }
   .social svg { width: 18px; height: 18px; }
   .social:hover { color: var(--playhead); border-color: var(--playhead); }
@@ -1118,7 +884,7 @@
     background: var(--faixa); color: var(--texto);
     border: var(--fio) solid var(--linha); border-radius: var(--r-sm);
     padding: .25rem .45rem;
-    opacity: 0; pointer-events: none; transition: opacity var(--dur-ui) var(--ease-ui);
+    opacity: 0; pointer-events: none; transition: opacity .16s ease;
   }
   .social:hover::after, .social:focus-visible::after { opacity: 1; }
   .social.copiado { color: var(--ok); border-color: var(--ok); }
@@ -1161,12 +927,6 @@
 
 
 <a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
-
-<div id="atmosfera" aria-hidden="true">
-  <div class="luz-monitor"></div>
-  <div class="grao"></div>
-  <div class="vinheta"></div>
-</div>
 
 <header id="barra">
   <div class="barra-int">
@@ -1229,8 +989,7 @@
 
       <h1 class="hero-h1">
         <span class="sr-only">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
-        <span class="hero-medida" aria-hidden="true">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
-        <span class="hero-escreve" aria-hidden="true"><span data-escreve>Seu site e seu vídeo, feitos pela mesma pessoa.</span><span class="cursor"></span></span>
+        <span data-frase aria-hidden="true">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
       </h1>
 
       <p class="hero-sub" data-anim>Você contrata uma pessoa em vez de duas — e a conta de compatibilizar
@@ -1368,15 +1127,9 @@
             <div class="ficha-linha"><dt>Ferramentas</dt><dd>Three.js · JavaScript · WebGL · HTML/CSS</dd></div>
             <div class="ficha-linha"><dt>Papel</dt><dd>Concepção, código e interface</dd></div>
             <div class="ficha-linha"><dt>A decisão</dt><dd>Painel que sobe de baixo, em vez de menu lateral</dd></div>
-            <div class="ficha-linha"><dt>Resultado</dt><dd>Roda a 60 quadros por segundo no celular, com os oito planetas em órbita simultânea</dd></div>
           </dl>
 
           <div class="acoes-projeto">
-            <a href="https://skotalexsander.github.io/solarsys/" target="_blank" rel="noopener noreferrer" class="botao">
-              Ver rodando
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
-            </a>
-            <a href="https://github.com/SkotAlexsander/solarsys" target="_blank" rel="noopener noreferrer" class="botao botao-fantasma">Ver o código</a>
             <a href="#contato" class="botao botao-fantasma">Falar sobre um projeto assim</a>
           </div>
         </div>
@@ -1420,8 +1173,6 @@
                mesmos arquivos. O disco gira e para onde estava, o braço desce e caminha.
                Tem fila, playlists, letra sincronizada, equalizador e velocidade sem
                alterar o tom.</p>
-            <p class="resultado"><b>Resultado</b> no ar como site e como aplicativo de Android,
-               da mesma base de código — instala por cima da versão anterior sem apagar a biblioteca de quem já usava</p>
             <div class="pe">
               <span class="pilha">JavaScript · PWA · IndexedDB</span>
               <a class="abrir" href="https://skotalexsander.github.io/vitrola/" target="_blank" rel="noopener noreferrer">
@@ -1440,8 +1191,6 @@
             <p>Jogo de labirinto em HTML, CSS e JavaScript puros — sem biblioteca, sem
                build, sem servidor. As 244 pastilhas do fliperama original e quatro
                fantasmas, cada um com o seu próprio alvo de perseguição.</p>
-            <p class="resultado"><b>Resultado</b> jogável no navegador, sem instalar nada. Uma bancada
-               automatizada joga sozinha e confere que toda pastilha é alcançável antes de cada publicação</p>
             <div class="pe">
               <span class="pilha">JavaScript · Canvas</span>
               <a class="abrir" href="https://skotalexsander.github.io/come-come/" target="_blank" rel="noopener noreferrer">
@@ -1651,15 +1400,6 @@
     <span class="total" id="tc-total">de 00:02:24:00</span>
   </div>
 
-  <button type="button" id="som-btn" class="regua-som" aria-pressed="false" aria-label="Ligar o som ambiente" data-dica="som ambiente">
-    <svg class="i-mudo" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="m23 9-6 6M17 9l6 6"/>
-    </svg>
-    <svg class="i-som" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-      <path d="M11 5 6 9H2v6h4l5 4V5Z"/><path d="M15.5 8.5a5 5 0 0 1 0 7M19 5a10 10 0 0 1 0 14"/>
-    </svg>
-  </button>
-
   <div class="regua-pista" id="regua-pista">
     <div class="faixas">
       <div class="faixa-linha">
@@ -1826,83 +1566,48 @@
 })();
 
 /* ==========================================================================
-   HERO — a frase sendo escrita, e o cold open que ela comanda
+   TÍTULO DO HERO — revelação palavra por palavra
 
-   A primeira tela é SÓ a frase. Enquanto ela é digitada, a barra do topo e a
-   régua do rodapé estão fora de cena; quando termina, as duas entram. Um
-   filme não abre com o menu do DVD.
+   Cada palavra vira um span dentro de uma máscara e sobe para o lugar. O
+   stagger é de 40ms: mais que isso vira apresentação de slide.
 
-   Quem faz o "fora de cena" é o CSS (`html.cold-open`, em css/05-atmosfera.css).
-   Este módulo só põe e tira a classe — nenhum outro módulo precisa saber que
-   isto existe.
+   O TEXTO ACESSÍVEL NÃO É ESTE. Ele está num .sr-only ao lado, inteiro; o
+   span que este módulo pica é aria-hidden. Leitor de tela nunca recebe a
+   frase em pedaços, e sem JavaScript o span aparece normal.
 
-   O RITMO NÃO É UNIFORME, e é isso que separa datilografia de contador de
-   caracteres: depois de vírgula e de ponto há uma pausa, como quem fala.
-   Um caractere a cada N milissegundos soa a máquina; com as pausas, soa a
-   alguém escrevendo.
-
-   O TEXTO ACESSÍVEL NÃO É ESTE. A frase inteira está num .sr-only ao lado,
-   e o que este módulo escreve é aria-hidden. Leitor de tela nunca ouve a
-   frase soletrada.
-
-   Sob "menos movimento": a frase aparece pronta e não há cold open.
+   Sob "menos movimento" o módulo sai de cena inteiro — o texto fica como
+   está no HTML, sem picar e sem animar.
    ========================================================================== */
 (function () {
   "use strict";
 
-  var VELOCIDADE = 38;      /* ms por caractere */
-  var PAUSA_VIRGULA = 260;  /* respiro depois de , e ; */
-  var PAUSA_PONTO = 420;    /* respiro depois de . */
-  var ATRASO = 420;         /* silêncio antes da primeira letra */
-
-  var alvo = document.querySelector("[data-escreve]");
-  if (!alvo) return;
-
-  var frase = alvo.textContent.trim();
-  var cursor = document.querySelector(".cursor");
-
   var quieto = false;
   try { quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+  if (quieto) return;
 
-  function terminou() {
-    document.documentElement.classList.remove("cold-open");
-    if (cursor) cursor.classList.add("parado");
+  var frase = document.querySelector("[data-frase]");
+  if (!frase) return;
+
+  var palavras = frase.textContent.split(" ");
+  frase.textContent = "";
+
+  var caixas = [];
+  for (var i = 0; i < palavras.length; i++) {
+    var caixa = document.createElement("span");
+    caixa.className = "pal";
+    var dentro = document.createElement("span");
+    dentro.textContent = palavras[i];
+    caixa.appendChild(dentro);
+    frase.appendChild(caixa);
+    /* o espaço entre palavras fica FORA da máscara: dentro dela ele seria
+       cortado e as palavras se colariam ao animar */
+    if (i < palavras.length - 1) frase.appendChild(document.createTextNode(" "));
+    caixas.push(caixa);
   }
 
-  if (quieto) {
-    alvo.textContent = frase;
-    terminou();
-    return;
-  }
-
-  /* A classe entra aqui, e não no HTML, de propósito: se este script não
-     rodar, ela nunca é posta e a página aparece montada. Esconder pelo HTML
-     deixaria a barra invisível para sempre num navegador com JS quebrado. */
-  document.documentElement.classList.add("cold-open");
-  alvo.textContent = "";
-
-  var i = 0;
-  function escrever() {
-    if (i >= frase.length) { terminou(); return; }
-    var c = frase.charAt(i);
-    alvo.textContent += c;
-    i++;
-    var espera = VELOCIDADE;
-    if (c === "." || c === "!" || c === "?") espera += PAUSA_PONTO;
-    else if (c === "," || c === ";" || c === ":") espera += PAUSA_VIRGULA;
-    setTimeout(escrever, espera);
-  }
-
-  setTimeout(escrever, ATRASO);
-
-  /* Quem chega já rolando (link com âncora, ou voltou pelo histórico) não
-     quer esperar a cartela: o cold open acaba na hora. */
-  window.addEventListener("scroll", function aoRolar() {
-    if (window.scrollY > 40) {
-      window.removeEventListener("scroll", aoRolar);
-      document.documentElement.classList.remove("cold-open");
-    }
-  }, { passive: true });
+  caixas.forEach(function (caixa, i) {
+    setTimeout(function () { caixa.classList.add("pronta"); }, 90 + i * 40);
+  });
 })();
 
 /* ==========================================================================
@@ -2229,218 +1934,6 @@
 
   pista.appendChild(grupo());
   pista.appendChild(grupo());
-})();
-
-/* ==========================================================================
-   SOM AMBIENTE — lofi gerado no navegador
-
-   POR QUE GERADO, E NÃO UM MP3
-   Um arquivo de música traria três problemas de uma vez: peso (2 a 4 MB num
-   site que inteiro tem 96 KB), licença (música com dono não se põe em site
-   comercial sem contrato) e repetição (dois minutos em loop viram tortura no
-   terceiro ciclo). Gerado por código: zero bytes, zero licença, e nunca toca
-   a mesma sequência duas vezes.
-
-   NUNCA COMEÇA SOZINHO. Todo navegador atual bloqueia áudio sem gesto do
-   usuário — e mesmo que não bloqueasse, som que começa sozinho faz a pessoa
-   que abriu o site no trabalho fechar a aba. O botão fica na régua, ao lado
-   do timecode, onde um botão de som está num editor. A escolha é lembrada.
-
-   COMO É FEITO
-     · progressão de quatro acordes maj7/min7, em Ré menor, lenta
-     · cada nota é um par de osciladores (triangle + sine uma oitava abaixo)
-       com envelope longo — sem ataque, o que dá o toque de teclado macio
-     · filtro passa-baixa em 900 Hz: é literalmente o "lo" de lofi
-     · ruído de vinil: um buffer de ruído em loop, filtrado e baixíssimo
-     · um delay com realimentação faz as vezes de reverb barato
-     · a cada compasso, uma nota da melodia entra ou não — é o que evita
-       que o ouvido reconheça um loop
-
-   TUDO PENDURADO NUM SÓ GANHO DE SAÍDA: desligar é uma rampa de 400 ms nele,
-   e não trinta osciladores parando fora de sincronia.
-   ========================================================================== */
-(function () {
-  "use strict";
-
-  var botao = document.getElementById("som-btn");
-  if (!botao || !(window.AudioContext || window.webkitAudioContext)) {
-    if (botao) botao.hidden = true;
-    return;
-  }
-
-  /* Ré menor: os acordes são graus da escala, em hertz.
-     i7 (Dm7) · VI maj7 (Bbmaj7) · III maj7 (Fmaj7) · v7 (Am7) */
-  var ACORDES = [
-    [146.83, 174.61, 220.00, 261.63],   /* Dm7  : D  F  A  C  */
-    [116.54, 146.83, 174.61, 220.00],   /* Bbmaj7: Bb D  F  A  */
-    [174.61, 220.00, 261.63, 329.63],   /* Fmaj7 : F  A  C  E  */
-    [110.00, 130.81, 164.81, 196.00]    /* Am7   : A  C  E  G  */
-  ];
-  var COMPASSO = 4.2;      /* segundos por acorde — bem lento */
-  var VOLUME = 0.16;       /* de fundo é de fundo */
-
-  var ctx = null, saida = null, relogio = null, vinil = null;
-  var compasso = 0, tocando = false;
-
-  /* ---- ruído de vinil ---------------------------------------------------
-     Dois segundos de ruído em loop, passado por um passa-alta (tira o grave,
-     que embolaria com os acordes) e mantido no limiar do audível. Sem ele o
-     som fica limpo demais e denuncia que é sintetizado. */
-  function ligarVinil() {
-    var n = ctx.sampleRate * 2;
-    var buffer = ctx.createBuffer(1, n, ctx.sampleRate);
-    var dados = buffer.getChannelData(0);
-    for (var i = 0; i < n; i++) dados[i] = (Math.random() * 2 - 1) * 0.5;
-
-    var fonte = ctx.createBufferSource();
-    fonte.buffer = buffer;
-    fonte.loop = true;
-
-    var passaAlta = ctx.createBiquadFilter();
-    passaAlta.type = "highpass";
-    passaAlta.frequency.value = 2200;
-
-    var g = ctx.createGain();
-    g.gain.value = 0.012;
-
-    fonte.connect(passaAlta).connect(g).connect(saida);
-    fonte.start();
-    return fonte;
-  }
-
-  /* ---- uma nota ---------------------------------------------------------
-     Dois osciladores por nota: triangle na fundamental e sine uma oitava
-     abaixo, mais fraco. É o que dá corpo sem virar órgão de igreja. */
-  function nota(freq, inicio, duracao, forca) {
-    var env = ctx.createGain();
-    env.gain.setValueAtTime(0.0001, inicio);
-    env.gain.exponentialRampToValueAtTime(forca, inicio + 0.7);      /* ataque lento */
-    env.gain.exponentialRampToValueAtTime(0.0001, inicio + duracao);  /* cauda longa */
-    env.connect(saida);
-
-    var o1 = ctx.createOscillator();
-    o1.type = "triangle";
-    o1.frequency.value = freq;
-    o1.connect(env);
-    o1.start(inicio); o1.stop(inicio + duracao + 0.1);
-
-    var g2 = ctx.createGain();
-    g2.gain.value = 0.45;
-    g2.connect(env);
-    var o2 = ctx.createOscillator();
-    o2.type = "sine";
-    o2.frequency.value = freq / 2;
-    o2.connect(g2);
-    o2.start(inicio); o2.stop(inicio + duracao + 0.1);
-  }
-
-  function tocarCompasso() {
-    if (!tocando) return;
-    var acorde = ACORDES[compasso % ACORDES.length];
-    var t = ctx.currentTime + 0.05;
-
-    /* as notas do acorde entram desencontradas, como dedos numa tecla */
-    for (var i = 0; i < acorde.length; i++) {
-      nota(acorde[i], t + i * 0.09, COMPASSO * 1.15, 0.09);
-    }
-
-    /* uma nota solta por cima, em dois compassos de cada três — a ausência
-       é o que faz o ouvido não decorar o laço */
-    if (compasso % 3 !== 2) {
-      var alto = acorde[1 + Math.floor(Math.random() * 3)] * 2;
-      nota(alto, t + COMPASSO * 0.45, COMPASSO * 0.7, 0.045);
-    }
-
-    compasso++;
-    relogio = setTimeout(tocarCompasso, COMPASSO * 1000);
-  }
-
-  function montar() {
-    var AC = window.AudioContext || window.webkitAudioContext;
-    ctx = new AC();
-
-    saida = ctx.createGain();
-    saida.gain.value = 0;
-
-    /* passa-baixa: o "lo" de lofi. Tira o brilho e deixa o som abafado,
-       como quem ouve pela parede. */
-    var filtro = ctx.createBiquadFilter();
-    filtro.type = "lowpass";
-    filtro.frequency.value = 900;
-    filtro.Q.value = 0.7;
-
-    /* delay com realimentação = reverb de pobre, e aqui é o que se quer:
-       um eco curto que borra as bordas das notas. */
-    var eco = ctx.createDelay(1.0);
-    eco.delayTime.value = 0.38;
-    var realim = ctx.createGain();
-    realim.gain.value = 0.32;
-    var mistura = ctx.createGain();
-    mistura.gain.value = 0.35;
-
-    saida.connect(filtro).connect(ctx.destination);
-    filtro.connect(eco).connect(realim).connect(eco);
-    eco.connect(mistura).connect(ctx.destination);
-
-    vinil = ligarVinil();
-  }
-
-  function ligar() {
-    if (!ctx) montar();
-    if (ctx.state === "suspended") ctx.resume();
-    tocando = true;
-    saida.gain.cancelScheduledValues(ctx.currentTime);
-    saida.gain.setValueAtTime(saida.gain.value, ctx.currentTime);
-    saida.gain.linearRampToValueAtTime(VOLUME, ctx.currentTime + 1.2);
-    tocarCompasso();
-    marcar(true);
-  }
-
-  function desligar() {
-    tocando = false;
-    if (relogio) { clearTimeout(relogio); relogio = null; }
-    if (ctx && saida) {
-      saida.gain.cancelScheduledValues(ctx.currentTime);
-      saida.gain.setValueAtTime(saida.gain.value, ctx.currentTime);
-      saida.gain.linearRampToValueAtTime(0.0001, ctx.currentTime + 0.4);
-    }
-    marcar(false);
-  }
-
-  function marcar(ligado) {
-    botao.setAttribute("aria-pressed", ligado ? "true" : "false");
-    botao.setAttribute("aria-label", ligado ? "Desligar o som ambiente" : "Ligar o som ambiente");
-    try { localStorage.setItem("pm-som", ligado ? "1" : "0"); } catch (e) {}
-  }
-
-  botao.addEventListener("click", function () {
-    if (tocando) desligar(); else ligar();
-  });
-
-  /* Aba escondida não precisa tocar para ninguém. */
-  document.addEventListener("visibilitychange", function () {
-    if (!ctx) return;
-    if (document.hidden && tocando) ctx.suspend();
-    else if (!document.hidden && tocando) ctx.resume();
-  });
-
-  marcar(false);
-
-  /* Quem já tinha ligado numa visita anterior continua precisando de um
-     gesto — é regra do navegador, não escolha nossa. O que dá para fazer é
-     deixar o botão avisando que estava ligado, e ligar no primeiro toque. */
-  var eraLigado = false;
-  try { eraLigado = localStorage.getItem("pm-som") === "1"; } catch (e) {}
-  if (eraLigado) {
-    botao.setAttribute("data-dica", "som ambiente — clique para retomar");
-    var retomar = function () {
-      document.removeEventListener("pointerdown", retomar);
-      document.removeEventListener("keydown", retomar);
-      if (!tocando) ligar();
-    };
-    document.addEventListener("pointerdown", retomar, { once: true });
-    document.addEventListener("keydown", retomar, { once: true });
-  }
 })();
 
 /* ==========================================================================
