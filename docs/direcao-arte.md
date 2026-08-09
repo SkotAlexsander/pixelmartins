@@ -77,7 +77,7 @@ playhead, que é o único elemento que tem direito de brilhar.
 
 | Papel | Fonte | Por quê |
 |---|---|---|
-| Display | **Archivo** 700/800 | Cara de sinalização e cartela de vídeo; mais caráter que a Manrope da v4 |
+| Display | **Manrope** 600/700/800 | Geometria alta e terminações macias. Chegou a ser trocada pela Archivo, e o Alex preferiu a Manrope de volta — a Archivo é mais dura e condensada, e competia com o resto da página |
 | Corpo | **Inter** 400/500 | Legibilidade neutra; já estava no projeto |
 | Dados | **IBM Plex Mono** 400/500/600 | Timecode, rótulo de faixa, ficha técnica. **Carrega a identidade** — num painel de edição, o dado é monoespaçado |
 

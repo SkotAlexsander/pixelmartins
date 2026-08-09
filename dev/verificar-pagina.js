@@ -204,6 +204,108 @@ async function rolarTudo(p) {
     await ctx.close();
   }
 
+  /* ---------- 7. cold open ---------- */
+  console.log(`\n== cold open ==`);
+  {
+    const { ctx, p } = await novaAba(b, {});
+    await p.goto(URL, { waitUntil: "load" });
+    await p.waitForTimeout(700);                 /* no meio da digitação */
+    const meio = await p.evaluate(`({
+      classe: document.documentElement.classList.contains("cold-open"),
+      escrito: document.querySelector("[data-escreve]").textContent.length,
+      barra: getComputedStyle(document.getElementById("barra")).opacity
+    })`);
+    ok(meio.classe, "durante a escrita, o html tem .cold-open");
+    ok(meio.escrito > 0 && meio.escrito < 47, `a frase está a meio caminho (${meio.escrito}/47)`);
+    ok(+meio.barra < 0.5, `a barra ainda não entrou (opacidade ${meio.barra})`);
+
+    /* A altura do título não pode pular enquanto digita — é o defeito que a
+       .hero-medida existe para evitar, e que a versão de julho tinha. */
+    const h1 = await p.evaluate(`document.querySelector(".hero-h1").getBoundingClientRect().height`);
+    await p.waitForTimeout(3200);
+    const fim = await p.evaluate(`({
+      classe: document.documentElement.classList.contains("cold-open"),
+      escrito: document.querySelector("[data-escreve]").textContent,
+      barra: getComputedStyle(document.getElementById("barra")).opacity,
+      cursor: document.querySelector(".cursor").classList.contains("parado"),
+      h: document.querySelector(".hero-h1").getBoundingClientRect().height
+    })`);
+    ok(!fim.classe, "ao terminar, o .cold-open sai");
+    ok(fim.escrito === "Seu site e seu vídeo, feitos pela mesma pessoa.", "a frase saiu inteira e correta");
+    ok(+fim.barra > 0.9, `a barra entrou (opacidade ${fim.barra})`);
+    ok(fim.cursor, "o cursor parou de piscar");
+    ok(Math.abs(h1 - fim.h) < 2, `a altura do título não pulou (${Math.round(h1)} → ${Math.round(fim.h)})`);
+    await ctx.close();
+  }
+
+  /* ---------- 8. som ambiente ---------- */
+  console.log(`\n== som ambiente ==`);
+  {
+    const { ctx, p, erros } = await novaAba(b, {});
+    await p.goto(URL, { waitUntil: "load" });
+    await p.evaluate(`document.documentElement.classList.remove("cold-open")`);
+    await p.waitForTimeout(1000);
+    const antes = await p.evaluate(`document.getElementById("som-btn").getAttribute("aria-pressed")`);
+    ok(antes === "false", `começa DESLIGADO — nunca toca sozinho (aria-pressed=${antes})`);
+    await p.click("#som-btn");
+    await p.waitForTimeout(1800);
+    const dep = await p.evaluate(`({
+      pressed: document.getElementById("som-btn").getAttribute("aria-pressed"),
+      rotulo: document.getElementById("som-btn").getAttribute("aria-label")
+    })`);
+    ok(dep.pressed === "true", "liga no clique");
+    ok(/desligar/i.test(dep.rotulo), `o rótulo vira a ação inversa: "${dep.rotulo}"`);
+    await p.click("#som-btn");
+    await p.waitForTimeout(600);
+    ok(await p.evaluate(`document.getElementById("som-btn").getAttribute("aria-pressed")`) === "false",
+       "desliga no segundo clique");
+    ok(erros.length === 0, `sem erro de JS no áudio (${erros.slice(0, 2).join(" | ") || "nenhum"})`);
+    await ctx.close();
+  }
+
+  /* ---------- 9. atmosfera e partículas ---------- */
+  console.log(`\n== atmosfera ==`);
+  {
+    const { ctx, p } = await novaAba(b, {});
+    await p.goto(URL, { waitUntil: "load" });
+    await p.evaluate(`document.documentElement.classList.remove("cold-open")`);
+    await p.waitForTimeout(1600);
+    const escuro = await p.evaluate(`(function () {
+      var a = document.getElementById("atmosfera");
+      var meio = document.elementFromPoint(innerWidth / 2, innerHeight / 2);
+      return {
+        pe: getComputedStyle(a).pointerEvents,
+        particulas: getComputedStyle(document.getElementById("particulas")).display,
+        noMeio: meio ? meio.tagName.toLowerCase() : "?"
+      };
+    })()`);
+    ok(escuro.pe === "none", `não intercepta clique (pointer-events: ${escuro.pe})`);
+    ok(escuro.particulas !== "none", "as partículas existem no tema escuro");
+    ok(escuro.noMeio !== "canvas", `o clique no meio da tela chega no conteúdo (${escuro.noMeio})`);
+
+    const amostra = `(function () {
+      var c = document.getElementById("particulas");
+      var d = c.getContext("2d").getImageData(0, 0, 400, 300).data;
+      var s = 0; for (var i = 0; i < d.length; i += 97) s = (s + d[i]) % 1e9; return s;
+    })()`;
+    const m1 = await p.evaluate(amostra);
+    await p.waitForTimeout(800);
+    const m2 = await p.evaluate(amostra);
+    ok(m1 !== m2, `as partículas se movem (${m1} → ${m2})`);
+
+    /* No tema claro elas somem — e o laço tem de PARAR junto. Canvas
+       invisível continuando a desenhar é bateria queimada por nada. */
+    await p.evaluate(`document.getElementById("tema-btn").click()`);
+    await p.waitForTimeout(900);
+    const c1 = await p.evaluate(amostra);
+    await p.waitForTimeout(800);
+    const c2 = await p.evaluate(amostra);
+    ok(await p.evaluate(`getComputedStyle(document.getElementById("particulas")).display`) === "none",
+       "no tema claro as partículas somem");
+    ok(c1 === c2, "e o laço para de verdade, não fica desenhando invisível");
+    await ctx.close();
+  }
+
   await b.close();
   console.log(`\nCapturas em: ${SAIDA}`);
   console.log(`\n${falhas.length ? "REPROVOU — " + falhas.length + " item(ns):\n  · " + falhas.join("\n  · ") : "PASSOU"}`);

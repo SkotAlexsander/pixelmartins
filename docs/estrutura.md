@@ -107,6 +107,7 @@ tema do WordPress.
 |---|---|
 | `00-tema-antiflash.js` | lê o tema salvo **antes do CSS pintar** (por isso vai num `<script>` próprio, no topo) |
 | `10-tema.js` | botão claro/escuro |
+| `15-particulas.js` | o campo de partículas do fundo — **só no tema escuro** |
 | `20-menu-mobile.js` | abre/fecha, Escape, clique fora, volta ao desktop |
 | `30-discord-copiar.js` | copia o usuário do Discord |
 | `40-hero-datilografa.js` | a frase escrita letra a letra, e o cold open que ela comanda |

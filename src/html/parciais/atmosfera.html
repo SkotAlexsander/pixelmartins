@@ -1,14 +1,22 @@
-<!--# ATMOSFERA — três camadas fixas atrás de tudo.
-     Estilo: css/05-atmosfera.css
+<!--# ATMOSFERA — as camadas fixas atrás de tudo.
+     Estilo: css/05-atmosfera.css  ·  Efeito: js/15-particulas.js
 
-     Não é o "fundo animado" que foi tirado na v5: aqui nada se move, nada é
-     saturado, e as três juntas somam menos de meio por cento de tinta na
-     tela. A v5 ficou seca demais depois de tirar as partículas; isto é o
-     mínimo que devolve ar sem devolver o brilho genérico junto.
+     A ordem aqui é a ordem da pilha: quem vem depois fica na frente.
 
-     A ordem é a ordem da pilha — quem vem depois fica na frente. -->
+     As três primeiras camadas só existem no TEMA ESCURO, por pedido do
+     Alex — e a razão se sustenta: partícula ciano a 16% sobre papel claro
+     vira sujeira cinzenta em vez de luz. No claro sobram o grão e a
+     vinheta, que funcionam nos dois.
+
+     Isto NÃO é o "fundo animado genérico" que foi tirado na v5: a luz do
+     monitor tem motivo (um monitor grande num quarto escuro joga luz fria
+     nas paredes), as partículas estavam aqui desde julho, e nada disso
+     intercepta clique nem cria rolagem. -->
 <div id="atmosfera" aria-hidden="true">
   <div class="luz-monitor"></div>
+  <div class="brilho-canto"></div>
+  <canvas id="particulas"></canvas>
+  <div class="pontos"></div>
   <div class="grao"></div>
   <div class="vinheta"></div>
 </div>

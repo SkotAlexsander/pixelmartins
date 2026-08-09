@@ -55,6 +55,7 @@ const JS_CRITICO = "00-tema-antiflash.js";
    recalcula CSS sozinho quando a paleta troca. */
 const ORDEM_JS = [
   "10-tema.js",
+  "15-particulas.js",
   "20-menu-mobile.js",
   "30-discord-copiar.js",
   "40-hero-datilografa.js",

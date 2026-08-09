@@ -44,6 +44,33 @@
 }
 html.light .luz-monitor { opacity: .12; }
 
+/* 1b. O BRILHO DE BAIXO — o par do de cima, no canto oposto.
+   Existe desde julho e o Alex pediu de volta. Só no escuro. */
+.brilho-canto {
+  position: absolute; bottom: -10vh; right: -10vh;
+  width: 55vh; height: 55vh; border-radius: 50%;
+  filter: blur(90px);
+  background: radial-gradient(circle,
+    color-mix(in srgb, var(--playhead) 16%, transparent) 0%, transparent 70%);
+}
+
+/* 2. AS PARTÍCULAS — SÓ NO ESCURO
+   Pontos que derivam e se ligam por uma linha quando chegam perto. A linha é
+   ciano a 16%: sobre o escuro é luz, sobre papel claro seria sujeira. Por
+   isso o canvas some no tema claro — e o laço de animação para junto, em
+   js/15-particulas.js, para não ficar desenhando no que ninguém vê. */
+#particulas { position: absolute; inset: 0; opacity: .7; }
+html.light #particulas { display: none; }
+
+/* 2b. A GRADE DE PONTOS — contínua, atravessa as seções sem emenda */
+.pontos {
+  position: absolute; inset: 0;
+  opacity: .10;
+  background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .5) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+html.light .pontos { display: none; }
+
 /* 2. O GRÃO
    Textura de vídeo, gerada por SVG (feTurbulence) — não é imagem baixada,
    não é canvas rodando a 60fps. É um único data URI que o navegador

@@ -112,3 +112,26 @@ html.js .orbitas .gira { animation: girar var(--dur) linear infinite; }
   letter-spacing: .14em; text-transform: uppercase;
   color: var(--ok); margin-block-end: .25rem;
 }
+
+/* Dois links por card quando dá: abrir e ver o código. Um projeto que o
+   visitante não consegue abrir é uma afirmação; um que ele abre é prova —
+   e o código aberto é a segunda prova, para quem sabe ler. */
+.links-clipe { display: inline-flex; align-items: center; gap: .9rem; flex-wrap: wrap; }
+.clipe .abrir.codigo { color: var(--texto-2); }
+.clipe .abrir.codigo:hover { color: var(--playhead); }
+
+/* Com três cards a grade precisa acomodar 1, 2 ou 3 por linha sem que o
+   último fique órfão numa faixa vazia. */
+@media (min-width: 62rem) { .trilho { grid-template-columns: repeat(3, 1fr); } }
+
+.mais-github {
+  margin-block-start: 1.2rem;
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .03em;
+  color: var(--texto-3);
+}
+/* o link tinha 15px de altura — inline dentro de um parágrafo pequeno */
+.mais-github a {
+  display: inline-flex; align-items: center; min-height: 40px;
+  color: var(--playhead); text-decoration: underline; text-underline-offset: 3px;
+}
+.mais-github a:hover { color: var(--texto); }
