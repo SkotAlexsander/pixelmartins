@@ -2,36 +2,44 @@
      Estilo: css/60-ia.css  ·  Efeito: js/50-revelar-ao-rolar.js
 
      "Uso IA no processo" é uma afirmação que se enfraquece quanto mais você
-     explica. Duas colunas e pronto: texto com etiquetas, terminal falso.
+     explica. Duas colunas e pronto: texto com etiquetas, log de render.
 
-     O terminal é o único elemento da página que imita interface. O cursor dele
-     reaproveita a classe .caret-blink do cursor do hero — uma animação, dois
-     usos. Se mexer nela em css/01-tokens-e-base.css, olhe os dois lugares. -->
+     O log não promete milagre: diz o que a automação faz (encurta o
+     repetitivo) e deixa claro, na última linha, que o que sobra é tempo para
+     decidir — que continua sendo trabalho humano. -->
 <!-- ===================== IA & Automação ===================== -->
-<section id="ia">
-  <div class="container-md">
-    <div class="ia-grid">
-      <div class="reveal">
-        <div class="section-heading left">
-          <span class="eyebrow">IA &amp; automação</span>
+<section id="ia" class="secao">
+  <div class="caixa">
+    <div class="clipe-cabeca" data-anim>
+      <span class="tc">00:01:34:00</span>
+      <span class="nome">IA</span>
+      <span class="fio" aria-hidden="true"></span>
+      <span class="n">V1 · 06</span>
+    </div>
+
+    <div class="ia-grade">
+      <div data-anim>
+        <div class="abre">
           <h2>IA no processo, não só no produto</h2>
-          <p>Uso IA no dia a dia pra acelerar código, organizar cortes e gerar variações. O que tomava horas leva minutos — e o tempo que sobra vai pra decisão criativa.</p>
+          <p>Uso IA no dia a dia para acelerar código, organizar cortes e gerar variações.
+             O que tomava horas leva minutos — e o tempo que sobra vai para a decisão criativa,
+             que continua sendo humana.</p>
         </div>
-        <ul class="focus-tags">
-          <li>Automação de fluxos</li>
-          <li>Integração com LLMs</li>
-          <li>Edição assistida por IA</li>
-          <li>Prototipagem rápida</li>
-        </ul>
+        <div class="marcas-lista">
+          <span class="tag">Automação de fluxos</span>
+          <span class="tag">Integração com LLMs</span>
+          <span class="tag">Edição assistida</span>
+          <span class="tag">Prototipagem rápida</span>
+        </div>
       </div>
 
-      <div class="reveal" style="transition-delay:0.15s">
-        <div class="terminal glass">
-          <div class="terminal-dots" aria-hidden="true">
-            <span></span><span></span><span></span>
-          </div>
-          <pre><span class="prompt">&gt; </span>automatiza(processo_manual)
-→ resultado em minutos, não horas<span class="terminal-cursor caret-blink" aria-hidden="true"></span></pre>
+      <div data-anim>
+        <div class="terminal">
+          <div class="barra-t" aria-hidden="true"><i></i><i></i><i></i><b>render.log</b></div>
+          <pre><span class="p">&gt;</span> automatiza(processo_manual)
+  <span class="ok">✓</span> 4h de trabalho repetitivo → 6 min
+  <span class="ok">✓</span> mesmo resultado, toda vez
+<span class="p">&gt;</span> sobra tempo para: <span class="cur" aria-hidden="true"></span></pre>
         </div>
       </div>
     </div>

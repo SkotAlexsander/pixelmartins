@@ -1,14 +1,32 @@
-/* ---------- Ajustes específicos WordPress / Elementor ---------- */
+/* ==========================================================================
+   AJUSTES WORDPRESS / ELEMENTOR — sempre por último na cascata
+
+   Estas regras existem para vencer o tema e o contêiner do Elementor, que
+   embrulham o widget num miolo centralizado com largura máxima. Sem elas o
+   site fica numa coluna estreita no meio da página.
+   ========================================================================== */
+
+/* Sangra o widget até as bordas da janela, saindo do contêiner do Elementor.
+   O par com `body { overflow-x: hidden }` é obrigatório: 100vw inclui a
+   largura da barra de rolagem, então sozinha esta regra criaria alguns pixels
+   de rolagem lateral. */
 #pm-site {
   width: 100vw;
   margin-left: calc(50% - 50vw);
   margin-right: calc(50% - 50vw);
 }
+
 .elementor-widget-html .elementor-widget-container { padding: 0 !important; margin: 0 !important; }
 .elementor-section .elementor-container,
 .e-con,
 .e-con-inner { max-width: 100% !important; padding: 0 !important; }
+
 body { overflow-x: hidden; }
 body, #page, .site, .site-content, main { margin: 0 !important; padding: 0 !important; }
 html { margin-top: 0 !important; }
 #wpadminbar { display: none !important; }
+
+/* A régua é `position: fixed` e vive no rodapé da janela, não do widget — é
+   por isso que ela sobrevive dentro do Elementor sem depender do contêiner.
+   O espaço para ela é reservado pelo padding-block-end do #pm-site
+   (01-tokens-e-base.css), senão o rodapé do site ficaria escondido atrás. */

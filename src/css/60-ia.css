@@ -1,51 +1,42 @@
-/* -------------------- IA & Automação -------------------- */
-.ia-grid {
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 3rem;
-  align-items: center;
-}
-@media (min-width: 1024px) { .ia-grid { grid-template-columns: repeat(2, 1fr); } }
+/* ==========================================================================
+   IA & AUTOMAÇÃO — o log de render
 
-.focus-tags {
-  margin: 1.5rem 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
-}
-.focus-tags li {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-  border-radius: 9999px;
-  padding: 0.25rem 0.75rem;
-}
+   "Uso IA no processo" é uma afirmação que se enfraquece quanto mais você
+   explica. Duas colunas e pronto: texto com etiquetas, e um log de render.
 
-.terminal { border-radius: 1rem; padding: 1.5rem; }
-.terminal-dots { display: flex; align-items: center; gap: 0.35rem; }
-.terminal-dots span {
-  width: 10px; height: 10px;
-  border-radius: 9999px;
-  background: var(--border);
+   O terminal é o único elemento da página que imita software de fora. Aqui
+   ele passa a ter nome de arquivo (render.log) — vira mais um painel da
+   mesma bancada, não um enfeite de landing de dev.
+   ========================================================================== */
+.ia-grade {
+  display: grid; gap: clamp(1.8rem, 4vw, 3rem);
+  margin-block-start: clamp(1.8rem, 4vw, 2.6rem); align-items: center;
+}
+@media (min-width: 56rem) { .ia-grade { grid-template-columns: 1fr 1fr; } }
+
+.marcas-lista { display: flex; flex-wrap: wrap; gap: .5rem; margin-block-start: 1.5rem; }
+
+.terminal { border: var(--fio) solid var(--linha); border-radius: var(--r); background: var(--painel); overflow: hidden; }
+.terminal .barra-t {
+  display: flex; align-items: center; gap: .45rem;
+  padding: .45rem .7rem; background: var(--faixa);
+  border-block-end: var(--fio) solid var(--linha);
+}
+.terminal .barra-t i { width: 7px; height: 7px; border-radius: 50%; background: var(--linha-forte); }
+.terminal .barra-t b {
+  font-family: var(--mono); font-size: .62rem; font-weight: 500;
+  letter-spacing: .1em; color: var(--texto-3); margin-inline-start: .3rem;
 }
 .terminal pre {
-  font-family: var(--font-mono);
-  margin: 1rem 0 0;
-  white-space: pre-wrap;
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--text-secondary);
+  margin: 0; padding: 1.1rem;
+  font-family: var(--mono); font-size: .78rem; line-height: 1.85;
+  color: var(--texto-2); white-space: pre-wrap; word-break: break-word;
 }
-.terminal pre .prompt { color: var(--accent-2); }
-.terminal-cursor {
-  display: inline-block;
-  width: 7px;
-  height: 1em;
-  margin-left: 0.25rem;
-  transform: translateY(2px);
-  vertical-align: middle;
-  background: var(--accent-2);
+.terminal .p  { color: var(--playhead); }
+.terminal .ok { color: var(--ok); }
+.terminal .cur {
+  display: inline-block; width: .55em; height: 1em;
+  background: var(--playhead); vertical-align: -.15em;
 }
+html.js .terminal .cur { animation: pisca-cur 1.05s steps(1, end) infinite; }
+@keyframes pisca-cur { 0%, 50% { opacity: 1 } 51%, 100% { opacity: 0 } }

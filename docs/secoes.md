@@ -1,10 +1,24 @@
 # As seções da página e os efeitos de cada uma
 
-> Escrito em 2026-08-03. Complementa [estrutura.md](estrutura.md): lá está *como
-> o código é montado*, aqui está *o que cada pedaço faz na tela*.
+> Escrito em 2026-08-03, reescrito em 2026-08-08 para a v5 "Sala de Edição".
+> Complementa [estrutura.md](estrutura.md): lá está *como o código é montado*,
+> aqui está *o que cada pedaço faz na tela*. O porquê do desenho está em
+> [direcao-arte.md](direcao-arte.md).
 
 Se você abriu este arquivo para mexer em alguma coisa, vá direto na tabela do
 fim — ela diz qual arquivo abrir para cada mudança.
+
+---
+
+## A ideia, em uma frase
+
+**A página é uma sequência aberta num editor de vídeo.** Quem rola está
+arrastando o playhead. Não é decoração com tema de vídeo: a régua do rodapé é
+navegação de verdade, o timecode anda com o scroll, e cada seção é um clipe.
+
+Isso existe porque o argumento de venda da página é *"site e vídeo, feitos pela
+mesma pessoa"*. Qualquer um **escreve** isso; só quem faz as duas coisas
+**constrói a prova**.
 
 ---
 
@@ -22,37 +36,42 @@ Por isso Serviços vem em segundo e Sobre só em quarto — depois de o visitant
 já saber o que pode contratar e já ter visto trabalho. "Sobre" deixa de ser
 apresentação e vira confirmação.
 
-A ordem vive num lugar só: `src/html/index.html`. Trocar duas seções de lugar é
-trocar duas linhas ali. O CSS não se importa — nenhuma seção depende de vir
-depois de outra.
+A ordem vive em **dois** lugares, e os dois têm de concordar:
+
+| Onde | O quê |
+|---|---|
+| `src/html/index.html` | a ordem real dos blocos na página |
+| `CLIPES`, em `src/js/70-regua.js` | os clipes da régua e os timecodes |
+
+Trocar duas seções de lugar é trocar duas linhas em cada um. Mudar só um deixa
+a régua mentindo.
 
 ---
 
-## O fundo: sete camadas fixas atrás de tudo
+## A régua — `parciais/regua.html`
 
-Antes das seções, o que está atrás delas. Todas moram em
-`src/html/parciais/fundo.html` e são um bloco `position: fixed` com
-`z-index: -10` e `pointer-events: none` — não rolam com a página e nunca
-interceptam clique.
+Antes das seções, o elemento que atravessa todas elas. É uma barra fixa no
+rodapé da janela (`position: fixed`), fora do `<main>` de propósito: é
+ferramenta de navegação, não conteúdo.
 
-Da mais atrás para a mais à frente:
+| Parte | O que é |
+|---|---|
+| `#tc-agora` | timecode que anda com o scroll, em HH:MM:SS:FF a 24 quadros |
+| faixa **V1** | um botão por seção, com a largura proporcional ao espaço que ela ocupa na página. O da seção atual fica selecionado (borda ciano), como clipe selecionado num editor |
+| faixa **A1** | forma de onda desenhada em canvas — determinística, a mesma sempre |
+| `.playhead` | a linha ciano que percorre a régua |
 
-| # | Camada | O que é | Onde se mexe |
-|---|---|---|---|
-| 1 | `#portrait-canvas` | seu retrato, 150 frames dirigidos pelo scroll | `js/70-retrato-scroll.js` · [animacao-scroll.md](animacao-scroll.md) |
-| 2 | `.bg-blob-1` | brilho ciano grande no topo, com deriva lenta de 14 s | `css/10-fundo.css` · animação em `01-tokens-e-base.css` |
-| 3 | `.bg-blob-2` | brilho menor no canto inferior direito, parado | `css/10-fundo.css` |
-| 4 | `#bg-canvas` | campo de partículas ligadas por linhas | `js/60-particulas.js` |
-| 5 | `.bg-dots` | grade de pontos de 20 px, contínua | `css/10-fundo.css` |
-| 6 | `.noise-layer` | ruído sutil, tira o aspecto "gradiente de banco de imagem" | `css/01-tokens-e-base.css` |
-| 7 | `.bg-vignette` | vinheta que escurece as bordas e centraliza o olho | `css/10-fundo.css` |
+**Ela substitui a barra de progresso E duplica o menu.** É clicável, tem
+`aria-label` em cada bloco e responde ao teclado — é botão de verdade, não
+`div` com `onclick`.
 
-**A ordem é a ordem no HTML.** Não há `z-index` entre elas: quem vem depois
-fica na frente. Mover uma linha no `fundo.html` muda a pilha.
+No celular não cabe texto nos blocos: cada clipe vira a própria marca colorida,
+e o nome sai (`font-size: 0`). O `aria-label` continua lá, então quem usa
+leitor de tela não perde nada.
 
-**Por que o retrato é o primeiro filho:** para ficar atrás de todas as outras.
-Ele é foto — sem os pontos, o ruído e a vinheta por cima, competiria com o
-texto em vez de ambientar.
+**Quem escreve nela:** `js/70-regua.js` (playhead, timecode, seleção) e
+`js/60-onda.js` (a forma de onda). O `70-regua.js` também é quem marca o link
+ativo lá no topo — é a mesma informação, para quem está olhando para cima.
 
 ---
 
@@ -60,142 +79,150 @@ texto em vez de ambientar.
 
 ### 1. Hero — `secoes/hero.html`
 
-A primeira tela. Tem **um fundo próprio** por cima do fundo global: o
-`.hero-dark-bg`, com cinco faixas de luz diagonais, textura, pontos e um
-brilho superior. Ele é o véu que segura o retrato (`--hero-veil: 0.70`) — por
-isso ali o retrato pode aparecer mais forte que no resto da página.
+A cartela de abertura: `● REC 00:00:00:00`, o título entrando **palavra por
+palavra**, e a forma de onda da narração embaixo.
 
-O efeito principal é o **texto sendo digitado**: 4 segundos, começando 300 ms
-depois de a página abrir.
-
-E ele comanda três coisas ao terminar — este é o detalhe que passa
-despercebido e é o que dá o ritmo da abertura:
-
-| Ao acabar de digitar | O que acontece |
-|---|---|
-| `#caret` | para de piscar |
-| `#scroll-indicator` | aparece e começa a pular |
-| `#navbar` | **só então aparece** |
-
-Ou seja: a barra de navegação não está lá desde o início. Ela entra quando a
-frase termina, junto com o convite para rolar. A primeira tela é só a frase.
+O fundo é uma **grade técnica** de duas linhas de 1px com máscara radial. Não
+há blob, brilho nem partícula — a v4 tinha os três, e é exatamente o que dava
+à página a cara de template de IA.
 
 > **Acessibilidade:** a frase existe duas vezes no HTML. Uma em `.sr-only`,
 > completa e imediata, para leitor de tela; a outra é a animada, marcada com
-> `aria-hidden`. Sem isso, quem usa leitor de tela ouviria a frase sendo
-> soletrada letra a letra.
+> `aria-hidden`. Sem isso, quem usa leitor de tela ouviria a frase picada em
+> palavras.
 
-**Para trocar a frase:** `HERO_TEXT` em `js/40-typewriter.js` **e** o texto do
-`.sr-only` em `hero.html`. São dois lugares — se mudar só um, o site diz uma
-coisa e o leitor de tela diz outra.
+**Para trocar a frase:** os dois `<span>` em `hero.html` — o `.sr-only` e o
+`[data-frase]`. São dois lugares; se mudar só um, o site diz uma coisa e o
+leitor de tela diz outra. (O JS não tem a frase escrita nele: ele lê a que
+está no HTML.)
+
+Logo abaixo do hero vem a **fita de ferramentas**, montada por `js/80-fita.js`.
+Ela é `aria-hidden` porque é movimento; a lista em texto corrido, para leitor
+de tela e para busca, está no `.sr-only` logo depois dela.
 
 ### 2. Serviços — `secoes/servicos.html`
 
-Três cartões (Sites, Vídeo, IA) e, embaixo, os quatro passos do processo
-(Briefing → Proposta → Produção → Entrega).
+Três painéis (Sites, Vídeo, IA) colados por um filete de 1px e, embaixo, os
+quatro passos do processo (Briefing → Proposta → Produção → Entrega).
 
-É a seção que responde "o que eu compro de você". Os cartões entram **em
-cascata** — 0,10 s, 0,18 s e 0,26 s de atraso — e não juntos. Três coisas
-aparecendo ao mesmo tempo o olho lê como um bloco; em cascata, ele lê como
-três.
-
-O bloco do processo existe para uma objeção específica: *"e depois que eu
-contratar, eu fico sem notícia?"*. Daí os textos serem sobre previsibilidade
-("sem surpresa depois", "nada de sumir por semanas") e não sobre técnica.
+É a seção que responde "o que eu compro de você". O bloco do processo existe
+para uma objeção específica: *"e depois que eu contratar, eu fico sem
+notícia?"*. Daí os textos serem sobre previsibilidade ("sem surpresa depois",
+"nada de sumir por semanas") e não sobre técnica.
 
 ### 3. Projetos — `secoes/projetos.html`
 
-Hoje: **um** projeto real (Explorador do Sistema Solar).
+**Um projeto contado inteiro** (Explorador do Sistema Solar), com ficha técnica
+— Ferramentas, Papel, A decisão — e o diagrama de órbitas ao lado. Abaixo,
+**"Também no ar"**: Vitrola e Come-Come, como clipes menores na mesma faixa.
 
-O CSS trata esse caso de propósito. Com um card só, ele **não** fica espremido
-no primeiro terço da grade — e volta sozinho ao layout de 3 colunas quando
-entrar o segundo. Está em `css/55-projetos.css`, e é a razão de a seção não
-parecer vazia mesmo tendo um item.
+A frase de abertura ("um projeto contado inteiro vale mais que uma vitrine de
+miniaturas") continua verdadeira com três projetos justamente porque os outros
+dois são **lista**, não vitrine. Se um dia virarem seis cards iguais, a frase
+deixa de valer e tem de sair junto.
 
-Os dois cards "Próximo projeto" saíram do repositório (estão em
-`privado/projetos-placeholder/`). O CSS deles ficou.
+O diagrama de órbitas é SVG autoral e gira por CSS (`--dur` inline em cada
+planeta). É data graphic, não ilustração.
 
 ### 4. Sobre — `secoes/sobre.html`
 
-Um parágrafo de apresentação com uma frase destacada em `.highlight`, e quatro
-cartões de capacidade (front-end, vídeo, IA, motion).
+O retrato de 150 frames dentro de um **monitor de programa**: rótulo `PROGRAM`,
+timecode no topo, `retrato.seq` e a contagem de frames no rodapé.
+
+Até a v4 esse retrato vivia **atrás do texto da página inteira**, a 12–38% de
+opacidade — um rosto que ninguém chegava a ver, pagando o preço de 150
+imagens. Aqui ele ganha o quadro que merecia, e a moldura é o que faz ele
+parecer o que sempre foi: um clipe de vídeo.
+
+Ao lado, a apresentação e quatro capacidades (front-end, vídeo, IA, motion).
 
 Vem **depois** de Projetos por decisão de ordem: quando o visitante chega aqui,
-ele já viu o que você entrega. Serve para confirmar, não para se apresentar.
+ele já viu o que você entrega.
 
 ### 5. IA & automação — `secoes/ia.html`
 
-Duas colunas: texto com etiquetas à esquerda, um **terminal falso** à direita.
+Duas colunas: texto com etiquetas à esquerda, um **log de render** à direita.
 
-O terminal é o único elemento decorativo da página que imita interface. Tem os
-três pontinhos do topo e um cursor que pisca — reaproveitando a mesma classe
-`.caret-blink` do cursor do hero. Uma animação, dois usos.
+O terminal é o único elemento da página que imita software de fora. Ganhou nome
+de arquivo (`render.log`) para virar mais um painel da mesma bancada, em vez de
+enfeite de landing de dev.
 
 É uma seção curta de propósito: "uso IA no processo" é uma afirmação que se
 enfraquece quanto mais você explica.
 
 ### 6. Trajetória — `secoes/trajetoria.html`
 
-Linha do tempo de três marcos, **em ordem inversa**: Hoje → A virada → O
-começo.
+Três marcos **em ordem inversa**: Hoje → A virada → O começo.
 
-Inversa porque o visitante não veio ver sua biografia em ordem cronológica.
-Ele quer saber onde você está *agora*; o passado só interessa como explicação
-do presente. Os marcos não têm data — são "Hoje", "A virada", "O começo".
+Inversa porque o visitante não veio ver sua biografia em ordem cronológica. Ele
+quer saber onde você está *agora*; o passado só interessa como explicação do
+presente.
+
+Os losangos âmbar à esquerda são **marcadores** — a mesma convenção da régua do
+rodapé. É o que amarra a seção ao resto da página. E os marcos não têm data:
+ano em portfólio envelhece sozinho e convida a comparar tempo de estrada, que
+não é o argumento aqui.
 
 ### 7. Contato — `secoes/contato.html`
 
-E-mail em destaque, e quatro atalhos: GitHub, LinkedIn, Discord e WhatsApp.
+E-mail em destaque (`FIM DA SEQUÊNCIA` no cabeçalho do clipe) e quatro
+atalhos: WhatsApp, GitHub, LinkedIn e Discord.
+
+Sem formulário, de propósito: formulário exige backend, dá erro em silêncio,
+cai em spam e some sem rastro. Um `mailto:` deixa a mensagem na caixa de saída
+da pessoa — ela sabe que mandou.
 
 O Discord é o único que não é link: é um **botão que copia** o usuário para a
 área de transferência, porque Discord não tem URL de perfil que funcione para
-um estranho. Ao clicar, a tooltip troca para "copiado!" por 1,6 s.
+um estranho. Ao clicar, a dica troca para "copiado!" por 1,6 s. Sendo botão, já
+funciona com Enter e Espaço no teclado.
 
 Os outros três abrem em aba nova, com `rel="noopener noreferrer"`.
 
 ---
 
-## Os efeitos: onde vivem e o que custam
+## Os efeitos: onde vivem e o que fazem
+
+**Nenhuma biblioteca.** Tudo abaixo é o que o navegador já tem. A v5 chegou a
+usar GSAP e Lenis por CDN e voltou atrás — o porquê está em
+[direcao-arte.md](direcao-arte.md).
 
 | Efeito | Arquivo | O que faz |
 |---|---|---|
-| Retrato no scroll | `js/70-retrato-scroll.js` | 150 frames; o scroll escolhe o frame, um amortecedor persegue o alvo |
-| Partículas | `js/60-particulas.js` | 18–52 pontos que se movem e se ligam quando ficam a menos de 130 px |
-| Revelar ao rolar | `js/50-revelar-ao-rolar.js` | tudo com `.reveal` sobe 24 px e aparece ao entrar na tela |
-| Texto digitado | `js/40-typewriter.js` | 4 s; ao terminar, solta navbar e indicador de scroll |
-| Copiar Discord | `js/30-discord-copiar.js` | clipboard com fallback para navegador velho |
-| Menu mobile | `js/20-menu-mobile.js` | fecha com Escape, com clique fora e ao passar de 768 px |
-| Tema claro/escuro | `js/10-tema.js` + `00-tema-antiflash.js` | classe `.light` no `<html>`, guardada no `localStorage` |
-| Deriva do brilho | `css/01-tokens-e-base.css` | `.animate-drift`, 14 s, no `.bg-blob-1` |
-| Cursor piscando | `css/01-tokens-e-base.css` | `.caret-blink`, 1,1 s — hero e terminal da seção de IA |
-| Chevron pulando | `css/30-hero.css` | `bounce-chevron`, no indicador de scroll |
-
-### O escalonamento é feito à mão
-
-O atraso de cada elemento revelado está **no HTML**, inline:
-
-```html
-<div class="reveal" style="transition-delay:0.18s">
-```
-
-Não é bug nem preguiça: o ritmo é decisão de composição, item por item, e
-mudá-lo não deveria exigir abrir o CSS e caçar um seletor. Os valores vão
-tipicamente de `0.1s` a `0.33s`.
+| Playhead, timecode e clipes | `js/70-regua.js` | evento `scroll` passivo; também navega por âncora e marca o link ativo |
+| Retrato em looping | `js/90-retrato.js` | 150 frames em vaivém a 20 fps; dorme fora de vista |
+| Forma de onda | `js/60-onda.js` | desenha os dois canvas (hero e régua); redesenha ao trocar o tema |
+| Revelar ao rolar | `js/50-revelar-ao-rolar.js` | tudo com `[data-anim]` sobe 14 px e aparece em 380 ms |
+| Título por palavra | `js/40-titulo-revelar.js` | pica a frase em palavras mascaradas, stagger de 40 ms |
+| Fita de ferramentas | `js/80-fita.js` | monta a lista **duas vezes** — com um grupo só, o laço saltaria |
+| Copiar Discord | `js/30-discord-copiar.js` | clipboard com plano B para navegador velho ou HTTP |
+| Menu mobile | `js/20-menu-mobile.js` | fecha com Escape, clique fora e ao passar de 62 rem |
+| Tema claro/escuro | `js/10-tema.js` + `00-tema-antiflash.js` | classe `.light` no `<html>`, guardada no `localStorage`; dispara `pm-tema` |
+| O ano do rodapé | `js/95-ano.js` | mantém o número certo sem ninguém lembrar de editar |
+| REC piscando | `css/30-hero.css` | `pisca-rec`, 2 s, em degraus (não é fade — é lâmpada) |
+| Cursor do terminal | `css/60-ia.css` | `pisca-cur`, 1,05 s |
+| Órbitas girando | `css/55-projetos.css` | `girar`, com `--dur` diferente por planeta |
 
 ### O que o site desliga sozinho
 
-Nenhum desses efeitos é incondicional. Dois interruptores:
+Nenhum desses efeitos é incondicional. Os interruptores:
 
 | Situação | O que acontece |
 |---|---|
-| `prefers-reduced-motion` | frase aparece inteira na hora · tudo já visível, sem subir · partículas desligadas · retrato vira 1 frame parado |
-| Tela ≤ 820 px | retrato vira **1 frame parado: 11 KB em vez de 1,8 MB** |
-| Aba em segundo plano | partículas e retrato pausam (`visibilitychange`) — não gastam bateria |
-| Modo claro | o retrato cai para 28% da opacidade dele — paleta clara não sustenta foto escura |
+| `prefers-reduced-motion` | o título não é picado · tudo já visível, sem subir · a fita para · as órbitas param · o retrato vira **1 quadro parado** · o scroll de âncora deixa de ser suave |
+| Sem JavaScript | a página aparece **inteira** — nada fica escondido esperando animação (é o que a classe `.js` garante) |
+| Sem `IntersectionObserver` | a revelação entrega tudo de uma vez, em vez de nunca |
+| Tela ≤ 47,99 rem | o retrato carrega **1 frame a cada 3** (50 em vez de 150) |
+| Economia de dados ou 2G | o retrato vira 1 quadro parado |
+| Seção "Sobre" fora da tela | o retrato **dorme** — não gasta bateria |
+| Aba em segundo plano | idem |
 
 O primeiro é acessibilidade: quem marcou "reduzir movimento" no sistema tem
-motivo, e às vezes o motivo é enjoo ou crise. O segundo é respeito ao plano de
-dados de quem abre pelo celular.
+motivo, e às vezes o motivo é enjoo ou crise. Os outros são respeito ao plano
+de dados e à bateria de quem abre pelo celular.
+
+Tudo isso é cobrado por `npm run verificar` — inclusive o cenário em que
+**toda** requisição externa é bloqueada.
 
 ---
 
@@ -203,16 +230,16 @@ dados de quem abre pelo celular.
 
 | Quero mudar | Abro |
 |---|---|
-| A frase que é digitada | `js/40-typewriter.js` (`HERO_TEXT`) **e** o `.sr-only` em `secoes/hero.html` |
-| A ordem das seções | `src/html/index.html` |
-| Os links do menu | `parciais/navbar.html` — as duas listas (desktop e mobile) |
+| A frase do hero | os **dois** `<span>` em `secoes/hero.html` (o `.sr-only` e o `[data-frase]`) |
+| A ordem das seções | `src/html/index.html` **e** `CLIPES` em `js/70-regua.js` |
+| Os timecodes | `CLIPES` em `js/70-regua.js`, o menu em `parciais/navbar.html` e o `.clipe-cabeca` de cada seção |
+| Os links do menu | `parciais/navbar.html` — as duas listas (desktop e celular) |
 | Cores, fontes, espessura de borda | `css/01-tokens-e-base.css` (`:root` e `html.light`) |
 | Texto de um serviço, projeto, marco | o `secoes/*.html` correspondente |
-| Quanto o retrato aparece | `OP_HERO` / `OP_CONTEUDO` em `js/70-retrato-scroll.js`; `--hero-veil` em `css/10-fundo.css` |
-| Velocidade do retrato | `EASING` em `js/70-retrato-scroll.js` (0,05 preguiçoso · 0,25 colado no dedo) |
-| Quantidade de partículas | `particleCountFor()` em `js/60-particulas.js` |
-| O ritmo em que os cartões aparecem | `transition-delay` inline, no HTML da seção |
+| Velocidade ou peso do retrato | o objeto `RETRATO` em `js/90-retrato.js` (`fps`, `passoCelular`) |
+| A aparência da régua | `css/10-regua.css` |
+| O jeito da forma de onda | `js/60-onda.js` (a função `desenhar`) |
+| A lista de ferramentas da fita | `itens` em `js/80-fita.js` |
 | E-mail, WhatsApp, redes | `secoes/contato.html` |
-| A camada de fundo que fica na frente | a ordem das linhas em `parciais/fundo.html` |
 
 Depois de qualquer uma delas: `npm run checar`.

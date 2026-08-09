@@ -1,22 +1,22 @@
-<!--# NAVBAR — só aparece quando o typewriter do hero termina.
-     Estilo: css/20-navbar.css (barra) e css/25-menu-mobile.css (menu)
-     Efeitos: js/40-typewriter.js (é ele que dá a classe .visible),
-     js/10-tema.js, js/20-menu-mobile.js
+<!--# BARRA DO TOPO — marca, navegação, tema e menu de celular.
+     Estilo: css/20-navbar.css e css/25-menu-mobile.css
+     Efeitos: js/10-tema.js · js/20-menu-mobile.js · js/70-regua.js (o
+              aria-current do link da seção atual)
 
-     Ela não está na tela desde o carregamento. Quem solta é o typewriter, ao
-     acabar de digitar — a primeira tela é só a frase. Se você tirar o
-     typewriter, tire também esse acoplamento, senão a navbar nunca aparece.
+     A logo é um monograma quadrado servido pelo WordPress. Os atributos
+     width/height declaram a proporção REAL (900×700): é assim que o navegador
+     reserva o espaço certo e a página não pula quando a imagem chega.
 
-     OS LINKS ESTÃO EM DUAS LISTAS: a de desktop (.nav-links) e a do
-     #mobile-menu. Mudou uma, mude a outra — não há nada que sincronize. -->
-<!-- ===================== Navbar ===================== -->
-<header id="navbar">
-  <div class="nav-inner glass">
-    <a href="#top" class="logo" aria-label="pixelmartins.com — início">
-      <img src="https://pixelmartins.com/wp-content/uploads/2026/08/5.png" alt="pixelmartins.com" width="140" height="32" />
+     Os timecodes no menu de celular são os mesmos de CLIPES em js/70-regua.js.
+     Mudou lá, muda aqui. -->
+<header id="barra">
+  <div class="barra-int">
+    <a href="#topo" class="marca" aria-label="pixelmartins.com — início">
+      <img src="https://pixelmartins.com/wp-content/uploads/2026/08/5.png" alt="pixelmartins.com" width="900" height="700" />
+      <span class="marca-txt">pixelmartins</span>
     </a>
 
-    <nav aria-label="Navegação principal" class="nav-links">
+    <nav class="links" aria-label="Navegação principal">
       <ul>
         <li><a href="#servicos">Serviços</a></li>
         <li><a href="#projetos">Projetos</a></li>
@@ -27,35 +27,35 @@
       </ul>
     </nav>
 
-    <div class="nav-actions">
-      <button type="button" id="theme-toggle" aria-label="Ativar modo claro">
-        <svg class="icon-sun" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-          <circle cx="12" cy="12" r="4"/><path d="M12 2v2"/><path d="M12 20v2"/><path d="m4.93 4.93 1.41 1.41"/><path d="m17.66 17.66 1.41 1.41"/><path d="M2 12h2"/><path d="M20 12h2"/><path d="m6.34 17.66-1.41 1.41"/><path d="m19.07 4.93-1.41 1.41"/>
+    <div class="acoes">
+      <button type="button" id="tema-btn" class="quadrado" aria-label="Ativar modo claro">
+        <svg class="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+          <circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/>
         </svg>
-        <svg class="icon-moon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
+        <svg class="i-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
           <path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/>
         </svg>
       </button>
 
-      <button type="button" id="menu-toggle" aria-label="Abrir menu" aria-expanded="false" aria-controls="mobile-menu">
-        <svg class="icon-burger" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M4 6h16"/><path d="M4 12h16"/><path d="M4 18h16"/>
+      <button type="button" id="menu-btn" class="quadrado" aria-label="Abrir menu" aria-expanded="false" aria-controls="menu">
+        <svg class="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+          <path d="M4 7h16M4 12h16M4 17h16"/>
         </svg>
-        <svg class="icon-close" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-          <path d="M18 6 6 18"/><path d="m6 6 12 12"/>
+        <svg class="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" aria-hidden="true">
+          <path d="M18 6 6 18M6 6l12 12"/>
         </svg>
       </button>
     </div>
   </div>
 
-  <nav id="mobile-menu" class="glass" aria-label="Navegação principal (mobile)">
+  <nav id="menu" aria-label="Navegação principal (celular)">
     <ul>
-      <li><a href="#servicos">Serviços</a></li>
-      <li><a href="#projetos">Projetos</a></li>
-      <li><a href="#sobre">Sobre</a></li>
-      <li><a href="#ia">IA</a></li>
-      <li><a href="#trajetoria">Trajetória</a></li>
-      <li><a href="#contato">Contato</a></li>
+      <li><a href="#servicos">Serviços <span>00:00:18:00</span></a></li>
+      <li><a href="#projetos">Projetos <span>00:00:42:00</span></a></li>
+      <li><a href="#sobre">Sobre <span>00:01:10:00</span></a></li>
+      <li><a href="#ia">IA <span>00:01:34:00</span></a></li>
+      <li><a href="#trajetoria">Trajetória <span>00:01:52:00</span></a></li>
+      <li><a href="#contato">Contato <span>00:02:10:00</span></a></li>
     </ul>
   </nav>
 </header>

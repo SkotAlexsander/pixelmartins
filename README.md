@@ -1,7 +1,9 @@
 # Portfólio — pixelmartins.com
 
 > Criado em 2026-08-02. Casa oficial do código do site pessoal do Alex Martins.
-> Modularizado em 2026-08-03: o fonte agora é `src/`, o arquivo que se cola é `dist/`.
+> Modularizado em 2026-08-03: o fonte é `src/`, o arquivo que se cola é `dist/`.
+> **v5 "Sala de Edição" em 2026-08-08:** a página virou uma timeline de edição.
+> Ainda **não publicada** — o widget do Elementor tem a versão anterior.
 
 ---
 
@@ -25,6 +27,28 @@ acelerando o repetitivo.
 
 ---
 
+## A ideia da v5: a página é uma timeline
+
+Quem rola está arrastando o playhead. A régua fixa no rodapé não é barra de
+progresso enfeitada — é **navegação**: timecode ao vivo, um clipe clicável por
+seção na faixa V1, forma de onda na A1, e o playhead andando.
+
+**Por que essa direção e não outra:** a página vende *"site e vídeo, feitos
+pela mesma pessoa"*. Qualquer um **escreve** isso; só quem faz as duas coisas
+**constrói a prova**. É a definição de "único" que se defende: não é único
+porque ninguém pensou, é único porque quase ninguém pode executar.
+
+O raciocínio inteiro — cor, tipografia, o que entrou e o que saiu, e por que o
+GSAP foi embora — está em **[docs/direcao-arte.md](docs/direcao-arte.md)**.
+
+**Sem biblioteca de terceiro.** A v5 chegou a usar GSAP + ScrollTrigger + Lenis
+por CDN e voltou atrás: a bancada mostrou que a página fazia tudo sem eles, e a
+decisão já registrada aqui — não depender de terceiro para pintar — continuava
+valendo. Hoje `dev/verificar-pagina.js` bloqueia **toda** requisição externa e
+cobra que a página continue inteira.
+
+---
+
 ## Estrutura desta pasta
 
 ```text
@@ -32,17 +56,17 @@ pixelmartins-site/
 ├── src/               ← O FONTE. É aqui que se edita.
 │   ├── html/
 │   │   ├── index.html      esqueleto: a ordem da página + marcadores
-│   │   ├── parciais/       fontes, fundo, navbar
+│   │   ├── parciais/       fontes, navbar, régua
 │   │   └── secoes/         hero, servicos, projetos, sobre, ia,
 │   │                       trajetoria, contato
-│   ├── css/           15 arquivos — o prefixo numérico É a ordem da cascata
-│   └── js/            8 módulos, cada um uma IIFE independente
+│   ├── css/           14 arquivos — o prefixo numérico É a ordem da cascata
+│   └── js/            11 módulos, cada um uma IIFE independente
 ├── build/build.js     junta src/ num fragmento único
 ├── dist/              ← GERADO. É isto que se cola no Elementor. Não editar.
 ├── assets/frames/     150 frames do retrato do fundo (servidos via jsDelivr)
 ├── backup/            cópia datada antes de cada alteração — NUNCA sobrescrever
 ├── dev/               ferramentas de teste local (não vão pro site)
-├── docs/              estrutura do código e a animação do retrato
+├── docs/              direção de arte, estrutura do código, seções, retrato
 └── privado/           notas internas — no .gitignore, não vem no clone
 ```
 
@@ -56,7 +80,8 @@ Dois documentos, e a diferença entre eles é o que você está tentando fazer:
 |---|---|
 | como o código é montado, e por que a ordem do CSS importa | **[docs/estrutura.md](docs/estrutura.md)** — antes de mexer no CSS |
 | o que cada seção faz, quais efeitos rodam nela e qual arquivo abrir para mudar X | **[docs/secoes.md](docs/secoes.md)** — antes de mexer no conteúdo |
-| como funciona o retrato de 150 frames no fundo | **[docs/animacao-scroll.md](docs/animacao-scroll.md)** |
+| por que a página é assim — a direção de arte | **[docs/direcao-arte.md](docs/direcao-arte.md)** |
+| como funciona o retrato de 150 frames | **[docs/animacao-retrato.md](docs/animacao-retrato.md)** |
 
 Cada arquivo de `src/html/` também abre com um resumo do que ele é e de quais
 efeitos o tocam. Esses cabeçalhos usam `<!--# ... -->`, o comentário
@@ -71,12 +96,19 @@ ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-s
 2. `npm run checar` → build + validação sem navegador. Tem de dar **PASSOU**.
 3. `npm run preview`, `npm run servir` noutra aba, `npm run verificar`
    → o teste em navegador de verdade. Também tem de dar **PASSOU**.
+   O `verificar` roda dois: a página (sem rede externa, sem JavaScript,
+   teclado, rolagem lateral em 5 larguras) e o retrato (anima à vista, dorme
+   fora dela).
 4. `git commit` + `git push` — isso **já atualiza os frames** servidos pelo jsDelivr.
 5. Colar o conteúdo de **`dist/index-elementor.html`** no widget HTML do Elementor.
 
 > O passo 3 precisa do Playwright (`npm i -D playwright && npx playwright install
 > chromium`). Sem ele, o passo 2 sozinho já pega erro de sintaxe, tag esquecida,
 > ID órfão e classe sem estilo.
+>
+> **Se a porta 8099 estiver ocupada** (outros projetos desta máquina servem
+> preview nela), use outra em toda a linha:
+> `PORTA=8123 npm run servir` e `PORTA=8123 npm run verificar`.
 
 > O passo 5 continua manual: o Elementor guarda a página num postmeta que a REST
 > API não expõe por padrão, então não há como publicar por script sem mexer no

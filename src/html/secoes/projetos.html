@@ -1,58 +1,118 @@
-<!--# PROJETOS — a prova. Hoje tem UM projeto real.
+<!--# PROJETOS — um contado inteiro, e os outros na faixa.
      Estilo: css/55-projetos.css  ·  Efeito: js/50-revelar-ao-rolar.js
 
-     O CSS trata o caso de um card só de propósito: ele não fica espremido no
-     primeiro terço da grade, e volta sozinho ao layout de 3 colunas quando
-     entrar o segundo. É por isso que a seção não parece vazia tendo um item.
+     A frase de abertura ("um projeto contado inteiro vale mais que uma
+     vitrine de miniaturas") continua verdadeira com três projetos porque os
+     outros dois entram ABAIXO, como lista, não como vitrine. Se um dia
+     virarem seis cards iguais, a frase deixa de valer e tem de sair junto.
 
-     Os cards "Próximo projeto" saíram do repo (privado/projetos-placeholder/).
-     O CSS deles ficou — são quatro regras curtas, prontas para quando voltarem.
-     Antes de devolvê-los, leia o aviso que está lá: um projeto bem contado
-     convence mais que um projeto mais dois placeholders. -->
+     A ficha técnica não inventa nada: "Papel" e "A decisão" foram extraídos
+     da própria descrição do projeto, que já contava as duas coisas em prosa.
+
+     Vitrola e Come-Come entraram em 08/08/2026 — já estavam no ar havia dias
+     e a página não os mostrava. Texto factual e curto de propósito: o
+     destaque é do primeiro. -->
 <!-- ===================== Projetos ===================== -->
-<section id="projetos">
-  <div class="container-lg">
-    <div class="reveal">
-      <div class="section-heading center">
-        <span class="eyebrow">Projetos</span>
-        <h2>O que eu já construí</h2>
-        <p>Código, vídeo ou os dois. A stack de cada um está nas tags.</p>
+<section id="projetos" class="secao">
+  <div class="caixa">
+    <div class="clipe-cabeca" data-anim>
+      <span class="tc">00:00:42:00</span>
+      <span class="nome">Projetos</span>
+      <span class="fio" aria-hidden="true"></span>
+      <span class="n">V1 · 04</span>
+    </div>
+
+    <div class="abre" data-anim>
+      <h2>O que eu já construí</h2>
+      <p>Um projeto contado inteiro vale mais que uma vitrine de miniaturas.</p>
+    </div>
+
+    <div class="destaque">
+      <div data-anim>
+        <span class="selo">em destaque</span>
+        <h3>Explorador do Sistema Solar</h3>
+        <p>Simulação 3D do sistema solar em escala orbital logarítmica, com física
+           planetária. O desafio real era caber num celular sem virar outra coisa:
+           resolvi com um painel deslizante que sobe de baixo em vez de um menu lateral.
+           Tem um modo infravermelho que mapeia temperatura em falsa cor.</p>
+
+        <dl class="ficha">
+          <div class="ficha-linha"><dt>Ferramentas</dt><dd>Three.js · JavaScript · WebGL · HTML/CSS</dd></div>
+          <div class="ficha-linha"><dt>Papel</dt><dd>Concepção, código e interface</dd></div>
+          <div class="ficha-linha"><dt>A decisão</dt><dd>Painel que sobe de baixo, em vez de menu lateral</dd></div>
+        </dl>
+
+        <div class="acoes-projeto">
+          <a href="#contato" class="botao botao-fantasma">Falar sobre um projeto assim</a>
+        </div>
+      </div>
+
+      <div data-anim>
+        <div class="janela">
+          <div class="janela-topo">
+            <i></i><i></i><i></i>
+            <b>sistema-solar · escala logarítmica</b>
+          </div>
+          <svg class="orbitas" viewBox="0 0 360 360" role="img" aria-label="Diagrama de órbitas planetárias">
+            <circle class="halo" cx="180" cy="180" r="26"/>
+            <circle class="sol"  cx="180" cy="180" r="11"/>
+            <g>
+              <circle class="anel" cx="180" cy="180" r="52"/>
+              <circle class="anel" cx="180" cy="180" r="82"/>
+              <circle class="anel" cx="180" cy="180" r="112"/>
+              <circle class="anel" cx="180" cy="180" r="145"/>
+            </g>
+            <g>
+              <g class="gira" style="--dur:9s">  <circle class="planeta" cx="232" cy="180" r="3.4"/></g>
+              <g class="gira" style="--dur:16s"> <circle class="planeta" cx="262" cy="180" r="4.6"/></g>
+              <g class="gira" style="--dur:26s"> <circle class="planeta" cx="292" cy="180" r="4.2"/></g>
+              <g class="gira" style="--dur:40s"> <circle class="planeta" cx="325" cy="180" r="6"/></g>
+            </g>
+          </svg>
+        </div>
       </div>
     </div>
 
-    <div class="projects-grid">
-      <div class="reveal" style="transition-delay:0.1s">
-        <article class="project-card">
-          <div class="project-thumb">
-            <span class="initials" aria-hidden="true">EX</span>
+    <div class="mais-clipes" data-anim>
+      <p class="rotulo-bloco">Também no ar</p>
+      <div class="trilho">
+        <article class="clipe">
+          <div class="clipe-topo">
+            <span class="id">CLIPE 02</span>
+            <span class="tipo">Web · App</span>
           </div>
-          <div class="project-body">
-            <h3>Explorador do Sistema Solar</h3>
-            <p>Simulação 3D com 100 corpos catalogados, em escala orbital logarítmica — porque na escala real o usuário passa a viagem toda atravessando vazio. Tem um modo infravermelho que mapeia temperatura em falsa cor.</p>
-            <ul class="project-stack">
-              <li>Three.js</li><li>JavaScript</li><li>HTML/CSS</li>
-            </ul>
-            <p class="project-links">
-              <a href="https://skotalexsander.github.io/solarsys/" target="_blank" rel="noopener noreferrer">
-                ver rodando
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-                </svg>
-              </a>
-              <a href="https://github.com/SkotAlexsander/solarsys" target="_blank" rel="noopener noreferrer">
-                ver o código
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
-                  <path d="M7 7h10v10"/><path d="M7 17 17 7"/>
-                </svg>
-              </a>
-            </p>
+          <h4>Vitrola</h4>
+          <p>Player de música que roda no navegador e como aplicativo de Android, dos
+             mesmos arquivos. O disco gira e para onde estava, o braço desce e caminha.
+             Tem fila, playlists, letra sincronizada, equalizador e velocidade sem
+             alterar o tom.</p>
+          <div class="pe">
+            <span class="pilha">JavaScript · PWA · IndexedDB</span>
+            <a class="abrir" href="https://skotalexsander.github.io/vitrola/" target="_blank" rel="noopener noreferrer">
+              Abrir
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
+            </a>
+          </div>
+        </article>
+
+        <article class="clipe">
+          <div class="clipe-topo">
+            <span class="id">CLIPE 03</span>
+            <span class="tipo">Web · Jogo</span>
+          </div>
+          <h4>Come-Come</h4>
+          <p>Jogo de labirinto em HTML, CSS e JavaScript puros — sem biblioteca, sem
+             build, sem servidor. As 244 pastilhas do fliperama original e quatro
+             fantasmas, cada um com o seu próprio alvo de perseguição.</p>
+          <div class="pe">
+            <span class="pilha">JavaScript · Canvas</span>
+            <a class="abrir" href="https://skotalexsander.github.io/come-come/" target="_blank" rel="noopener noreferrer">
+              Jogar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
+            </a>
           </div>
         </article>
       </div>
-
-      <!--# Os cards "Próximo projeto" ficam em
-           privado/projetos-placeholder/cards-em-breve.html.
-           O CSS deles continua aqui (.project-card.placeholder). -->
     </div>
   </div>
 </section>

@@ -1,123 +1,98 @@
-/* -------------------- Projetos -------------------- */
-.projects-grid {
-  margin-top: 4rem;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1.5rem;
-}
-@media (min-width: 640px) { .projects-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .projects-grid { grid-template-columns: repeat(3, 1fr); } }
+/* ==========================================================================
+   PROJETOS — um clipe contado inteiro, e os outros na faixa
 
-/* Com UM projeto só, o card não deve ficar espremido no primeiro terço.
-   Volta sozinho ao grid de 3 colunas assim que entrar o segundo. */
-.projects-grid:has(> *:only-child) {
-  grid-template-columns: 1fr;
-  max-width: 26rem;
-  margin-left: auto;
-  margin-right: auto;
-}
+   A seção tem dois níveis de propósito. Em cima, UM projeto contado com ficha
+   técnica — porque um case bem contado convence mais que seis miniaturas. Em
+   baixo, os outros que estão no ar, como clipes menores na mesma faixa.
 
-.project-card {
-  overflow: hidden;
-  border-radius: 1rem;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  transition: transform 0.3s cubic-bezier(0.16,1,0.3,1), border-color 0.3s ease;
-}
-.project-card:hover { transform: translateY(-6px); border-color: var(--accent-2); }
-.project-card.placeholder { border-style: dashed; opacity: 0.7; }
-.project-card.placeholder:hover { transform: none; border-color: var(--border); }
+   É isso que deixa a frase "um projeto contado inteiro vale mais que uma
+   vitrine de miniaturas" continuar verdadeira mesmo com três projetos: os
+   outros dois são lista, não vitrine.
 
-.project-thumb {
-  position: relative;
-  aspect-ratio: 16 / 9;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  overflow: hidden;
-  border-bottom: 1px solid var(--border);
-  background-color: var(--surface-2);
-  background-image:
-    radial-gradient(circle at 30% 20%, rgba(0,207,255,0.14) 0%, transparent 55%),
-    radial-gradient(circle at 80% 80%, rgba(0,207,255,0.08) 0%, transparent 50%);
+   O diagrama de órbitas é data graphic (SVG autoral), não ilustração.
+   ========================================================================== */
+.destaque {
+  display: grid; gap: clamp(1.6rem, 4vw, 2.6rem);
+  margin-block-start: clamp(2rem, 5vw, 3rem);
 }
-.project-card.placeholder .project-thumb { border-bottom-style: dashed; }
-.project-thumb .initials {
-  font-family: var(--font-display);
-  font-size: 2.25rem;
-  font-weight: 800;
-  color: var(--text-primary);
-  opacity: 0.15;
-  user-select: none;
-  transition: transform 0.5s ease;
-}
-.project-card:hover .project-thumb .initials { transform: scale(1.1); }
-.placeholder-tag {
-  position: absolute;
-  top: 0.75rem; right: 0.75rem;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  text-transform: uppercase;
-  letter-spacing: 0.05em;
-  border: 1px solid var(--border);
-  border-radius: 9999px;
-  padding: 0.15rem 0.5rem;
-  color: var(--text-secondary);
-}
-.project-body { padding: 1.25rem; }
-.project-body h3 {
-  font-family: var(--font-display);
-  margin: 0;
-  font-size: 1.125rem;
-  font-weight: 700;
-  color: var(--text-primary);
-}
-.project-body p {
-  margin: 0.5rem 0 0;
-  font-size: 0.875rem;
-  line-height: 1.7;
-  color: var(--text-secondary);
-}
-.project-stack {
-  margin: 1rem 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 0.5rem;
-  list-style: none;
-  padding: 0;
-}
-.project-stack li {
-  font-family: var(--font-mono);
-  font-size: 11px;
-  color: var(--text-secondary);
-  border: 1px solid var(--border);
-  border-radius: 9999px;
-  padding: 0.25rem 0.65rem;
-}
+@media (min-width: 62rem) { .destaque { grid-template-columns: 1.05fr .95fr; align-items: center; } }
 
-/* Ver rodando / ver o código. Um projeto que o visitante não consegue abrir
-   é uma afirmação; um que ele abre é uma prova. */
-.project-links {
-  margin: 1.1rem 0 0;
-  display: flex;
-  flex-wrap: wrap;
-  gap: 1.1rem;
+.selo {
+  display: inline-flex; align-items: center; gap: .45rem;
+  font-family: var(--mono); font-size: .64rem; letter-spacing: .14em;
+  text-transform: uppercase; color: var(--marcador);
+  border: var(--fio) solid color-mix(in srgb, var(--marcador) 45%, transparent);
+  border-radius: var(--r-sm); padding: .28rem .55rem;
 }
-.project-links a {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.35rem;
-  font-family: var(--font-mono);
-  font-size: 12px;
-  color: var(--accent-2);
-  border-bottom: 1px solid transparent;
-  transition: border-color 0.2s ease;
+.destaque h3 { font-size: clamp(1.5rem, 3.6vw, 2.3rem); text-transform: uppercase; margin-block-start: .9rem; }
+.destaque > div > p { color: var(--texto-2); margin-block-start: .9rem; max-width: 54ch; }
+
+/* ficha técnica — a mesma tabela que acompanha um clipe num acervo */
+.ficha { margin-block-start: 1.3rem; border-block-start: var(--fio) solid var(--linha); display: grid; gap: 0; }
+.ficha-linha {
+  display: grid; grid-template-columns: 8.5rem 1fr; gap: .8rem;
+  padding-block: .55rem; border-block-end: var(--fio) solid var(--linha);
+  font-size: .85rem;
 }
-.project-links a:hover,
-.project-links a:focus-visible { border-bottom-color: var(--accent-2); }
-.project-links svg {
-  width: 13px;
-  height: 13px;
-  transition: transform 0.2s ease;
+.ficha-linha dt {
+  font-family: var(--mono); font-size: .66rem; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--texto-3); padding-block-start: .18em;
 }
-.project-links a:hover svg { transform: translate(2px, -2px); }
+.ficha-linha dd { margin: 0; color: var(--texto-2); }
+
+.acoes-projeto { margin-block-start: 1.4rem; display: flex; flex-wrap: wrap; gap: .7rem; }
+
+/* ---- a janela do diagrama ------------------------------------------------ */
+.janela { border: var(--fio) solid var(--linha); border-radius: var(--r); background: var(--painel); overflow: hidden; }
+.janela-topo {
+  display: flex; align-items: center; gap: .5rem;
+  padding: .45rem .7rem; background: var(--faixa);
+  border-block-end: var(--fio) solid var(--linha);
+}
+.janela-topo i { width: 7px; height: 7px; border-radius: 50%; background: var(--linha-forte); flex: none; }
+.janela-topo i:first-child { background: var(--marcador); }
+.janela-topo b {
+  font-family: var(--mono); font-size: .62rem; font-weight: 500;
+  letter-spacing: .08em; color: var(--texto-3); margin-inline-start: .3rem;
+}
+.orbitas { width: 100%; height: auto; aspect-ratio: 1 / 1; padding: 1rem; }
+.orbitas .anel    { fill: none; stroke: var(--linha-forte); stroke-width: 1; }
+.orbitas .sol     { fill: var(--marcador); }
+.orbitas .halo    { fill: color-mix(in srgb, var(--marcador) 16%, transparent); }
+.orbitas .planeta { fill: var(--playhead); }
+.orbitas .gira    { transform-origin: 180px 180px; }
+html.js .orbitas .gira { animation: girar var(--dur) linear infinite; }
+@keyframes girar { to { transform: rotate(360deg); } }
+
+/* ---- os outros clipes ---------------------------------------------------- */
+.mais-clipes { margin-block-start: clamp(2.4rem, 5vw, 3.4rem); }
+.trilho {
+  display: grid; gap: 1px; background: var(--linha);
+  border: var(--fio) solid var(--linha); border-radius: var(--r); overflow: hidden;
+}
+@media (min-width: 48rem) { .trilho { grid-template-columns: repeat(2, 1fr); } }
+
+.clipe {
+  background: var(--painel); padding: clamp(1.2rem, 2.6vw, 1.6rem);
+  display: flex; flex-direction: column; gap: .7rem;
+  transition: background .2s ease;
+}
+.clipe:hover { background: var(--faixa); }
+.clipe-topo { display: flex; align-items: center; justify-content: space-between; gap: .8rem; }
+.clipe-topo .id   { font-family: var(--mono); font-size: .66rem; letter-spacing: .1em; color: var(--playhead); }
+.clipe-topo .tipo { font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--texto-3); }
+.clipe h4 { font-family: var(--display); font-weight: 700; font-size: 1.15rem; text-transform: uppercase; }
+.clipe p { font-size: .89rem; color: var(--texto-2); line-height: 1.55; }
+.clipe .pe {
+  display: flex; align-items: center; justify-content: space-between; gap: .8rem;
+  margin-block-start: auto; padding-block-start: .5rem;
+  border-block-start: var(--fio) solid var(--linha);
+}
+.clipe .pilha { font-family: var(--mono); font-size: .64rem; color: var(--texto-3); letter-spacing: .04em; }
+.clipe .abrir {
+  display: inline-flex; align-items: center; gap: .35rem;
+  font-family: var(--mono); font-size: .66rem; letter-spacing: .1em;
+  text-transform: uppercase; color: var(--playhead);
+}
+.clipe .abrir svg { width: 12px; height: 12px; }
+.clipe .abrir:hover { text-decoration: underline; text-underline-offset: 3px; }

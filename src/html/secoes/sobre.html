@@ -1,58 +1,76 @@
-<!--# SOBRE — confirmação, não apresentação.
-     Estilo: css/50-sobre.css  ·  Efeito: js/50-revelar-ao-rolar.js
+<!--# SOBRE — o retrato no monitor de programa.
+     Estilo: css/50-sobre.css  ·  Efeito: js/90-retrato.js
 
-     Vem DEPOIS de Projetos por decisão de ordem (ver docs/secoes.md): quando o
-     visitante chega aqui, ele já sabe o que você entrega e já viu trabalho.
-     A pergunta dele era "o que você faz por mim", não "quem é você".
+     Vem em quarto, e não em segundo, de propósito: quando o visitante chega
+     aqui ele já sabe o que pode contratar e já viu trabalho. Aí "quem é você"
+     deixa de ser apresentação e vira confirmação.
 
-     Um parágrafo com uma frase destacada em .highlight, e quatro cartões de
-     capacidade em cascata de 0.15s a 0.33s. -->
+     O canvas do retrato começa vazio e com uma tarja "carregando retrato" por
+     cima. Se as 150 imagens não vierem, a tarja troca para "retrato
+     indisponível" e o layout não muda de altura — o quadro tem aspect-ratio
+     fixo justamente para não empurrar o texto quando a imagem chega. -->
 <!-- ===================== Sobre ===================== -->
-<section id="sobre">
-  <div class="container-lg">
-    <div class="reveal">
-      <div class="section-heading center">
-        <span class="eyebrow">Sobre</span>
-        <h2>Uma pessoa, as duas entregas</h2>
-      </div>
+<section id="sobre" class="secao">
+  <div class="caixa">
+    <div class="clipe-cabeca" data-anim>
+      <span class="tc">00:01:10:00</span>
+      <span class="nome">Sobre</span>
+      <span class="fio" aria-hidden="true"></span>
+      <span class="n">V1 · 05</span>
     </div>
 
-    <div class="reveal" style="transition-delay:0.1s">
-      <p class="intro-text">
-        Sou o Alex. Construo sites rápidos e edito vídeo que prende — as duas coisas,
-        no mesmo padrão e no mesmo prazo.
-        <span class="highlight">Automatizo o repetitivo com IA e uso o tempo que sobra
-        na parte que decide o resultado: a ideia.</span>
-      </p>
+    <div class="abre" data-anim>
+      <h2>Uma pessoa, as duas entregas</h2>
     </div>
 
-    <div class="capabilities-grid">
-      <div class="reveal" style="transition-delay:0.15s">
-        <div class="capability-card glass">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 16 4-4-4-4"/><path d="m6 8-4 4 4 4"/><path d="m14.5 4-5 16"/></svg>
-          <h3>Front-end engineering</h3>
-          <p>Sites que carregam rápido, em Next.js, React e TypeScript.</p>
+    <div class="sobre-grade">
+      <div data-anim>
+        <div class="monitor">
+          <div class="monitor-topo">
+            <b>Program</b>
+            <span class="fio" aria-hidden="true"></span>
+            <span class="tc">00:01:10:00</span>
+          </div>
+          <div class="retrato-quadro">
+            <div class="retrato-carregando" id="retrato-status">carregando retrato</div>
+            <canvas id="retrato" aria-label="Retrato de Alex Martins em movimento" role="img"></canvas>
+          </div>
+          <div class="monitor-pe">
+            <span class="medindo" id="retrato-info">retrato.seq</span>
+            <span id="retrato-modo">150 frames · em looping</span>
+          </div>
         </div>
       </div>
-      <div class="reveal" style="transition-delay:0.21s">
-        <div class="capability-card glass">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9"/><path d="m12.4 3.4 3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
-          <h3>Edição de vídeo</h3>
-          <p>Corte, ritmo, som e cor — pra ninguém largar no meio.</p>
-        </div>
-      </div>
-      <div class="reveal" style="transition-delay:0.27s">
-        <div class="capability-card glass">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
-          <h3>IA &amp; automação</h3>
-          <p>Fluxos que matam o trabalho repetitivo, no código e na edição.</p>
-        </div>
-      </div>
-      <div class="reveal" style="transition-delay:0.33s">
-        <div class="capability-card glass">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.64 3.64-1.28-1.28a1.21 1.21 0 0 0-1.72 0L2.36 18.64a1.21 1.21 0 0 0 0 1.72l1.28 1.28a1.2 1.2 0 0 0 1.72 0L21.64 5.36a1.2 1.2 0 0 0 0-1.72Z"/><path d="m14 7 3 3"/><path d="M5 6v4"/><path d="M19 14v4"/><path d="M10 2v2"/><path d="M7 8H3"/><path d="M21 16h-4"/><path d="M11 3H9"/></svg>
-          <h3>Motion &amp; interação</h3>
-          <p>Microinterações que guiam o olho sem roubar a cena.</p>
+
+      <div data-anim>
+        <p class="bio-lead">Sou o Alex. Construo sites rápidos e edito vídeo que prende —
+          <em>as duas coisas, no mesmo padrão e no mesmo prazo.</em></p>
+        <p class="bio-texto">Automatizo o repetitivo com IA e uso o tempo que sobra na parte
+          que decide o resultado: a ideia. Na prática isso significa que você não precisa
+          alinhar dois fornecedores, traduzir o que um falou para o outro, nem descobrir
+          no fim que o vídeo não cabe no site.</p>
+
+        <div class="habilidades">
+          <div class="habilidade">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m18 16 4-4-4-4M6 8l-4 4 4 4M14.5 4l-5 16"/></svg>
+            <b>Front-end</b>
+            <span>Sites que carregam rápido, em Next.js, React e TypeScript.</span>
+          </div>
+          <div class="habilidade">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.2 6 3 11l-.9-2.4c-.3-1.1.3-2.2 1.3-2.5l13.5-4c1.1-.3 2.2.3 2.5 1.3Z"/><path d="m6.2 5.3 3.1 3.9M12.4 3.4l3.1 4"/><path d="M3 11h18v8a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2Z"/></svg>
+            <b>Edição de vídeo</b>
+            <span>Corte, ritmo, som e cor — para ninguém largar no meio.</span>
+          </div>
+          <div class="habilidade">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m12 3-1.9 5.8a2 2 0 0 1-1.3 1.3L3 12l5.8 1.9a2 2 0 0 1 1.3 1.3L12 21l1.9-5.8a2 2 0 0 1 1.3-1.3L21 12l-5.8-1.9a2 2 0 0 1-1.3-1.3L12 3Z"/></svg>
+            <b>IA &amp; automação</b>
+            <span>Fluxos que matam o trabalho repetitivo, no código e na edição.</span>
+          </div>
+          <div class="habilidade">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="m21.6 3.6-1.3-1.3a1.2 1.2 0 0 0-1.7 0L2.4 18.6a1.2 1.2 0 0 0 0 1.7l1.3 1.3a1.2 1.2 0 0 0 1.7 0L21.6 5.4a1.2 1.2 0 0 0 0-1.8Z"/><path d="m14 7 3 3M5 6v4M19 14v4M10 2v2M7 8H3M21 16h-4M11 3H9"/></svg>
+            <b>Motion &amp; interação</b>
+            <span>Microinterações que guiam o olho sem roubar a cena.</span>
+          </div>
         </div>
       </div>
     </div>

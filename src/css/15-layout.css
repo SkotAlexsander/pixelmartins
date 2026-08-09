@@ -1,7 +1,43 @@
-/* -------------------- Layout helpers -------------------- */
-.container-lg { max-width: 64rem; margin: 0 auto; padding: 0 1.5rem; }
-.container-md { max-width: 56rem; margin: 0 auto; padding: 0 1.5rem; }
+/* ==========================================================================
+   LAYOUT — as caixas, o ritmo vertical e o cabeçalho de clipe
 
-section { position: relative; padding: 5rem 1.25rem; }
-@media (min-width: 640px) { section { padding: 7rem 1.5rem; } }
-@media (min-width: 1024px) { section { padding: 9rem 1.5rem; } }
+   O cabeçalho de seção não é um título com sobrescrito: é a barra de
+   identificação de um clipe num NLE — timecode à esquerda, nome do clipe,
+   filete até a borda e a posição na faixa à direita.
+   ========================================================================== */
+.caixa      { width: 100%; max-width: 1180px; margin-inline: auto; padding-inline: var(--gutter); }
+.caixa-fina { width: 100%; max-width: 780px;  margin-inline: auto; padding-inline: var(--gutter); }
+
+.secao { padding-block: var(--secao-y); position: relative; }
+.secao + .secao { border-block-start: var(--fio) solid var(--linha); }
+
+.clipe-cabeca {
+  display: flex; align-items: center; gap: .8rem;
+  border-block-end: var(--fio) solid var(--linha);
+  padding-block-end: .7rem;
+  margin-block-end: clamp(1.6rem, 4vw, 2.6rem);
+}
+.clipe-cabeca .tc   { font-family: var(--mono); font-size: .72rem; color: var(--playhead); letter-spacing: .04em; }
+.clipe-cabeca .nome { font-family: var(--mono); font-size: .68rem; letter-spacing: .16em; text-transform: uppercase; color: var(--texto-3); }
+.clipe-cabeca .fio  { flex: 1; height: 1px; background: var(--linha); }
+.clipe-cabeca .n    { font-family: var(--mono); font-size: .68rem; color: var(--texto-3); }
+
+.abre { max-width: 62ch; }
+.abre p {
+  color: var(--texto-2); margin-block-start: 1rem;
+  font-size: clamp(1rem, 1.6vw, 1.1rem);
+}
+
+/* Título de bloco menor, em mono — usado em "Como funciona" e "Também no ar" */
+.rotulo-bloco {
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--texto-3); margin-block-end: 1rem;
+}
+
+/* ---- rodapé -------------------------------------------------------------- */
+.rodape { border-block-start: var(--fio) solid var(--linha); padding-block: 1.6rem; }
+.rodape-int {
+  display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between;
+  gap: .6rem; font-family: var(--mono); font-size: .68rem; color: var(--texto-3);
+}
+.rodape a:hover { color: var(--texto); }

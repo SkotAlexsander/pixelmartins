@@ -1,0 +1,35 @@
+<!--# A RÉGUA — é ela que carrega a ideia da página inteira.
+     Estilo: css/10-regua.css  ·  Efeitos: js/70-regua.js e js/60-onda.js
+
+     Fica fora do <main> de propósito: é ferramenta de navegação, não
+     conteúdo. É `position: fixed`, presa ao rodapé da JANELA — por isso
+     sobrevive dentro do widget do Elementor sem depender do contêiner dele.
+
+     O que vem vazio daqui e o JS preenche:
+       #v1         os blocos de clipe (um por seção, com a largura proporcional
+                   ao espaço que a seção ocupa na página)
+       #a1         a forma de onda, desenhada em canvas
+       #tc-agora   o timecode que anda com o scroll
+
+     Sem JavaScript ela aparece vazia mas não atrapalha: é uma barra fina no
+     rodapé, e a navegação continua toda no menu do topo. -->
+<div id="regua" role="navigation" aria-label="Linha do tempo da página">
+  <div class="regua-tc">
+    <span class="agora" id="tc-agora">00:00:00:00</span>
+    <span class="total" id="tc-total">de 00:02:24:00</span>
+  </div>
+
+  <div class="regua-pista" id="regua-pista">
+    <div class="faixas">
+      <div class="faixa-linha">
+        <span class="faixa-rot" aria-hidden="true">V1</span>
+        <div class="v1" id="v1"></div>
+      </div>
+      <div class="faixa-linha" aria-hidden="true">
+        <span class="faixa-rot">A1</span>
+        <canvas id="a1"></canvas>
+      </div>
+    </div>
+    <div class="playhead" id="playhead" aria-hidden="true"></div>
+  </div>
+</div>

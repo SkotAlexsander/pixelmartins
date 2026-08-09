@@ -1,48 +1,61 @@
-<!--# HERO — a primeira tela.
-     Estilo: css/30-hero.css  ·  Efeito: js/40-typewriter.js
+<!--# HERO — o "cold open" da sequência.
+     Estilo: css/30-hero.css
+     Efeitos: js/40-titulo-revelar.js · js/60-onda.js · js/80-fita.js
 
-     O .hero-dark-bg é um fundo PRÓPRIO, por cima do fundo global. Ele é o véu
-     que segura o retrato (--hero-veil, em css/10-fundo.css) — por isso ali o
-     retrato pode aparecer mais forte que no resto da página.
+     A frase é a página inteira em uma linha, e não se mexe nela sem motivo
+     forte: foi ela que resolveu o hero abstrato da versão de julho.
 
-     Ao acabar de digitar, o typewriter solta três coisas de uma vez: o cursor
-     para de piscar, o indicador de scroll entra e A NAVBAR APARECE. Ela não
-     está lá desde o começo — a primeira tela é só a frase.
+     O título aparece DUAS vezes de propósito:
+       .sr-only        a frase inteira, para leitor de tela
+       [data-frase]    a mesma frase, aria-hidden, que o JS pica em palavras
+     Assim a revelação por palavra nunca chega picada a quem usa leitor de
+     tela. Se o JS não rodar, o segundo span aparece normal e ninguém percebe.
 
-     A frase existe DUAS vezes: no .sr-only (para leitor de tela) e no
-     #typewriter-text (animada, aria-hidden). Trocar uma sem a outra faz o site
-     dizer uma coisa e o leitor de tela dizer outra. O texto animado mora em
-     js/40-typewriter.js, na constante HERO_TEXT. -->
+     A fita de ferramentas embaixo é aria-hidden porque é movimento; a lista
+     de verdade está no .sr-only logo depois dela, em texto corrido. -->
 <!-- ===================== Hero ===================== -->
-<section id="top">
-  <!-- Fundo "elegant dark pattern" (convertido do componente React DarkGradientBg) -->
-  <div class="hero-dark-bg" aria-hidden="true">
-    <div class="hdb-gradient">
-      <div class="hdb-streak"></div>
-      <div class="hdb-streak"></div>
-      <div class="hdb-streak"></div>
-      <div class="hdb-streak"></div>
-      <div class="hdb-streak"></div>
+<section id="topo">
+  <div class="grade" aria-hidden="true"></div>
+  <div class="caixa">
+    <p class="rec"><i aria-hidden="true"></i> REC <span class="tc">00:00:00:00</span></p>
+
+    <h1 class="hero-h1">
+      <span class="sr-only">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
+      <span data-frase aria-hidden="true">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
+    </h1>
+
+    <p class="hero-sub" data-anim>Você contrata uma pessoa em vez de duas — e a conta de compatibilizar
+      o site com o vídeo deixa de ser sua.</p>
+
+    <div class="onda-caixa" data-anim aria-hidden="true">
+      <div class="onda-topo">
+        <b>A1 · narração</b>
+        <span class="fio"></span>
+        <b>48 kHz · 24 bit</b>
+      </div>
+      <canvas id="onda"></canvas>
     </div>
-    <div class="hdb-texture"></div>
-    <div class="hdb-dots"></div>
-    <div class="hdb-highlight"></div>
-  </div>
 
-  <p class="hero-eyebrow">Alex Martins · sites e vídeo</p>
+    <div class="hero-meta" data-anim>
+      <span class="status"><i aria-hidden="true"></i> disponível para projetos</span>
+      <span class="sep" aria-hidden="true">/</span>
+      <span>Porto Alegre, RS</span>
+      <span class="sep" aria-hidden="true">/</span>
+      <span>remoto</span>
+    </div>
 
-  <h1 id="hero-heading">
-    <span class="sr-only">Seu site e seu vídeo, feitos pela mesma pessoa.</span>
-    <span id="typewriter-text" aria-hidden="true"></span><span class="caret caret-blink" id="caret"></span>
-  </h1>
-
-  <p class="hero-sub">Você contrata uma pessoa em vez de duas — e a conta de compatibilizar
-  o site com o vídeo deixa de ser sua.</p>
-
-  <div id="scroll-indicator">
-    <span>scroll</span>
-    <svg class="chevron" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round">
-      <path d="m6 9 6 6 6-6"/>
-    </svg>
+    <div class="hero-acoes" data-anim>
+      <a href="#contato" class="botao">
+        Começar um projeto
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+      </a>
+      <a href="#projetos" class="botao botao-fantasma">Ver o que eu fiz</a>
+    </div>
   </div>
 </section>
+
+<!-- ===================== Fita de ferramentas ===================== -->
+<div class="fita" aria-hidden="true">
+  <div class="fita-pista" id="fita-pista"></div>
+</div>
+<p class="sr-only">Ferramentas: Next.js, React, TypeScript, JavaScript, Three.js, HTML, CSS, WordPress, Elementor, Premiere, After Effects, DaVinci Resolve, CapCut, Figma, Git, Node.js e integração com modelos de linguagem.</p>

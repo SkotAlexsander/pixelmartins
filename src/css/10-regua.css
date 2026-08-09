@@ -1,0 +1,99 @@
+/* ==========================================================================
+   A RÉGUA — o elemento que carrega a ideia inteira
+
+   Não é barra de progresso enfeitada: é navegação. Cada bloco da faixa V1 é
+   uma seção da página, clicável, e o bloco da seção em que você está fica
+   selecionado — como clipe selecionado num editor de vídeo.
+
+   Estrutura, de fora pra dentro:
+     #regua            barra fixa no rodapé
+       .regua-tc       timecode ao vivo + duração total
+       .regua-pista    a área rolável
+         .faixa-linha  V1 (os clipes) e A1 (forma de onda)
+         .playhead     a linha que anda
+
+   Efeito: js/70-regua.js   ·   A forma de onda: js/60-onda.js
+   ========================================================================== */
+#regua {
+  position: fixed; inset-inline: 0; bottom: 0; z-index: 70;
+  height: var(--regua-h);
+  background: var(--painel);
+  border-block-start: var(--fio) solid var(--linha-forte);
+  display: flex; align-items: stretch;
+  font-family: var(--mono);
+  user-select: none;
+}
+
+.regua-tc {
+  flex: none; display: flex; flex-direction: column; justify-content: center;
+  padding-inline: .75rem; border-inline-end: var(--fio) solid var(--linha);
+  background: var(--faixa);
+}
+.regua-tc .agora { font-size: .82rem; font-weight: 600; color: var(--playhead); letter-spacing: .02em; line-height: 1.2; }
+.regua-tc .total { font-size: .58rem; color: var(--texto-3); letter-spacing: .08em; }
+@media (min-width: 48rem) {
+  .regua-tc { padding-inline: 1rem; }
+  .regua-tc .agora { font-size: 1rem; }
+  .regua-tc .total { font-size: .62rem; }
+}
+
+/* --rot é a canaleta dos rótulos V1/A1. O playhead precisa respeitar a MESMA
+   canaleta, senão ele anda 28px adiantado no desktop. */
+.regua-pista { position: relative; flex: 1; min-width: 0; overflow: hidden; --rot: 0px; }
+@media (min-width: 48rem) { .regua-pista { --rot: 28px; } }
+
+.faixas { position: absolute; inset: 0; display: flex; flex-direction: column; }
+.faixa-linha { position: relative; flex: 1; min-height: 0; display: flex; padding-inline-start: var(--rot); }
+.faixa-linha + .faixa-linha { border-block-start: var(--fio) solid var(--linha); }
+
+.faixa-rot {
+  position: absolute; inset-block: 0; inset-inline-start: 0; z-index: 3;
+  display: none; align-items: center; padding-inline: .4rem;
+  font-size: .56rem; letter-spacing: .1em; color: var(--texto-3);
+  background: var(--faixa); border-inline-end: var(--fio) solid var(--linha);
+  pointer-events: none;
+}
+@media (min-width: 48rem) { .faixa-rot { display: flex; } }
+
+/* V1: os clipes. A largura de cada um é a fatia real que a seção ocupa na
+   página — o JS escreve o flex-grow. */
+.v1 { display: flex; width: 100%; gap: 1px; }
+.bloco {
+  position: relative; flex: none; min-width: 0;
+  display: flex; align-items: center; padding-inline: .5rem;
+  background: var(--faixa-2); border: 0; border-radius: 0;
+  color: var(--texto-3); font-family: var(--mono); font-size: .58rem;
+  letter-spacing: .08em; text-transform: uppercase; text-align: start;
+  white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  cursor: pointer; transition: background .18s ease, color .18s ease;
+}
+.bloco::before {
+  content: ""; position: absolute; inset-block: 0; inset-inline-start: 0;
+  width: 2px; background: var(--linha-forte);
+}
+.bloco:hover { background: var(--linha); color: var(--texto-2); }
+.bloco[aria-current="true"] {
+  background: var(--playhead-fraco); color: var(--texto);
+  box-shadow: inset 0 0 0 1px var(--playhead);
+}
+.bloco[aria-current="true"]::before { background: var(--playhead); }
+/* No celular não cabe texto: o clipe vira a própria marca colorida. */
+@media (max-width: 47.99rem) {
+  .bloco { font-size: 0; padding-inline: 0; }
+  .bloco::before { width: 100%; opacity: .5; }
+  .bloco[aria-current="true"]::before { opacity: 1; }
+}
+
+#a1 { flex: 1; min-width: 0; width: 100%; height: 100%; display: block; }
+
+.playhead {
+  position: absolute; inset-block: 0; inset-inline-start: var(--rot); width: 1px; z-index: 5;
+  background: var(--playhead); pointer-events: none;
+  will-change: transform;
+}
+.playhead::before {
+  content: ""; position: absolute; top: 0; left: 50%;
+  transform: translateX(-50%);
+  border-inline: 5px solid transparent;
+  border-block-start: 7px solid var(--playhead);
+}

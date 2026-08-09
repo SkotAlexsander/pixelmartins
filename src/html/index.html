@@ -2,6 +2,10 @@
      Trocar duas seções de lugar é trocar duas linhas. Nenhuma seção depende de
      vir depois de outra; o CSS não se importa.
 
+     ATENÇÃO: quem muda a ordem aqui tem de mudar também a lista CLIPES em
+     src/js/70-regua.js — é ela que desenha os blocos da régua e distribui os
+     timecodes. Uma ordem em cada lugar deixaria a régua mentindo.
+
      A ordem atual (Hero → Serviços → Projetos → Sobre → IA → Trajetória →
      Contato) não é a de um portfólio comum, que põe Sobre logo após o Hero.
      O motivo: a primeira pergunta do visitante é "o que você faz por mim", não
@@ -11,9 +15,9 @@
 
      Marcadores que o build resolve — ver docs/estrutura.md:
        @js-critico   o script do tema, que roda antes do CSS pintar
-       @estilos      os 15 CSS na ordem de ORDEM_CSS (a ordem É a cascata)
+       @estilos      os CSS na ordem de ORDEM_CSS (a ordem É a cascata)
        @incluir X    o conteúdo do arquivo, na indentação do próprio marcador
-       @scripts      os 7 módulos de JS
+       @scripts      os módulos de JS
        <!--# ...     comentário só-do-fonte, como este: some no build
 
      O que cada seção faz e quais efeitos rodam nela: docs/secoes.md -->
@@ -27,13 +31,11 @@
 <div id="pm-site">
 
 
-<a href="#main-content" class="skip-link">Pular para o conteúdo</a>
-
-<!-- @incluir parciais/fundo.html -->
+<a href="#conteudo" class="skip-link">Pular para o conteúdo</a>
 
 <!-- @incluir parciais/navbar.html -->
 
-<main id="main-content">
+<main id="conteudo">
 
   <!-- @incluir secoes/hero.html -->
 
@@ -52,7 +54,16 @@
 
   <!-- @incluir secoes/contato.html -->
 
+  <footer class="rodape">
+    <div class="caixa rodape-int">
+      <span>© <span id="ano">2026</span> Alex Martins · pixelmartins.com</span>
+      <span><a href="#topo">voltar ao topo ↑</a></span>
+    </div>
+  </footer>
+
 </main>
+
+<!-- @incluir parciais/regua.html -->
 
 <!-- @scripts -->
 

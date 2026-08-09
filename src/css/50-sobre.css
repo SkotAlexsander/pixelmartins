@@ -1,39 +1,72 @@
-/* -------------------- Sobre -------------------- */
-#sobre .intro-text {
-  max-width: 42rem;
-  margin: 2rem auto 0;
-  text-align: center;
-  font-size: 15px;
-  line-height: 1.7;
-  color: var(--text-secondary);
-}
-#sobre .intro-text .highlight { color: var(--text-primary); }
+/* ==========================================================================
+   SOBRE — o retrato dentro de um monitor de programa
 
-.capabilities-grid {
-  margin-top: 4rem;
-  display: grid;
-  grid-template-columns: 1fr;
-  gap: 1rem;
-}
-@media (min-width: 640px) { .capabilities-grid { grid-template-columns: repeat(2, 1fr); } }
-@media (min-width: 1024px) { .capabilities-grid { grid-template-columns: repeat(4, 1fr); } }
+   O retrato de 150 frames sempre foi, por acaso, a peça mais alinhada com a
+   ideia da página: é literalmente um clipe de vídeo. Até a v4 ele vivia atrás
+   do texto, a 12–38% de opacidade — um rosto que ninguém chegava a ver,
+   pagando o preço de 150 imagens. Aqui ele ganha o quadro que merecia, com a
+   moldura de um monitor de programa: rótulo, timecode e contagem de frames.
 
-.capability-card {
-  height: 100%;
-  border-radius: 1rem;
-  padding: 1.25rem;
+   Efeito: js/90-retrato.js
+   ========================================================================== */
+.sobre-grade {
+  display: grid; gap: clamp(1.8rem, 4.5vw, 3rem);
+  margin-block-start: clamp(2rem, 5vw, 3rem); align-items: start;
 }
-.capability-card svg { width: 20px; height: 20px; color: var(--accent-2); }
-.capability-card h3 {
-  font-family: var(--font-display);
-  margin: 1rem 0 0;
-  font-size: 0.875rem;
-  font-weight: 700;
-  color: var(--text-primary);
+@media (min-width: 56rem) { .sobre-grade { grid-template-columns: minmax(0, .88fr) minmax(0, 1.12fr); } }
+
+.monitor { border: var(--fio) solid var(--linha); border-radius: var(--r); background: var(--painel); overflow: hidden; }
+.monitor-topo {
+  display: flex; align-items: center; gap: .6rem;
+  padding: .45rem .7rem; background: var(--faixa);
+  border-block-end: var(--fio) solid var(--linha);
 }
-.capability-card p {
-  margin: 0.5rem 0 0;
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--text-secondary);
+.monitor-topo b {
+  font-family: var(--mono); font-size: .62rem; font-weight: 600;
+  letter-spacing: .14em; text-transform: uppercase; color: var(--texto-3);
 }
+.monitor-topo .fio { flex: 1; height: 1px; background: var(--linha); }
+.monitor-topo .tc { font-family: var(--mono); font-size: .62rem; color: var(--playhead); }
+
+.retrato-quadro { position: relative; aspect-ratio: 4 / 5; overflow: hidden; background: var(--faixa-2); }
+@media (min-width: 56rem) { .retrato-quadro { aspect-ratio: 3 / 4; } }
+#retrato { width: 100%; height: 100%; opacity: 0; transition: opacity .7s ease; }
+#retrato.pronto { opacity: 1; }
+
+.retrato-carregando {
+  position: absolute; inset: 0; z-index: 1; display: grid; place-items: center;
+  font-family: var(--mono); font-size: .68rem; letter-spacing: .16em;
+  text-transform: uppercase; color: var(--texto-3);
+  background: var(--faixa-2); transition: opacity .5s ease;
+}
+.retrato-carregando.some { opacity: 0; pointer-events: none; }
+
+.monitor-pe {
+  display: flex; align-items: center; justify-content: space-between; gap: .8rem;
+  padding: .45rem .7rem; background: var(--faixa);
+  border-block-start: var(--fio) solid var(--linha);
+  font-family: var(--mono); font-size: .62rem; letter-spacing: .06em; color: var(--texto-3);
+}
+.monitor-pe .medindo { display: inline-flex; align-items: center; gap: .4rem; }
+.monitor-pe .medindo::before { content: ""; width: 5px; height: 5px; background: var(--ok); }
+
+.bio-lead {
+  font-size: clamp(1.1rem, 2.3vw, 1.4rem); line-height: 1.45;
+  font-family: var(--display); font-weight: 600; letter-spacing: -.01em;
+}
+.bio-lead em { font-style: normal; color: var(--playhead); }
+.bio-texto { color: var(--texto-2); margin-block-start: 1rem; }
+
+.habilidades {
+  display: grid; gap: 1px; background: var(--linha);
+  border: var(--fio) solid var(--linha); border-radius: var(--r);
+  margin-block-start: 1.6rem; overflow: hidden;
+}
+@media (min-width: 30rem) { .habilidades { grid-template-columns: 1fr 1fr; } }
+.habilidade { background: var(--painel); padding: 1rem 1.1rem; }
+.habilidade svg { width: 17px; height: 17px; color: var(--playhead); }
+.habilidade b {
+  display: block; margin-block-start: .55rem; font-size: .92rem;
+  font-family: var(--display); font-weight: 700; text-transform: uppercase; letter-spacing: .01em;
+}
+.habilidade span { display: block; margin-block-start: .3rem; font-size: .84rem; color: var(--texto-2); line-height: 1.5; }

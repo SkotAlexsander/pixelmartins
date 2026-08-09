@@ -1,44 +1,56 @@
+/* ==========================================================================
+   MENU DE CELULAR
+
+   Quatro maneiras de fechar, porque menu que só fecha pelo próprio botão
+   irrita: pelo botão, tocando num link, com Escape (devolvendo o foco ao
+   botão) e tocando fora. E fecha sozinho se a tela crescer para o layout de
+   desktop, onde ele nem existe — senão ficaria um painel aberto invisível
+   segurando o foco.
+
+   Estilo: css/25-menu-mobile.css
+   ========================================================================== */
 (function () {
   "use strict";
 
-  /* ============ Menu mobile ============ */
-  var menuToggle = document.getElementById("menu-toggle");
-  var mobileMenu = document.getElementById("mobile-menu");
+  var btn = document.getElementById("menu-btn");
+  var menu = document.getElementById("menu");
+  if (!btn || !menu) return;
 
-  function setMenu(open) {
-    if (!menuToggle || !mobileMenu) return;
-    menuToggle.classList.toggle("open", open);
-    mobileMenu.classList.toggle("open", open);
-    menuToggle.setAttribute("aria-expanded", open ? "true" : "false");
-    menuToggle.setAttribute("aria-label", open ? "Fechar menu" : "Abrir menu");
+  function definir(aberto) {
+    menu.classList.toggle("aberto", aberto);
+    btn.setAttribute("aria-expanded", aberto ? "true" : "false");
+    btn.setAttribute("aria-label", aberto ? "Fechar menu" : "Abrir menu");
   }
-  function menuIsOpen() { return mobileMenu && mobileMenu.classList.contains("open"); }
+  function aberto() { return menu.classList.contains("aberto"); }
 
-  if (menuToggle && mobileMenu) {
-    menuToggle.addEventListener("click", function (e) {
-      e.stopPropagation();
-      setMenu(!menuIsOpen());
-    });
-    // Fecha ao tocar num link (navega e recolhe)
-    mobileMenu.addEventListener("click", function (e) {
-      if (e.target.closest("a")) setMenu(false);
-    });
-    // Fecha com Escape
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && menuIsOpen()) {
-        setMenu(false);
-        menuToggle.focus();
-      }
-    });
-    // Fecha ao tocar fora
-    document.addEventListener("click", function (e) {
-      if (menuIsOpen() && !mobileMenu.contains(e.target) && !menuToggle.contains(e.target)) {
-        setMenu(false);
-      }
-    });
-    // Fecha se a tela crescer para o layout desktop
-    window.matchMedia("(min-width: 768px)").addEventListener("change", function (mq) {
-      if (mq.matches) setMenu(false);
-    });
-  }
+  btn.addEventListener("click", function (e) {
+    e.stopPropagation();
+    definir(!aberto());
+  });
+
+  /* toca num link: navega e recolhe */
+  menu.addEventListener("click", function (e) {
+    if (e.target.closest && e.target.closest("a")) definir(false);
+  });
+
+  /* Escape devolve o foco ao botão — quem fechou pelo teclado precisa saber
+     onde está */
+  document.addEventListener("keydown", function (e) {
+    if (e.key === "Escape" && aberto()) {
+      definir(false);
+      btn.focus();
+    }
+  });
+
+  document.addEventListener("click", function (e) {
+    if (aberto() && !menu.contains(e.target) && !btn.contains(e.target)) definir(false);
+  });
+
+  /* 62rem é o mesmo ponto em que o CSS troca o menu pela navegação do topo */
+  try {
+    var largo = window.matchMedia("(min-width: 62rem)");
+    var aoMudar = function (mq) { if (mq.matches) definir(false); };
+    if (largo.addEventListener) largo.addEventListener("change", aoMudar);
+    else if (largo.addListener) largo.addListener(aoMudar);
+  } catch (e) {}
 })();

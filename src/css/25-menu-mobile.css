@@ -1,60 +1,32 @@
-/* -------------------- Menu mobile -------------------- */
-#menu-toggle {
-  position: relative;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 2.25rem; height: 2.25rem;
-  border-radius: 9999px;
-  border: 1px solid var(--border);
-  background: transparent;
-  color: var(--text-secondary);
-  cursor: pointer;
-  transition: color 0.2s ease, border-color 0.2s ease;
-}
-#menu-toggle:hover { border-color: var(--accent-2); color: var(--text-primary); }
-#menu-toggle svg {
-  position: absolute;
-  width: 16px; height: 16px;
-  transition: transform 0.25s ease, opacity 0.25s ease;
-}
-#menu-toggle .icon-close { transform: scale(0) rotate(-90deg); opacity: 0; }
-#menu-toggle.open .icon-burger { transform: scale(0) rotate(90deg); opacity: 0; }
-#menu-toggle.open .icon-close { transform: scale(1) rotate(0deg); opacity: 1; }
-@media (min-width: 768px) { #menu-toggle { display: none; } }
+/* ==========================================================================
+   MENU DE CELULAR
 
-#mobile-menu {
-  margin: 0.5rem 1rem 0;
-  border-radius: 1.25rem;
-  overflow: hidden;
-  opacity: 0;
-  transform: translateY(-8px) scale(0.98);
-  transform-origin: top center;
-  pointer-events: none;
-  transition: opacity 0.25s ease, transform 0.25s cubic-bezier(0.16,1,0.3,1);
+   Cada item leva o timecode da seção ao lado — é o mesmo dado que a régua
+   mostra, e reforça que a página é uma sequência.
+   Efeito: js/20-menu-mobile.js
+   ========================================================================== */
+#menu-btn { display: grid; }
+@media (min-width: 62rem) { #menu-btn { display: none; } }
+#pm-site #menu-btn[aria-expanded="true"] .i-menu { display: none; }
+#pm-site #menu-btn[aria-expanded="true"] .i-x { display: block; }
+
+#menu {
+  display: none;
+  border-block-start: var(--fio) solid var(--linha);
+  background: var(--painel);
 }
-#mobile-menu.open {
-  opacity: 1;
-  transform: translateY(0) scale(1);
-  pointer-events: auto;
+#menu.aberto { display: block; }
+@media (min-width: 62rem) { #menu, #menu.aberto { display: none; } }
+
+#menu ul { list-style: none; margin: 0; padding: .4rem var(--gutter) 1rem; }
+#menu li + li { border-block-start: var(--fio) solid var(--linha); }
+#menu a {
+  display: flex; align-items: baseline; justify-content: space-between; gap: 1rem;
+  padding: .85rem 0;
+  font-family: var(--display); font-weight: 700; font-size: 1.05rem;
+  text-transform: uppercase; letter-spacing: -.01em;
 }
-@media (min-width: 768px) { #mobile-menu { display: none; } }
-#mobile-menu ul {
-  list-style: none;
-  margin: 0;
-  padding: 0.5rem;
-}
-#mobile-menu a {
-  display: block;
-  padding: 0.85rem 1rem;
-  border-radius: 0.85rem;
-  font-family: var(--font-mono);
-  font-size: 14px;
-  color: var(--text-secondary);
-  transition: color 0.2s ease, background-color 0.2s ease;
-}
-#mobile-menu a:hover,
-#mobile-menu a:focus-visible {
-  color: var(--text-primary);
-  background: color-mix(in srgb, var(--surface-2) 70%, transparent);
+#menu a span {
+  font-family: var(--mono); font-size: .68rem; font-weight: 400;
+  color: var(--playhead); letter-spacing: .04em;
 }
