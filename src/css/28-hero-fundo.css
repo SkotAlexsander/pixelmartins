@@ -1,0 +1,92 @@
+/* ==========================================================================
+   O FUNDO DO HERO — as faixas de luz
+
+   Camada própria do hero, por cima da atmosfera global. É ela que dá a luz
+   diagonal atravessando a primeira tela, e era o que faltava nas tentativas
+   anteriores: eu tinha replicado os brilhos e as partículas, mas não isto.
+
+   Valores lidos do pixelmartins-SITE-NOVO.html (01/08) e mantidos como
+   estavam — inclusive as cinco máscaras horizontais diferentes, uma por
+   faixa. É a irregularidade entre elas que faz parecer luz passando por
+   uma veneziana, e não cinco listras iguais.
+
+   COMO É FEITO
+     .hero-fundo    preto, com máscara que DISSOLVE na base — sem ela o hero
+                    terminaria num bloco preto com emenda visível contra o
+                    resto da página
+     .hf-gradiente  radial de cinza no canto superior esquerdo até preto
+     .hf-faixa ×5   linear ciano de cima para baixo, inclinado em 45°, a 20%
+                    de opacidade; cada uma recortada por uma máscara própria
+     .hf-textura    o mesmo ruído da atmosfera, a 5%
+     .hf-pontos     a mesma grade de 20px da atmosfera — a densidade tem de
+                    bater, senão a passagem do hero para o resto salta
+     .hf-realce     um realce radial no centro, quase imperceptível
+
+   SÓ NO TEMA ESCURO: no claro a camada inteira some (opacity 0), porque
+   luz ciano sobre papel é sujeira, não luz.
+   ========================================================================== */
+.hero-fundo {
+  position: absolute; inset: 0; z-index: 0;
+  pointer-events: none;
+  background: #000;
+  transition: opacity var(--dur-entra) var(--ease-ui);
+  -webkit-mask-image: linear-gradient(to bottom, rgb(0 0 0) 45%, rgb(0 0 0 / .55) 72%, rgb(0 0 0 / .18) 88%, transparent 96%);
+          mask-image: linear-gradient(to bottom, rgb(0 0 0) 45%, rgb(0 0 0 / .55) 72%, rgb(0 0 0 / .18) 88%, transparent 96%);
+}
+html.light .hero-fundo { opacity: 0; }
+
+.hf-gradiente {
+  position: absolute; inset: 0;
+  background: radial-gradient(100% 100% at 0% 0%, rgb(46 46 46) 0%, rgb(0 0 0) 100%);
+  -webkit-mask-image: radial-gradient(125% 100% at 0% 0%, rgb(0 0 0) 0%, rgb(0 0 0 / .224) 88.2883%, rgb(0 0 0 / 0) 100%);
+          mask-image: radial-gradient(125% 100% at 0% 0%, rgb(0 0 0) 0%, rgb(0 0 0 / .224) 88.2883%, rgb(0 0 0 / 0) 100%);
+}
+
+.hf-faixa {
+  position: absolute; inset: 0;
+  opacity: .2;
+  background: linear-gradient(rgb(0 207 255) 0%, rgb(0 207 255 / 0) 100%);
+  transform: skewX(45deg);
+}
+.hf-faixa:nth-child(1) {
+  -webkit-mask-image: linear-gradient(90deg, rgb(0 0 0/0) 0%, rgb(0 0 0) 20%, rgb(0 0 0/0) 36%, rgb(0 0 0) 55%, rgb(0 0 0/.13) 67%, rgb(0 0 0) 78%, rgb(0 0 0/0) 97%);
+          mask-image: linear-gradient(90deg, rgb(0 0 0/0) 0%, rgb(0 0 0) 20%, rgb(0 0 0/0) 36%, rgb(0 0 0) 55%, rgb(0 0 0/.13) 67%, rgb(0 0 0) 78%, rgb(0 0 0/0) 97%);
+}
+.hf-faixa:nth-child(2) {
+  -webkit-mask-image: linear-gradient(90deg, rgb(0 0 0/0) 11%, rgb(0 0 0) 25%, rgb(0 0 0/.55) 41%, rgb(0 0 0/.13) 67%, rgb(0 0 0) 78%, rgb(0 0 0/0) 97%);
+          mask-image: linear-gradient(90deg, rgb(0 0 0/0) 11%, rgb(0 0 0) 25%, rgb(0 0 0/.55) 41%, rgb(0 0 0/.13) 67%, rgb(0 0 0) 78%, rgb(0 0 0/0) 97%);
+}
+.hf-faixa:nth-child(3) {
+  -webkit-mask-image: linear-gradient(90deg, rgb(0 0 0/0) 9%, rgb(0 0 0) 20%, rgb(0 0 0/.55) 28%, rgb(0 0 0/.424) 40%, rgb(0 0 0) 48%, rgb(0 0 0/.267) 54%, rgb(0 0 0/.13) 78%, rgb(0 0 0) 88%, rgb(0 0 0/0) 97%);
+          mask-image: linear-gradient(90deg, rgb(0 0 0/0) 9%, rgb(0 0 0) 20%, rgb(0 0 0/.55) 28%, rgb(0 0 0/.424) 40%, rgb(0 0 0) 48%, rgb(0 0 0/.267) 54%, rgb(0 0 0/.13) 78%, rgb(0 0 0) 88%, rgb(0 0 0/0) 97%);
+}
+.hf-faixa:nth-child(4) {
+  -webkit-mask-image: linear-gradient(90deg, rgb(0 0 0/0) 0%, rgb(0 0 0) 17%, rgb(0 0 0/.55) 26%, rgb(0 0 0) 35%, rgb(0 0 0/0) 47%, rgb(0 0 0/.13) 69%, rgb(0 0 0) 79%, rgb(0 0 0/0) 97%);
+          mask-image: linear-gradient(90deg, rgb(0 0 0/0) 0%, rgb(0 0 0) 17%, rgb(0 0 0/.55) 26%, rgb(0 0 0) 35%, rgb(0 0 0/0) 47%, rgb(0 0 0/.13) 69%, rgb(0 0 0) 79%, rgb(0 0 0/0) 97%);
+}
+.hf-faixa:nth-child(5) {
+  -webkit-mask-image: linear-gradient(90deg, rgb(0 0 0/0) 0%, rgb(0 0 0) 20%, rgb(0 0 0/.55) 27%, rgb(0 0 0) 42%, rgb(0 0 0/0) 48%, rgb(0 0 0/.13) 67%, rgb(0 0 0) 74%, rgb(0 0 0) 82%, rgb(0 0 0/.47) 88%, rgb(0 0 0/0) 97%);
+          mask-image: linear-gradient(90deg, rgb(0 0 0/0) 0%, rgb(0 0 0) 20%, rgb(0 0 0/.55) 27%, rgb(0 0 0) 42%, rgb(0 0 0/0) 48%, rgb(0 0 0/.13) 67%, rgb(0 0 0) 74%, rgb(0 0 0) 82%, rgb(0 0 0/.47) 88%, rgb(0 0 0/0) 97%);
+}
+
+.hf-textura {
+  position: absolute; inset: 0;
+  opacity: .05;
+  background-repeat: repeat;
+  background-size: 150px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+}
+
+/* A densidade tem de ser a MESMA da grade da atmosfera (20px), senão a
+   passagem do hero para o resto da página salta. */
+.hf-pontos {
+  position: absolute; inset: 0;
+  opacity: .12;
+  background-image: radial-gradient(circle at 1px 1px, rgb(255 255 255 / .5) 1px, transparent 0);
+  background-size: 20px 20px;
+}
+
+.hf-realce {
+  position: absolute; inset: 0;
+  background: radial-gradient(ellipse at center, rgb(30 41 59 / .2) 0%, transparent 70%);
+}

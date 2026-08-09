@@ -31,6 +31,7 @@ const ORDEM_CSS = [
   "15-layout.css",
   "20-navbar.css",
   "25-menu-mobile.css",
+  "28-hero-fundo.css",
   "30-hero.css",
   "35-revelar.css",
   "50-sobre.css",

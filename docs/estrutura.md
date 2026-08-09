@@ -83,7 +83,7 @@ dois. Comentário normal continua passando — ele orienta quem lê o código, e
 ### CSS: o prefixo numérico é a cascata
 
 `01-tokens-e-base` → `05-atmosfera` → `10-regua` → `15-layout` → `20-navbar` →
-`25-menu-mobile` → `30-hero` → `35-revelar` → `50-sobre` → `55-projetos` →
+`25-menu-mobile` → `28-hero-fundo` → `30-hero` → `35-revelar` → `50-sobre` → `55-projetos` →
 `60-ia` → `65-trajetoria` → `70-servicos` → `80-contato` →
 `99-wordpress-elementor`
 

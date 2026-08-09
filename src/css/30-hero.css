@@ -5,11 +5,10 @@
    timecode zerado, o título entrando palavra por palavra, e a forma de onda
    da narração embaixo.
 
-   Nada aqui é enfeite pelo enfeite. A grade de fundo é papel milimetrado de
-   monitor; a onda é um data graphic (js/60-onda.js); o REC é a convenção que
-   todo mundo que já viu uma câmera reconhece.
+   O fundo — as faixas de luz inclinadas — mora em css/28-hero-fundo.css,
+   separado, porque é uma peça inteira com seis camadas.
 
-   Efeitos: js/40-titulo-revelar.js · js/60-onda.js
+   Efeitos: js/40-hero-datilografa.js · js/60-onda.js
    ========================================================================== */
 #topo {
   min-height: calc(100svh - var(--regua-h));
@@ -18,17 +17,6 @@
   position: relative;
 }
 #topo > .caixa { position: relative; z-index: 1; }
-
-/* Duas camadas de 1px. Sem gradiente, sem blob, sem partícula. */
-.grade {
-  position: absolute; inset: 0; pointer-events: none; z-index: 0;
-  background-image:
-    linear-gradient(to right, var(--linha) 1px, transparent 1px),
-    linear-gradient(to bottom, var(--linha) 1px, transparent 1px);
-  background-size: 88px 88px;
-  opacity: .5;
-  mask-image: radial-gradient(ellipse 80% 60% at 50% 45%, #000 20%, transparent 78%);
-}
 
 .rec {
   display: inline-flex; align-items: center; gap: .55rem;

@@ -1,19 +1,18 @@
-<!--# ATMOSFERA — as camadas fixas atrás de tudo.
+<!--# ATMOSFERA — as seis camadas fixas atrás de tudo.
      Estilo: css/05-atmosfera.css  ·  Efeito: js/15-particulas.js
 
-     A ordem aqui é a ordem da pilha: quem vem depois fica na frente.
+     É o fundo do pixelmartins-SITE-NOVO.html (01/08), replicado com os
+     valores originais — inclusive o círculo de 95vh com deriva de 14 s, que
+     é o que faz o topo da página respirar.
 
-     As três primeiras camadas só existem no TEMA ESCURO, por pedido do
-     Alex — e a razão se sustenta: partícula ciano a 16% sobre papel claro
-     vira sujeira cinzenta em vez de luz. No claro sobram o grão e a
-     vinheta, que funcionam nos dois.
+     A ordem aqui É a ordem da pilha: quem vem depois fica na frente. Mover
+     uma linha muda o empilhamento; não há z-index entre elas.
 
-     Isto NÃO é o "fundo animado genérico" que foi tirado na v5: a luz do
-     monitor tem motivo (um monitor grande num quarto escuro joga luz fria
-     nas paredes), as partículas estavam aqui desde julho, e nada disso
-     intercepta clique nem cria rolagem. -->
+     As quatro primeiras só existem no TEMA ESCURO, por pedido do Alex.
+     Brilho ciano e linha fina sobre papel claro viram sujeira cinzenta em
+     vez de luz. No claro sobram o grão e a vinheta. -->
 <div id="atmosfera" aria-hidden="true">
-  <div class="luz-monitor"></div>
+  <div class="brilho-topo"></div>
   <div class="brilho-canto"></div>
   <canvas id="particulas"></canvas>
   <div class="pontos"></div>
