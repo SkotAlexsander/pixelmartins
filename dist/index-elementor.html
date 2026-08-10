@@ -1048,12 +1048,20 @@
   .clipe-topo .tipo { font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--texto-3); }
   .clipe h4 { font-family: var(--display); font-weight: 700; font-size: 1.15rem; text-transform: uppercase; }
   .clipe p { font-size: .89rem; color: var(--texto-2); line-height: 1.55; }
+  /* PILHA EM CIMA, LINKS EMBAIXO — sempre, nos três cards.
+     A tentação é pôr lado a lado e deixar quebrar quando não couber. Só que
+     num card de ~340px "JavaScript · PWA · IndexedDB" + "Abrir  Código" nunca
+     cabe, e o resultado é um card quebrando e outro não, com os rodapés em
+     alturas diferentes. Previsível vale mais que apertado. */
   .clipe .pe {
-    display: flex; align-items: center; justify-content: space-between; gap: .8rem;
-    margin-block-start: auto; padding-block-start: .5rem;
+    display: flex; flex-direction: column; align-items: flex-start; gap: .5rem;
+    margin-block-start: auto; padding-block-start: .6rem;
     border-block-start: var(--fio) solid var(--linha);
   }
-  .clipe .pilha { font-family: var(--mono); font-size: .64rem; color: var(--texto-3); letter-spacing: .04em; }
+  .clipe .pilha {
+    font-family: var(--mono); font-size: .64rem; color: var(--texto-3);
+    letter-spacing: .04em;
+  }
   .clipe .abrir {
     display: inline-flex; align-items: center; gap: .35rem;
     min-height: 40px; padding-inline-start: .2rem;
@@ -1614,23 +1622,23 @@
           <article class="clipe">
             <div class="clipe-topo">
               <span class="id">CLIPE 04</span>
-              <span class="tipo">Web · Jogo</span>
+              <span class="tipo">Web · App</span>
             </div>
-            <h4>Come-Come</h4>
-            <p>Jogo de labirinto em HTML, CSS e JavaScript puros — sem biblioteca, sem
-               build, sem servidor. As 244 pastilhas do fliperama original e quatro
-               fantasmas, cada um com o seu próprio alvo de perseguição.</p>
-            <p class="resultado"><b>Resultado</b> jogável no navegador, sem instalar nada. Uma
-               bancada automatizada joga sozinha e confere que toda pastilha é alcançável
-               antes de cada publicação</p>
+            <h4>Prato</h4>
+            <p>App para anotar o que se come e bebe, montar o treino do mês e ver quanto
+               falta para bater cada meta. Abre offline e instala na tela de início — o
+               mesmo código roda no navegador e como aplicativo de Android.</p>
+            <p class="resultado"><b>Resultado</b> o plano de treino guarda a <em>regra</em>
+               (3× por semana), não datas fixas — assim ele não vence sozinho quando a
+               semana escapa, que é onde a maioria dos apps de hábito perde o usuário</p>
             <div class="pe">
-              <span class="pilha">JavaScript · Canvas</span>
+              <span class="pilha">JavaScript · PWA · Android</span>
               <span class="links-clipe">
-                <a class="abrir" href="https://skotalexsander.github.io/come-come/" target="_blank" rel="noopener noreferrer">
-                  Jogar
+                <a class="abrir" href="https://skotalexsander.github.io/prato/" target="_blank" rel="noopener noreferrer">
+                  Abrir
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
                 </a>
-                <a class="abrir codigo" href="https://github.com/SkotAlexsander/come-come" target="_blank" rel="noopener noreferrer">Código</a>
+                <a class="abrir codigo" href="https://github.com/SkotAlexsander/prato" target="_blank" rel="noopener noreferrer">Código</a>
               </span>
             </div>
           </article>

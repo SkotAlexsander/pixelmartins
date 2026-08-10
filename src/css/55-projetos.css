@@ -83,12 +83,20 @@ html.js .orbitas .gira { animation: girar var(--dur) linear infinite; }
 .clipe-topo .tipo { font-family: var(--mono); font-size: .62rem; letter-spacing: .12em; text-transform: uppercase; color: var(--texto-3); }
 .clipe h4 { font-family: var(--display); font-weight: 700; font-size: 1.15rem; text-transform: uppercase; }
 .clipe p { font-size: .89rem; color: var(--texto-2); line-height: 1.55; }
+/* PILHA EM CIMA, LINKS EMBAIXO — sempre, nos três cards.
+   A tentação é pôr lado a lado e deixar quebrar quando não couber. Só que
+   num card de ~340px "JavaScript · PWA · IndexedDB" + "Abrir  Código" nunca
+   cabe, e o resultado é um card quebrando e outro não, com os rodapés em
+   alturas diferentes. Previsível vale mais que apertado. */
 .clipe .pe {
-  display: flex; align-items: center; justify-content: space-between; gap: .8rem;
-  margin-block-start: auto; padding-block-start: .5rem;
+  display: flex; flex-direction: column; align-items: flex-start; gap: .5rem;
+  margin-block-start: auto; padding-block-start: .6rem;
   border-block-start: var(--fio) solid var(--linha);
 }
-.clipe .pilha { font-family: var(--mono); font-size: .64rem; color: var(--texto-3); letter-spacing: .04em; }
+.clipe .pilha {
+  font-family: var(--mono); font-size: .64rem; color: var(--texto-3);
+  letter-spacing: .04em;
+}
 .clipe .abrir {
   display: inline-flex; align-items: center; gap: .35rem;
   min-height: 40px; padding-inline-start: .2rem;

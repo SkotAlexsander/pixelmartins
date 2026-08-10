@@ -125,8 +125,11 @@ async function rolarTudo(p) {
     /* textContent e não innerText: innerText aplica text-transform e
        devolveria tudo em maiúsculas, reprovando um site que está correto */
     const txt = (await p.locator("#pm-site").textContent()).replace(/\s+/g, " ");
+    /* Os quatro projetos por nome: se um sair da seção sem querer, este
+       teste é quem avisa. (Foi assim que a troca do Come-Come pelo Prato,
+       em 10/08, apareceu aqui antes de ir para o ar.) */
     const precisa = ["Seu site e seu vídeo, feitos pela mesma pessoa.", "O que eu entrego",
-                     "Explorador do Sistema Solar", "Vitrola", "Come-Come",
+                     "Explorador do Sistema Solar", "Vitrola", "Acervo", "Prato",
                      "Uma pessoa, as duas entregas", "Como cheguei aqui", "alexsandermmj@gmail.com"];
     const faltando = precisa.filter(t => !txt.includes(t));
     ok(faltando.length === 0, `todo o conteúdo está no documento (faltando: ${faltando.join(", ") || "nada"})`);
