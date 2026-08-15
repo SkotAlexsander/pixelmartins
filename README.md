@@ -33,6 +33,17 @@ Quem rola está arrastando o playhead. A régua fixa no rodapé não é barra de
 progresso enfeitada — é **navegação**: timecode ao vivo, um clipe clicável por
 seção na faixa V1, forma de onda na A1, e o playhead andando.
 
+![A abertura: timecode em REC, a frase que se digita, a forma de onda da narração e a régua de edição no rodapé com um clipe por seção](docs/imagens/01-desktop.png)
+
+Na régua, os clipes são as seções: `COLD OPEN`, `SERVIÇOS`, `PROJETOS`, `SOBRE`,
+`IA`, `TRAJETÓRIA`, `CONTATO`. Clicar num deles é ir para a seção; rolar move o
+playhead sobre eles. É a mesma peça fazendo as duas coisas.
+
+> **Estas capturas são do `dist/` deste repositório** — a v5, gerada por
+> `npm run build` e servida localmente. O widget do Elementor ainda tem a versão
+> anterior, como diz o aviso no topo. As imagens mostram o que o código faz, não
+> o que o endereço público serve hoje.
+
 **Por que essa direção e não outra:** a página vende *"site e vídeo, feitos
 pela mesma pessoa"*. Qualquer um **escreve** isso; só quem faz as duas coisas
 **constrói a prova**. É a definição de "único" que se defende: não é único
@@ -46,6 +57,17 @@ por CDN e voltou atrás: a bancada mostrou que a página fazia tudo sem eles, e 
 decisão já registrada aqui — não depender de terceiro para pintar — continuava
 valendo. Hoje `dev/verificar-pagina.js` bloqueia **toda** requisição externa e
 cobra que a página continue inteira.
+
+### E no celular
+
+<p align="center">
+  <img src="docs/imagens/02-celular.png" width="300" alt="A mesma página em 390px: timecode, título, forma de onda e a régua de edição ainda no rodapé, com os clipes reduzidos a blocos">
+</p>
+
+Em 390px a régua **não é escondida** — os clipes perdem o rótulo e viram blocos,
+o timecode e a forma de onda continuam. Uma peça que só existisse em 1440px
+seria decoração de desktop, não estrutura, e a primeira coisa que se faz com
+decoração é apagá-la no celular.
 
 ---
 
