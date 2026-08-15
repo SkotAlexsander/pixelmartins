@@ -164,23 +164,6 @@
     padding-block-end: var(--regua-h);
   }
   #pm-site *, #pm-site *::before, #pm-site *::after { box-sizing: border-box; }
-  /* ⚠️ ESTA LINHA TEM UM ID, E O ID GANHA DE QUALQUER CLASSE.
-     Ela vale (1,0,1); ".minha-classe" vale (0,1,0). Ou seja: escrever
-     `.qualquer-coisa { margin-block-start: 1rem }` num <p>, <h2> ou <ul>
-     NÃO FUNCIONA — a margem é descartada sem erro, sem aviso, sem nada no
-     console. O sintoma é só "o espaço que eu pedi não apareceu".
-
-     Foi medido em 15/08: dos 64 elementos que este reset atinge, TODAS as
-     margens de classe estavam mortas. Só duas causavam dano visível
-     (.bio-texto e .video-texto, os únicos dois casos de parágrafo seguido de
-     parágrafo) — nos outros o espaçamento vem do `gap` do pai, então a regra
-     era morta E redundante. As duas foram consertadas prefixando com
-     #pm-site; as redundantes ficaram como estavam, porque mexer nelas mudaria
-     o ritmo de uma página que já passou por quatro rodadas de aprovação.
-
-     REGRA PARA QUEM VIER DEPOIS: precisou de margem num h1-h4/p/ul/ol/figure,
-     escreva `#pm-site .classe`. E confira lendo de volta o
-     getComputedStyle — CSS que não aplica não reclama. */
   #pm-site h1, #pm-site h2, #pm-site h3, #pm-site h4, #pm-site p,
   #pm-site ul, #pm-site ol, #pm-site figure { margin: 0; }
   #pm-site img, #pm-site svg, #pm-site canvas { display: block; max-width: 100%; }
@@ -964,12 +947,7 @@
   .bio-lead em { font-style: normal; color: var(--playhead); }
   /* 65ch é o ponto em que o olho ainda acha o começo da linha seguinte sem
      se perder. Em 768px este bloco chegava a 87ch. */
-  /* 15/08 — ganhou o "#pm-site". A regra existia desde a v5 e NUNCA valeu:
-     perdia por especificidade para "#pm-site p { margin: 0 }", e o parágrafo da
-     bio ficava colado no .bio-lead como se fosse a continuação da mesma frase.
-     Passou por quatro rodadas de revisão sem ninguém ver, porque o defeito não
-     é uma coisa errada na tela — é uma coisa que falta. */
-  #pm-site .bio-texto { color: var(--texto-2); margin-block-start: 1rem; max-width: 65ch; }
+  .bio-texto { color: var(--texto-2); margin-block-start: 1rem; max-width: 65ch; }
 
   .habilidades {
     display: grid; gap: 1px; background: var(--linha);
@@ -1115,14 +1093,9 @@
   .clipe .abrir.codigo { color: var(--texto-2); }
   .clipe .abrir.codigo:hover { color: var(--playhead); }
 
-  /* QUATRO CARDS: a grade PARA em duas colunas — não vai a três.
-     Com três cards, três colunas era o certo. Com quatro, três colunas deixam
-     o último sozinho numa faixa vazia, e um card órfão lê como "faltou um".
-     Quatro colunas resolveriam o órfão e criariam pior: a ~250px de largura o
-     nome do projeto quebra em duas linhas e o parágrafo vira uma coluna de
-     palavras soltas. 2×2 é a única que fecha o retângulo com os quatro do
-     mesmo tamanho, e dá a cada um a largura em que o texto respira.
-     Se um dia virarem 6, volta a valer três colunas — 3×2 também fecha. */
+  /* Com três cards a grade precisa acomodar 1, 2 ou 3 por linha sem que o
+     último fique órfão numa faixa vazia. */
+  @media (min-width: 62rem) { .trilho { grid-template-columns: repeat(3, 1fr); } }
 
   .mais-github {
     margin-block-start: 1.2rem;
@@ -1135,91 +1108,6 @@
     color: var(--playhead); text-decoration: underline; text-underline-offset: 3px;
   }
   .mais-github a:hover { color: var(--texto); }
-
-  /* ==========================================================================
-     VÍDEO — a árvore de entrega
-
-     Mora entre PROJETOS (55) e SOBRE (50 já veio antes na cascata? não: a
-     ordem é a de ORDEM_CSS no build, e lá este arquivo entra depois do 55).
-     Reaproveita .janela, .janela-topo, .ficha e .acoes-projeto de 55-projetos —
-     de propósito: as duas seções são a mesma ideia com material diferente, e
-     componente repetido é o que faz a página parecer UMA coisa.
-
-     A ÁRVORE não é ilustração, é data graphic — mesma categoria do diagrama de
-     órbitas do solarsys. As três caixas têm a proporção REAL do formato que
-     nomeiam: 90×51 e 56×32 são 16:9, 42×75 é 9:16. Quem olha entende a
-     diferença entre os formatos antes de ler o rótulo, que é o trabalho de um
-     diagrama. Mexer nas medidas sem manter a razão quebra a única coisa que
-     ele faz.
-
-     Sem animação aqui, e isso é decisão: a página já tem órbitas girando na
-     seção anterior e o playhead andando no rodapé. Uma terceira coisa em
-     movimento na mesma rolagem disputa atenção com as duas — e o critério de
-     animação deste projeto é "explica hierarquia, confirma ação, guia o olho
-     ou mantém continuidade". Esta não faria nenhum dos quatro.
-     ========================================================================== */
-  .video-grade {
-    display: grid; gap: clamp(1.6rem, 4vw, 2.6rem);
-    margin-block-start: clamp(2rem, 5vw, 3rem);
-  }
-  /* A janela vem PRIMEIRO no HTML e continua primeira no celular: o diagrama é
-     o que explica a seção, e explicação antes do argumento. No desktop ela vai
-     pra esquerda com a coluna menor — o texto é que precisa de medida de leitura. */
-  @media (min-width: 62rem) { .video-grade { grid-template-columns: .95fr 1.05fr; align-items: center; } }
-
-  .arvore { width: 100%; height: auto; padding: 1.1rem .8rem; }
-
-  .arv-fonte {
-    fill: color-mix(in srgb, var(--marcador) 14%, transparent);
-    stroke: var(--marcador); stroke-width: 1;
-  }
-  .arv-ramo  { fill: none; stroke: var(--linha-forte); stroke-width: 1; }
-  .arv-saida { fill: var(--faixa); stroke: var(--linha-forte); stroke-width: 1; }
-  /* O vertical é o que a maioria dos editores entrega como sobra da peça
-     grande. Aqui ele é destacado porque é o que o cliente mais pede — e o
-     ciano é a cor de "selecionado" no vocabulário desta página. */
-  .arv-alta  { fill: color-mix(in srgb, var(--playhead) 12%, var(--faixa)); stroke: var(--playhead); }
-
-  .arv-rot {
-    fill: var(--texto-2); text-anchor: middle;
-    font-family: var(--mono); font-size: 9px;
-    letter-spacing: .12em; text-transform: uppercase;
-  }
-  .arv-titulo { fill: var(--marcador); letter-spacing: .18em; }
-  .arv-dado   { fill: var(--texto-3); font-size: 8px; letter-spacing: .06em; }
-
-  .video-lead {
-    font-family: var(--display); font-weight: 700;
-    font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.2;
-    letter-spacing: -.01em; text-wrap: balance;
-  }
-  /* O #pm-site NÃO é enfeite — sem ele esta margem não existe.
-     O reset em 01-tokens-e-base.css é "#pm-site p { margin: 0 }", que tem um
-     ID e vale (1,0,1). ".video-texto" vale (0,1,0) e PERDE, então a margem é
-     descartada em silêncio: nenhum erro, nenhum aviso, e os dois parágrafos
-     desta seção grudam num bloco só — foi assim que ela nasceu em 15/08.
-     É o mesmo defeito de especificidade que já derrubou a régua do rodapé
-     uma vez (ver o comentário em dev/verificar-pagina.js).
-     Só faz diferença onde há DOIS parágrafos seguidos: onde o pai tem `gap`,
-     o espaçamento vem de lá e a margem morta não faz falta. */
-  #pm-site .video-texto {
-    color: var(--texto-2); margin-block-start: .9rem; max-width: 54ch;
-  }
-  .video-texto em { color: var(--texto); font-style: normal; }
-
-  /* Fica escondido até o Alex mandar os endereços públicos — a regra está no
-     comentário de src/html/secoes/video.html. O estilo já existe para que
-     ligar a linha seja descomentar, e não escrever CSS com pressa depois. */
-  .video-links {
-    margin-block-start: 1.2rem;
-    font-family: var(--mono); font-size: .72rem; letter-spacing: .03em;
-    color: var(--texto-3);
-  }
-  .video-links a {
-    display: inline-flex; align-items: center; min-height: 40px;
-    color: var(--playhead); text-decoration: underline; text-underline-offset: 3px;
-  }
-  .video-links a:hover { color: var(--texto); }
 
   /* ==========================================================================
      IA & AUTOMAÇÃO — o log de render
@@ -1442,7 +1330,6 @@
       <ul>
         <li><a href="#servicos">Serviços</a></li>
         <li><a href="#projetos">Projetos</a></li>
-        <li><a href="#video">Vídeo</a></li>
         <li><a href="#sobre">Sobre</a></li>
         <li><a href="#ia">IA</a></li>
         <li><a href="#trajetoria">Trajetória</a></li>
@@ -1475,11 +1362,10 @@
     <ul>
       <li><a href="#servicos">Serviços <span>00:00:18:00</span></a></li>
       <li><a href="#projetos">Projetos <span>00:00:42:00</span></a></li>
-      <li><a href="#video">Vídeo <span>00:01:06:00</span></a></li>
-      <li><a href="#sobre">Sobre <span>00:01:28:00</span></a></li>
-      <li><a href="#ia">IA <span>00:01:48:00</span></a></li>
-      <li><a href="#trajetoria">Trajetória <span>00:02:04:00</span></a></li>
-      <li><a href="#contato">Contato <span>00:02:22:00</span></a></li>
+      <li><a href="#sobre">Sobre <span>00:01:10:00</span></a></li>
+      <li><a href="#ia">IA <span>00:01:34:00</span></a></li>
+      <li><a href="#trajetoria">Trajetória <span>00:01:52:00</span></a></li>
+      <li><a href="#contato">Contato <span>00:02:10:00</span></a></li>
     </ul>
   </nav>
 </header>
@@ -1715,55 +1601,6 @@
               <span class="id">CLIPE 03</span>
               <span class="tipo">App · Android</span>
             </div>
-            <h4>Rotina</h4>
-            <p>Agenda, tarefas e lembretes para quem estuda. Funciona sem conta e sem
-               servidor: tudo mora no aparelho. Não pede permissão de internet — ela
-               nem está declarada no aplicativo.</p>
-            <p class="resultado"><b>Resultado</b> embrulhar um site num aplicativo
-               <em>não</em> faz o lembrete tocar com o celular no bolso — quem toca é o
-               alarme do sistema. A prova é o aplicativo ser morto à força e o alarme
-               continuar de pé no Android</p>
-            <div class="pe">
-              <span class="pilha">React · TypeScript · Capacitor</span>
-              <span class="links-clipe">
-                <a class="abrir" href="https://github.com/SkotAlexsander/rotina/releases/latest" target="_blank" rel="noopener noreferrer">
-                  Baixar
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
-                </a>
-                <a class="abrir codigo" href="https://github.com/SkotAlexsander/rotina" target="_blank" rel="noopener noreferrer">Código</a>
-              </span>
-            </div>
-          </article>
-
-          <article class="clipe">
-            <div class="clipe-topo">
-              <span class="id">CLIPE 04</span>
-              <span class="tipo">Web · App</span>
-            </div>
-            <h4>Corpo</h4>
-            <p>Comida, água e treino num app só. Abre offline e instala na tela de
-               início — o mesmo código roda no navegador e como aplicativo de Android.
-               165 alimentos com busca por apelido: miojo, refri, pê-efe.</p>
-            <p class="resultado"><b>Resultado</b> a meta de água vira copos com horário,
-               e o plano não é guardado: é recalculado do que falta — por isso
-               <em>“agora não”</em> redistribui o dia sozinho em vez de acumular atraso</p>
-            <div class="pe">
-              <span class="pilha">JavaScript · PWA · Android</span>
-              <span class="links-clipe">
-                <a class="abrir" href="https://skotalexsander.github.io/corpo/" target="_blank" rel="noopener noreferrer">
-                  Abrir
-                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
-                </a>
-                <a class="abrir codigo" href="https://github.com/SkotAlexsander/corpo" target="_blank" rel="noopener noreferrer">Código</a>
-              </span>
-            </div>
-          </article>
-
-          <article class="clipe">
-            <div class="clipe-topo">
-              <span class="id">CLIPE 05</span>
-              <span class="tipo">App · Android</span>
-            </div>
             <h4>Acervo</h4>
             <p>Organizador de arquivos e pastas do celular: transforma formato, protege
                com senha, deixa mais leve. Roda no navegador do PC com armazenamento
@@ -1781,6 +1618,30 @@
               </span>
             </div>
           </article>
+
+          <article class="clipe">
+            <div class="clipe-topo">
+              <span class="id">CLIPE 04</span>
+              <span class="tipo">Web · App</span>
+            </div>
+            <h4>Prato</h4>
+            <p>App para anotar o que se come e bebe, montar o treino do mês e ver quanto
+               falta para bater cada meta. Abre offline e instala na tela de início — o
+               mesmo código roda no navegador e como aplicativo de Android.</p>
+            <p class="resultado"><b>Resultado</b> o plano de treino guarda a <em>regra</em>
+               (3× por semana), não datas fixas — assim ele não vence sozinho quando a
+               semana escapa, que é onde a maioria dos apps de hábito perde o usuário</p>
+            <div class="pe">
+              <span class="pilha">JavaScript · PWA · Android</span>
+              <span class="links-clipe">
+                <a class="abrir" href="https://skotalexsander.github.io/prato/" target="_blank" rel="noopener noreferrer">
+                  Abrir
+                  <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
+                </a>
+                <a class="abrir codigo" href="https://github.com/SkotAlexsander/prato" target="_blank" rel="noopener noreferrer">Código</a>
+              </span>
+            </div>
+          </article>
         </div>
 
         <p class="mais-github">
@@ -1791,85 +1652,14 @@
     </div>
   </section>
 
-  <!-- ===================== Vídeo ===================== -->
-  <section id="video" class="secao">
-    <div class="caixa">
-      <div class="clipe-cabeca" data-anim>
-        <span class="tc">00:01:06:00</span>
-        <span class="nome">Vídeo</span>
-        <span class="fio" aria-hidden="true"></span>
-        <span class="n">V1 · 05</span>
-      </div>
-
-      <div class="abre" data-anim>
-        <h2>A outra metade</h2>
-        <p>Você acabou de ver o que eu construo. Vídeo é a mesma decisão com outro
-           material: o que fica, em que ordem, e por quanto tempo.</p>
-      </div>
-
-      <div class="video-grade">
-        <div data-anim>
-          <div class="janela">
-            <div class="janela-topo">
-              <i></i><i></i><i></i>
-              <b>uma gravação · três destinos</b>
-            </div>
-            <svg class="arvore" viewBox="0 0 360 200" role="img" aria-labelledby="arvore-titulo">
-              <title id="arvore-titulo">Diagrama: uma gravação longa se divide em três entregas — a aula em 16:9, a peça curta de apoio em 16:9 e o corte vertical em 9:16, cada caixa desenhada na proporção real do seu formato</title>
-
-              <rect class="arv-fonte" x="30" y="14" width="300" height="26" rx="2"/>
-              <text class="arv-rot arv-titulo" x="180" y="31">GRAVAÇÃO</text>
-
-              <path class="arv-ramo" d="M180 40v14H75v16M180 54h105v16M180 54v16"/>
-
-              <rect class="arv-saida" x="30"  y="70" width="90" height="51" rx="2"/>
-              <rect class="arv-saida" x="152" y="70" width="56" height="32" rx="2"/>
-              <rect class="arv-saida arv-alta" x="264" y="70" width="42" height="75" rx="2"/>
-
-              <text class="arv-rot" x="75"  y="167">AULA</text>
-              <text class="arv-rot" x="180" y="167">APOIO</text>
-              <text class="arv-rot" x="285" y="167">VERTICAL</text>
-
-              <text class="arv-rot arv-dado" x="75"  y="184">16:9</text>
-              <text class="arv-rot arv-dado" x="180" y="184">16:9</text>
-              <text class="arv-rot arv-dado" x="285" y="184">9:16 · 4K</text>
-            </svg>
-          </div>
-        </div>
-
-        <div data-anim>
-          <p class="video-lead">Uma gravação de uma hora não vira um vídeo de uma hora.</p>
-          <p class="video-texto">Vira a aula, as peças curtas que levam até ela, e os cortes
-            verticais que param o dedo de quem nunca ouviu falar de você. Três destinos,
-            três cortes, o mesmo material.</p>
-          <p class="video-texto">O vertical não é a aula encolhida — é outra peça. Ele começa
-            no meio da frase que interessa, porque não tem os dez segundos de cortesia que
-            uma aula tem. <em>O que segura quem já te acompanha não é o que para quem ainda
-            não te conhece.</em></p>
-
-          <dl class="ficha">
-            <div class="ficha-linha"><dt>Formatos</dt><dd>1920×1080 e 2160×3840 — o vertical sai em 4K</dd></div>
-            <div class="ficha-linha"><dt>Entregas</dt><dd>Aula de 16 min · peça de apoio de 1 a 2 min · corte vertical de ~1 min</dd></div>
-            <div class="ficha-linha"><dt>No corte</dt><dd>Ritmo, som nivelado, cor e legenda queimada</dd></div>
-            <div class="ficha-linha"><dt>A decisão</dt><dd>Uma gravação vira várias peças — e o corte muda com o destino</dd></div>
-          </dl>
-
-          <div class="acoes-projeto">
-            <a href="#contato" class="botao botao-fantasma">Falar sobre um vídeo</a>
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ===================== Sobre ===================== -->
   <section id="sobre" class="secao">
     <div class="caixa">
       <div class="clipe-cabeca" data-anim>
-        <span class="tc">00:01:28:00</span>
+        <span class="tc">00:01:10:00</span>
         <span class="nome">Sobre</span>
         <span class="fio" aria-hidden="true"></span>
-        <span class="n">V1 · 06</span>
+        <span class="n">V1 · 05</span>
       </div>
 
       <div class="abre" data-anim>
@@ -1882,7 +1672,7 @@
             <div class="monitor-topo">
               <b>Program</b>
               <span class="fio" aria-hidden="true"></span>
-              <span class="tc">00:01:28:00</span>
+              <span class="tc">00:01:10:00</span>
             </div>
             <div class="retrato-quadro">
               <div class="retrato-carregando" id="retrato-status">carregando retrato</div>
@@ -1934,10 +1724,10 @@
   <section id="ia" class="secao">
     <div class="caixa">
       <div class="clipe-cabeca" data-anim>
-        <span class="tc">00:01:48:00</span>
+        <span class="tc">00:01:34:00</span>
         <span class="nome">IA</span>
         <span class="fio" aria-hidden="true"></span>
-        <span class="n">V1 · 07</span>
+        <span class="n">V1 · 06</span>
       </div>
 
       <div class="ia-grade">
@@ -1973,7 +1763,7 @@
   <section id="trajetoria" class="secao">
     <div class="caixa-fina">
       <div class="clipe-cabeca" data-anim>
-        <span class="tc">00:02:04:00</span>
+        <span class="tc">00:01:52:00</span>
         <span class="nome">Trajetória</span>
         <span class="fio" aria-hidden="true"></span>
         <span class="n">MARCADORES · 03</span>
@@ -2008,7 +1798,7 @@
   <section id="contato" class="secao">
     <div class="caixa-fina contato-centro">
       <div class="clipe-cabeca" data-anim>
-        <span class="tc">00:02:22:00</span>
+        <span class="tc">00:02:10:00</span>
         <span class="nome">Contato</span>
         <span class="fio" aria-hidden="true"></span>
         <span class="n">FIM DA SEQUÊNCIA</span>
@@ -2610,13 +2400,12 @@
     { id: "topo",       nome: "Cold open",  tc: 0   },
     { id: "servicos",   nome: "Serviços",   tc: 18  },
     { id: "projetos",   nome: "Projetos",   tc: 42  },
-    { id: "video",      nome: "Vídeo",      tc: 66  },
-    { id: "sobre",      nome: "Sobre",      tc: 88  },
-    { id: "ia",         nome: "IA",         tc: 108 },
-    { id: "trajetoria", nome: "Trajetória", tc: 124 },
-    { id: "contato",    nome: "Contato",    tc: 142 }
+    { id: "sobre",      nome: "Sobre",      tc: 70  },
+    { id: "ia",         nome: "IA",         tc: 94  },
+    { id: "trajetoria", nome: "Trajetória", tc: 112 },
+    { id: "contato",    nome: "Contato",    tc: 130 }
   ];
-  var DUR_TOTAL = 156;   /* segundos "de sequência" — existe só para o timecode */
+  var DUR_TOTAL = 144;   /* segundos "de sequência" — existe só para o timecode */
 
   var quieto = false;
   try { quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
@@ -3041,21 +2830,7 @@
     bases: {
       local: "./assets/frames/",
       wp:    "https://pixelmartins.com/wp-content/uploads/retrato/",
-      /* 15/08/2026 — este endereço passou a apontar para o nome NOVO do
-         repositório. O antigo não tinha quebrado: o jsDelivr segue o
-         redirecionamento do GitHub, e as duas URLs devolviam os mesmos 13.974
-         bytes (conferido no dia).
-
-         Trocado assim mesmo, porque redirecionamento é emprestado — vale só
-         enquanto ninguém criar um repositório novo com o nome velho. No dia
-         em que isso acontecesse, o retrato pararia de carregar SEM erro
-         nenhum no console: o canvas ficaria na tarja "retrato indisponível" e
-         ninguém saberia por quê.
-
-         (O nome antigo não é citado aqui de propósito. Este arquivo vai
-         inteiro para o site no ar, e a bancada reprova se ele aparecer —
-         foi ela que pegou a primeira versão deste comentário.) */
-      cdn:   "https://cdn.jsdelivr.net/gh/SkotAlexsander/pixelmartins@main/assets/frames/"
+      cdn:   "https://cdn.jsdelivr.net/gh/SkotAlexsander/pixelmartins-site@main/assets/frames/"
     }
   };
 

@@ -2,9 +2,10 @@
      Estilo: css/55-projetos.css  ·  Efeito: js/50-revelar-ao-rolar.js
 
      A frase de abertura ("um projeto contado inteiro vale mais que uma
-     vitrine de miniaturas") continua verdadeira com três projetos porque os
-     outros dois entram ABAIXO, como lista, não como vitrine. Se um dia
-     virarem seis cards iguais, a frase deixa de valer e tem de sair junto.
+     vitrine de miniaturas") continua verdadeira com cinco projetos porque só
+     UM é contado — os outros quatro entram ABAIXO, como lista, não como
+     vitrine. O que mataria a frase é o destaque virar mais um card igual aos
+     outros; aí ela sai junto.
 
      A ficha técnica não inventa nada: "Papel" e "A decisão" foram extraídos
      da própria descrição do projeto, que já contava as duas coisas em prosa.
@@ -89,28 +90,48 @@
 
     <!--# OS OUTROS CLIPES — vieram do GitHub, e a lista é honesta.
 
-         Dos 7 repositórios públicos, entram 3 aqui (mais o destaque acima):
+         Dos 7 repositórios públicos, entram 4 aqui (mais o destaque acima):
 
            solarsys    → é o destaque
            vitrola     → CLIPE 02
-           acervo      → CLIPE 03
-           prato       → CLIPE 04
+           rotina      → CLIPE 03
+           corpo       → CLIPE 04
+           acervo      → CLIPE 05
+
+         ⚠️ 15/08/2026 — DOIS REPOSITÓRIOS FORAM RENOMEADOS E ESTA SEÇÃO
+         APONTAVA PARA O ENDEREÇO MORTO:
+
+           prato → corpo     `skotalexsander.github.io/prato/` virou 404.
+                             O GitHub redireciona o endereço do REPOSITÓRIO,
+                             mas NÃO o do Pages. Um link quebrado no
+                             portfólio custa mais que o projeto vale.
+           central-pessoal → rotina
+
+         O Rotina entrou agora: é o app com a decisão de produto mais cara de
+         todos (alarme no sistema operacional em vez de aviso de navegador) e
+         estava fora só porque foi publicado depois desta seção.
 
          Ficam de fora, e o motivo importa:
            · come-come — saiu daqui em 10/08, por escolha do Alex, quando o
-             Prato foi publicado. Continua no ar e no GitHub; o que mudou é
+             Corpo foi publicado. Continua no ar e no GitHub; o que mudou é
              que a vaga é de quem prova mais. Um jogo de labirinto mostra
              canvas e lógica; um app de hábito que roda offline e vira APK
              mostra decisão de produto — e é o que o cliente dele compra.
            · ecommerce-project — 0 KB, repositório VAZIO. Um repositório vazio
              num portfólio não é "mais um projeto": é a prova de que a lista
              foi enchida sem ninguém olhar.
-           · pixelmartins-site e SkotAlexsander — são este site e o README do
+           · pixelmartins e SkotAlexsander — são este site e o README do
              perfil. São trabalho de verdade, mas são sobre ele mesmo; entram
              no rodapé da seção, com o link do GitHub, e não como case.
 
          Cada card tem DOIS links quando dá: abrir e ver o código. O Acervo
-         não tem página no ar (é app de celular), então tem só o código. -->
+         não tem página no ar (é app de celular), então tem só o código; o
+         Rotina não tem página no ar tampouco, mas tem APK assinado, então o
+         primeiro link dele é o download.
+
+         COM QUATRO CARDS a grade virou 2×2 — ver o comentário em
+         css/55-projetos.css. Três colunas deixariam o quarto órfão. -->
+
     <div class="mais-clipes" data-anim>
       <p class="rotulo-bloco">Também no ar</p>
       <div class="trilho">
@@ -143,6 +164,55 @@
             <span class="id">CLIPE 03</span>
             <span class="tipo">App · Android</span>
           </div>
+          <h4>Rotina</h4>
+          <p>Agenda, tarefas e lembretes para quem estuda. Funciona sem conta e sem
+             servidor: tudo mora no aparelho. Não pede permissão de internet — ela
+             nem está declarada no aplicativo.</p>
+          <p class="resultado"><b>Resultado</b> embrulhar um site num aplicativo
+             <em>não</em> faz o lembrete tocar com o celular no bolso — quem toca é o
+             alarme do sistema. A prova é o aplicativo ser morto à força e o alarme
+             continuar de pé no Android</p>
+          <div class="pe">
+            <span class="pilha">React · TypeScript · Capacitor</span>
+            <span class="links-clipe">
+              <a class="abrir" href="https://github.com/SkotAlexsander/rotina/releases/latest" target="_blank" rel="noopener noreferrer">
+                Baixar
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
+              </a>
+              <a class="abrir codigo" href="https://github.com/SkotAlexsander/rotina" target="_blank" rel="noopener noreferrer">Código</a>
+            </span>
+          </div>
+        </article>
+
+        <article class="clipe">
+          <div class="clipe-topo">
+            <span class="id">CLIPE 04</span>
+            <span class="tipo">Web · App</span>
+          </div>
+          <h4>Corpo</h4>
+          <p>Comida, água e treino num app só. Abre offline e instala na tela de
+             início — o mesmo código roda no navegador e como aplicativo de Android.
+             165 alimentos com busca por apelido: miojo, refri, pê-efe.</p>
+          <p class="resultado"><b>Resultado</b> a meta de água vira copos com horário,
+             e o plano não é guardado: é recalculado do que falta — por isso
+             <em>“agora não”</em> redistribui o dia sozinho em vez de acumular atraso</p>
+          <div class="pe">
+            <span class="pilha">JavaScript · PWA · Android</span>
+            <span class="links-clipe">
+              <a class="abrir" href="https://skotalexsander.github.io/corpo/" target="_blank" rel="noopener noreferrer">
+                Abrir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
+              </a>
+              <a class="abrir codigo" href="https://github.com/SkotAlexsander/corpo" target="_blank" rel="noopener noreferrer">Código</a>
+            </span>
+          </div>
+        </article>
+
+        <article class="clipe">
+          <div class="clipe-topo">
+            <span class="id">CLIPE 05</span>
+            <span class="tipo">App · Android</span>
+          </div>
           <h4>Acervo</h4>
           <p>Organizador de arquivos e pastas do celular: transforma formato, protege
              com senha, deixa mais leve. Roda no navegador do PC com armazenamento
@@ -157,30 +227,6 @@
                 Código
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
               </a>
-            </span>
-          </div>
-        </article>
-
-        <article class="clipe">
-          <div class="clipe-topo">
-            <span class="id">CLIPE 04</span>
-            <span class="tipo">Web · App</span>
-          </div>
-          <h4>Prato</h4>
-          <p>App para anotar o que se come e bebe, montar o treino do mês e ver quanto
-             falta para bater cada meta. Abre offline e instala na tela de início — o
-             mesmo código roda no navegador e como aplicativo de Android.</p>
-          <p class="resultado"><b>Resultado</b> o plano de treino guarda a <em>regra</em>
-             (3× por semana), não datas fixas — assim ele não vence sozinho quando a
-             semana escapa, que é onde a maioria dos apps de hábito perde o usuário</p>
-          <div class="pe">
-            <span class="pilha">JavaScript · PWA · Android</span>
-            <span class="links-clipe">
-              <a class="abrir" href="https://skotalexsander.github.io/prato/" target="_blank" rel="noopener noreferrer">
-                Abrir
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg>
-              </a>
-              <a class="abrir codigo" href="https://github.com/SkotAlexsander/prato" target="_blank" rel="noopener noreferrer">Código</a>
             </span>
           </div>
         </article>

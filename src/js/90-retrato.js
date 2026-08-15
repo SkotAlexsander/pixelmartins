@@ -36,7 +36,21 @@
     bases: {
       local: "./assets/frames/",
       wp:    "https://pixelmartins.com/wp-content/uploads/retrato/",
-      cdn:   "https://cdn.jsdelivr.net/gh/SkotAlexsander/pixelmartins-site@main/assets/frames/"
+      /* 15/08/2026 — este endereço passou a apontar para o nome NOVO do
+         repositório. O antigo não tinha quebrado: o jsDelivr segue o
+         redirecionamento do GitHub, e as duas URLs devolviam os mesmos 13.974
+         bytes (conferido no dia).
+
+         Trocado assim mesmo, porque redirecionamento é emprestado — vale só
+         enquanto ninguém criar um repositório novo com o nome velho. No dia
+         em que isso acontecesse, o retrato pararia de carregar SEM erro
+         nenhum no console: o canvas ficaria na tarja "retrato indisponível" e
+         ninguém saberia por quê.
+
+         (O nome antigo não é citado aqui de propósito. Este arquivo vai
+         inteiro para o site no ar, e a bancada reprova se ele aparecer —
+         foi ela que pegou a primeira versão deste comentário.) */
+      cdn:   "https://cdn.jsdelivr.net/gh/SkotAlexsander/pixelmartins@main/assets/frames/"
     }
   };
 

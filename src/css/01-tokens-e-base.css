@@ -122,6 +122,23 @@ html.light {
   padding-block-end: var(--regua-h);
 }
 #pm-site *, #pm-site *::before, #pm-site *::after { box-sizing: border-box; }
+/* ⚠️ ESTA LINHA TEM UM ID, E O ID GANHA DE QUALQUER CLASSE.
+   Ela vale (1,0,1); ".minha-classe" vale (0,1,0). Ou seja: escrever
+   `.qualquer-coisa { margin-block-start: 1rem }` num <p>, <h2> ou <ul>
+   NÃO FUNCIONA — a margem é descartada sem erro, sem aviso, sem nada no
+   console. O sintoma é só "o espaço que eu pedi não apareceu".
+
+   Foi medido em 15/08: dos 64 elementos que este reset atinge, TODAS as
+   margens de classe estavam mortas. Só duas causavam dano visível
+   (.bio-texto e .video-texto, os únicos dois casos de parágrafo seguido de
+   parágrafo) — nos outros o espaçamento vem do `gap` do pai, então a regra
+   era morta E redundante. As duas foram consertadas prefixando com
+   #pm-site; as redundantes ficaram como estavam, porque mexer nelas mudaria
+   o ritmo de uma página que já passou por quatro rodadas de aprovação.
+
+   REGRA PARA QUEM VIER DEPOIS: precisou de margem num h1-h4/p/ul/ol/figure,
+   escreva `#pm-site .classe`. E confira lendo de volta o
+   getComputedStyle — CSS que não aplica não reclama. */
 #pm-site h1, #pm-site h2, #pm-site h3, #pm-site h4, #pm-site p,
 #pm-site ul, #pm-site ol, #pm-site figure { margin: 0; }
 #pm-site img, #pm-site svg, #pm-site canvas { display: block; max-width: 100%; }

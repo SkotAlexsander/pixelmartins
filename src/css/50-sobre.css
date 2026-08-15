@@ -57,7 +57,12 @@
 .bio-lead em { font-style: normal; color: var(--playhead); }
 /* 65ch é o ponto em que o olho ainda acha o começo da linha seguinte sem
    se perder. Em 768px este bloco chegava a 87ch. */
-.bio-texto { color: var(--texto-2); margin-block-start: 1rem; max-width: 65ch; }
+/* 15/08 — ganhou o "#pm-site". A regra existia desde a v5 e NUNCA valeu:
+   perdia por especificidade para "#pm-site p { margin: 0 }", e o parágrafo da
+   bio ficava colado no .bio-lead como se fosse a continuação da mesma frase.
+   Passou por quatro rodadas de revisão sem ninguém ver, porque o defeito não
+   é uma coisa errada na tela — é uma coisa que falta. */
+#pm-site .bio-texto { color: var(--texto-2); margin-block-start: 1rem; max-width: 65ch; }
 
 .habilidades {
   display: grid; gap: 1px; background: var(--linha);

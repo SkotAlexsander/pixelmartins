@@ -65,13 +65,35 @@ const MEDIR_CONTRASTE = `(function () {
   var alvos = [".hero-sub", ".abre p", ".clipe p", ".bio-texto", ".servico li",
                ".clipe-cabeca .nome", ".regua-tc .total", ".hero-meta span", ".rodape-int",
                ".ficha-linha dt", ".passo p", ".clipe .pilha", ".faixa-rot", ".resultado",
-               ".tag", ".log-item p", ".monitor-pe"];
+               ".tag", ".log-item p", ".monitor-pe",
+               /* Seção Vídeo (15/08). Entram na lista porque medição que não
+                  cobre o elemento novo aprova por ausência: a auditoria dizia
+                  PASSOU sem ter olhado uma linha da seção. O .arv-dado é o
+                  menor texto da página inteira (8px em SVG) e usa --texto-3,
+                  que já reprovou contraste uma vez neste projeto. */
+               /* Um seletor por COR, não por classe: a lista usa querySelector,
+                  que pega só o primeiro. ".arv-rot" cru casava com o rótulo
+                  âmbar do topo e deixava os três rótulos cinza — que são os
+                  de risco — sem nenhuma medição. */
+               ".video-texto", ".video-lead", ".arv-titulo",
+               ".arv-rot:not(.arv-titulo):not(.arv-dado)", ".arv-dado"];
   var saida = [];
   for (var i = 0; i < alvos.length; i++) {
     var el = document.querySelector(alvos[i]);
     if (!el) continue;
     var cs = getComputedStyle(el);
-    var r = ct(cs.color, fundoDe(el));
+    /* TEXTO DE SVG NÃO SE PINTA COM color, SE PINTA COM fill.
+       Lendo cs.color num <text>, o que volta é o color HERDADO do documento
+       (--texto, quase branco) — nada a ver com o que está na tela. A primeira
+       corrida desta lista deu 14,85 para os dois rótulos da árvore, que é o
+       contraste de #EDEDEF; os valores reais são ~6,2 e ~5,3. Passavam de
+       qualquer jeito, e é justamente esse o perigo: a medição estava certa
+       por sorte e não pegaria a regressão do dia em que não estivesse.
+       Mesma família do medidor de "tela não está em branco" que contava
+       cores e aprovou uma caixa de erro do emulador. */
+    var ehSvg = el.ownerSVGElement != null;
+    var tinta = ehSvg && cs.fill && cs.fill !== "none" ? cs.fill : cs.color;
+    var r = ct(tinta, fundoDe(el));
     if (r === null) continue;
     var tam = parseFloat(cs.fontSize);
     var grande = tam >= 24 || (tam >= 18.66 && parseInt(cs.fontWeight, 10) >= 700);
@@ -109,7 +131,7 @@ const MEDIR_MEDIDA = `(function () {
     return w > 0 ? w : parseFloat(cs.fontSize) * 0.5;
   }
   var out = [];
-  var sel = ".abre p, .bio-texto, .destaque > div > p, .clipe p, .hero-sub, .resultado, .log-item p";
+  var sel = ".abre p, .bio-texto, .destaque > div > p, .clipe p, .hero-sub, .resultado, .log-item p, .video-texto";
   var todos = document.querySelectorAll(sel);
   for (var i = 0; i < todos.length; i++) {
     var el = todos[i];
@@ -150,6 +172,41 @@ async function preparar(p) {
     await preparar(p);
     const pequenos = await p.evaluate(MEDIR_TOQUE);
     ok(pequenos.length === 0, `${w}px: ${pequenos.length ? pequenos.slice(0, 5).join(", ") : "nenhum abaixo de 40px"}`);
+    await p.close();
+  }
+
+  /* ------------------------------------------------------------------------
+     PARÁGRAFO COLADO EM PARÁGRAFO — a prova que faltava.
+
+     O reset "#pm-site p { margin: 0 }" tem um ID, então vence toda regra de
+     classe. Resultado: `.bio-texto { margin-block-start: 1rem }` estava no
+     CSS desde a v5 e NUNCA aplicou — o parágrafo da bio ficava grudado no
+     lead como se fosse a mesma frase. Quatro rodadas de revisão humana não
+     pegaram, porque o defeito é uma AUSÊNCIA e não um erro.
+
+     Esta prova não olha o CSS, olha o resultado: dois irmãos do mesmo tipo,
+     sem margem e sem `gap` no pai, é colagem. É a única forma de pegar de
+     novo — a regra pode voltar a morrer por qualquer seletor mais forte que
+     alguém escreva amanhã.
+     ------------------------------------------------------------------------ */
+  console.log("\n== parágrafo colado em parágrafo (especificidade morta) ==");
+  {
+    const p = await b.newPage({ viewport: { width: 1440, height: 900 } });
+    await preparar(p);
+    const colados = await p.evaluate(() => {
+      const fora = [];
+      for (const e of document.querySelectorAll("#pm-site p, #pm-site h2, #pm-site h3, #pm-site h4, #pm-site ul")) {
+        const ant = e.previousElementSibling;
+        if (!ant || ant.tagName !== e.tagName) continue;
+        if (parseFloat(getComputedStyle(e).marginBlockStart) > 0) continue;
+        if (parseFloat(getComputedStyle(ant).marginBlockEnd) > 0) continue;
+        const pai = getComputedStyle(e.parentElement);
+        if (pai.gap !== "normal" && parseFloat(pai.gap) > 0) continue;
+        fora.push(e.tagName + "." + (e.className || "(sem classe)"));
+      }
+      return [...new Set(fora)];
+    });
+    ok(colados.length === 0, `nenhum irmão do mesmo tipo sem respiro (${colados.join(", ") || "nenhum"})`);
     await p.close();
   }
 

@@ -25,12 +25,13 @@
     { id: "topo",       nome: "Cold open",  tc: 0   },
     { id: "servicos",   nome: "Serviços",   tc: 18  },
     { id: "projetos",   nome: "Projetos",   tc: 42  },
-    { id: "sobre",      nome: "Sobre",      tc: 70  },
-    { id: "ia",         nome: "IA",         tc: 94  },
-    { id: "trajetoria", nome: "Trajetória", tc: 112 },
-    { id: "contato",    nome: "Contato",    tc: 130 }
+    { id: "video",      nome: "Vídeo",      tc: 66  },
+    { id: "sobre",      nome: "Sobre",      tc: 88  },
+    { id: "ia",         nome: "IA",         tc: 108 },
+    { id: "trajetoria", nome: "Trajetória", tc: 124 },
+    { id: "contato",    nome: "Contato",    tc: 142 }
   ];
-  var DUR_TOTAL = 144;   /* segundos "de sequência" — existe só para o timecode */
+  var DUR_TOTAL = 156;   /* segundos "de sequência" — existe só para o timecode */
 
   var quieto = false;
   try { quieto = window.matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}

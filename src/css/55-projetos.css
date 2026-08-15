@@ -128,9 +128,14 @@ html.js .orbitas .gira { animation: girar var(--dur) linear infinite; }
 .clipe .abrir.codigo { color: var(--texto-2); }
 .clipe .abrir.codigo:hover { color: var(--playhead); }
 
-/* Com três cards a grade precisa acomodar 1, 2 ou 3 por linha sem que o
-   último fique órfão numa faixa vazia. */
-@media (min-width: 62rem) { .trilho { grid-template-columns: repeat(3, 1fr); } }
+/* QUATRO CARDS: a grade PARA em duas colunas — não vai a três.
+   Com três cards, três colunas era o certo. Com quatro, três colunas deixam
+   o último sozinho numa faixa vazia, e um card órfão lê como "faltou um".
+   Quatro colunas resolveriam o órfão e criariam pior: a ~250px de largura o
+   nome do projeto quebra em duas linhas e o parágrafo vira uma coluna de
+   palavras soltas. 2×2 é a única que fecha o retângulo com os quatro do
+   mesmo tamanho, e dá a cada um a largura em que o texto respira.
+   Se um dia virarem 6, volta a valer três colunas — 3×2 também fecha. */
 
 .mais-github {
   margin-block-start: 1.2rem;

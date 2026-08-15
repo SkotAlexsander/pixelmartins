@@ -36,6 +36,12 @@ const ORDEM_CSS = [
   "35-revelar.css",
   "50-sobre.css",
   "55-projetos.css",
+  /* Depois do 55 porque reaproveita .janela, .ficha e .acoes-projeto dele —
+     o que este arquivo faz é acrescentar, não sobrescrever. Invertendo, as
+     regras próprias da árvore continuariam valendo, mas qualquer ajuste
+     futuro em cima de um componente compartilhado passaria a depender da
+     ordem — e ordem invisível é a dívida que 15-layout.css já ensinou aqui. */
+  "57-video.css",
   "60-ia.css",
   "65-trajetoria.css",
   "70-servicos.css",

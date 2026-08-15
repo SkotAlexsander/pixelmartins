@@ -3,7 +3,32 @@
 > Criado em 2026-08-02. Casa oficial do código do site pessoal do Alex Martins.
 > Modularizado em 2026-08-03: o fonte é `src/`, o arquivo que se cola é `dist/`.
 > **v5 "Sala de Edição" em 2026-08-08:** a página virou uma timeline de edição.
-> Ainda **não publicada** — o widget do Elementor tem a versão anterior.
+> **v10 em 2026-08-15:** entrou a seção **Vídeo** e o link quebrado saiu.
+> Ainda **não publicada** — o widget do Elementor tem a versão de julho.
+
+---
+
+## ⚠️ O que está no ar não é isto
+
+Medido em 15/08/2026 em `pixelmartins.com/portifolio/`: a página no ar é a de
+**julho**. Ela mostra **um** projeto real e **dois cartões escritos "Próximo
+projeto"** — enquanto há sete projetos publicados e rodando.
+
+Publicar é copiar e colar (ver *Como publicar uma alteração*, abaixo). Nada
+disso chega ao visitante enquanto o passo 5 não for feito.
+
+### O que a v10 mudou
+
+| | |
+|---|---|
+| 🔴 **Link morto** | o cartão "Prato" apontava para `skotalexsander.github.io/prato/`, que virou **404** quando o repositório foi renomeado para `corpo`. O GitHub redireciona a URL do **repositório**, não a do **Pages** |
+| 🔴 **Metade da oferta sem prova** | o hero promete *"seu site **e** seu vídeo"* e a página mostrava cinco projetos de código e nenhum frame de vídeo. Entrou a seção **Vídeo** — ver [docs/secoes.md](docs/secoes.md) §4 |
+| 🟠 **Rotina entrou** | o projeto tecnicamente mais forte estava fora só porque foi publicado depois desta seção. A faixa virou 2×2 |
+| 🟡 **Retrato pelo nome velho** | o `jsDelivr` seguia o redirecionamento do GitHub e funcionava — mas redirecionamento é emprestado, e o dia em que o nome antigo fosse reusado o retrato sumiria **sem erro nenhum** |
+| 🟡 **Margem que nunca aplicou** | `.bio-texto { margin-block-start: 1rem }` existia desde a v5 e perdia por especificidade para `#pm-site p { margin: 0 }`. Dois parágrafos colados na seção Sobre, através de quatro rodadas de revisão. Ver o aviso em `src/css/01-tokens-e-base.css` |
+
+As três últimas linhas foram achadas **pela bancada**, não por leitura — e cada
+uma virou uma prova nova que reprova se o defeito voltar.
 
 ---
 
@@ -22,8 +47,9 @@ a raiz não exige alteração nenhuma aqui.
 pessoa"* — o diferencial é ser as duas frentes num profissional só, com IA
 acelerando o repetitivo.
 
-**Ordem das seções:** Hero → Serviços → Projetos → Sobre → IA → Trajetória → Contato.
-(A pergunta do visitante é "o que você faz por mim", não "quem é você".)
+**Ordem das seções:** Hero → Serviços → Projetos → **Vídeo** → Sobre → IA →
+Trajetória → Contato. (A pergunta do visitante é "o que você faz por mim", não
+"quem é você" — e as duas metades da promessa provam-se juntas.)
 
 ---
 
@@ -35,9 +61,9 @@ seção na faixa V1, forma de onda na A1, e o playhead andando.
 
 ![A abertura: timecode em REC, a frase que se digita, a forma de onda da narração e a régua de edição no rodapé com um clipe por seção](docs/imagens/01-desktop.png)
 
-Na régua, os clipes são as seções: `COLD OPEN`, `SERVIÇOS`, `PROJETOS`, `SOBRE`,
-`IA`, `TRAJETÓRIA`, `CONTATO`. Clicar num deles é ir para a seção; rolar move o
-playhead sobre eles. É a mesma peça fazendo as duas coisas.
+Na régua, os clipes são as seções: `COLD OPEN`, `SERVIÇOS`, `PROJETOS`, `VÍDEO`,
+`SOBRE`, `IA`, `TRAJETÓRIA`, `CONTATO`. Clicar num deles é ir para a seção; rolar
+move o playhead sobre eles. É a mesma peça fazendo as duas coisas.
 
 > **Estas capturas são do `dist/` deste repositório** — a v5, gerada por
 > `npm run build` e servida localmente. O widget do Elementor ainda tem a versão
@@ -79,10 +105,10 @@ pixelmartins-site/
 │   ├── html/
 │   │   ├── index.html      esqueleto: a ordem da página + marcadores
 │   │   ├── parciais/       fontes, navbar, régua
-│   │   └── secoes/         hero, servicos, projetos, sobre, ia,
+│   │   └── secoes/         hero, servicos, projetos, video, sobre, ia,
 │   │                       trajetoria, contato
-│   ├── css/           14 arquivos — o prefixo numérico É a ordem da cascata
-│   └── js/            11 módulos, cada um uma IIFE independente
+│   ├── css/           17 arquivos — o prefixo numérico É a ordem da cascata
+│   └── js/            13 módulos, cada um uma IIFE independente
 ├── build/build.js     junta src/ num fragmento único
 ├── dist/              ← GERADO. É isto que se cola no Elementor. Não editar.
 ├── assets/frames/     150 frames do retrato do fundo (servidos via jsDelivr)
@@ -110,7 +136,8 @@ efeitos o tocam. Esses cabeçalhos usam `<!--# ... -->`, o comentário
 só-do-fonte: o build os remove, então explicar bastante ali não pesa no site.
 
 **Este é um repositório git próprio**, separado do repo-mãe do agente (que o
-ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-site`.
+ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins`
+(renomeado em 15/08/2026 — o nome antigo redireciona, mas não conte com isso).
 
 ## Como publicar uma alteração
 
@@ -127,6 +154,10 @@ ignora via `.gitignore`). Publicado em `github.com/SkotAlexsander/pixelmartins-s
 > O passo 3 precisa do Playwright (`npm i -D playwright && npx playwright install
 > chromium`). Sem ele, o passo 2 sozinho já pega erro de sintaxe, tag esquecida,
 > ID órfão e classe sem estilo.
+>
+> **Já tem Playwright noutro projeto?** Aponte em vez de baixar 120 MB de novo:
+> `PLAYWRIGHT_DIR="C:...
+ode_modulesplaywright" npm run verificar`
 >
 > **Se a porta 8099 estiver ocupada** (outros projetos desta máquina servem
 > preview nela), use outra em toda a linha:

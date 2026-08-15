@@ -1,0 +1,109 @@
+<!--# VÍDEO — a metade da oferta que não tinha prova.
+     Estilo: css/57-video.css  ·  Efeito: js/50-revelar-ao-rolar.js
+
+     POR QUE ESTA SEÇÃO EXISTE (15/08/2026):
+     o hero promete "seu site E seu vídeo, feitos pela mesma pessoa" e a
+     página inteira mostrava só o lado do site — cinco projetos de código e
+     zero frame de vídeo. Metade da oferta era afirmação. Quem chegou pelo
+     vídeo saía sem ver nada do que veio buscar.
+
+     POR QUE NÃO TEM FOOTAGE, E ISSO É DECISÃO, NÃO FALTA:
+     o material de vídeo do Alex é trabalho DE CLIENTE. Publicar clipe de
+     cliente num portfólio sem autorização escrita não é escolha do
+     desenvolvedor — nem quando o arquivo está na máquina dele. Então esta
+     seção mostra o MÉTODO, que é dele, em vez do material, que não é.
+
+     A árvore é data graphic autoral, mesma categoria do diagrama de órbitas
+     do solarsys: as três caixas têm a PROPORÇÃO REAL de cada formato, então
+     a forma já informa antes de o rótulo ser lido.
+
+     OS NÚMEROS SÃO MEDIDOS, não estimados — ffprobe nos arquivos entregues:
+       verticais    51 a 66 s  ·  2160×3840 (9:16 em 4K)  ·  6 peças
+       aulas        951 e 976 s = 15m51 e 16m16  ·  1920×1080
+       apoio        83, 108 e 113 s              ·  1920×1080
+     Se um dia mudarem, medir de novo antes de reescrever.
+
+     ⚠️ ALEX — QUANDO VOCÊ MANDAR OS ENDEREÇOS PÚBLICOS:
+     o bloco .video-links no fim está pronto e comentado. Descomente e troque
+     os dois href. A regra que não muda: só entra o que a DONA do conteúdo já
+     publicou no perfil dela. Link para o que já é público não pede licença;
+     hospedar cópia aqui, pede. -->
+<!-- ===================== Vídeo ===================== -->
+<section id="video" class="secao">
+  <div class="caixa">
+    <div class="clipe-cabeca" data-anim>
+      <span class="tc">00:01:06:00</span>
+      <span class="nome">Vídeo</span>
+      <span class="fio" aria-hidden="true"></span>
+      <span class="n">V1 · 05</span>
+    </div>
+
+    <div class="abre" data-anim>
+      <h2>A outra metade</h2>
+      <p>Você acabou de ver o que eu construo. Vídeo é a mesma decisão com outro
+         material: o que fica, em que ordem, e por quanto tempo.</p>
+    </div>
+
+    <div class="video-grade">
+      <div data-anim>
+        <div class="janela">
+          <div class="janela-topo">
+            <i></i><i></i><i></i>
+            <b>uma gravação · três destinos</b>
+          </div>
+          <svg class="arvore" viewBox="0 0 360 200" role="img" aria-labelledby="arvore-titulo">
+            <title id="arvore-titulo">Diagrama: uma gravação longa se divide em três entregas — a aula em 16:9, a peça curta de apoio em 16:9 e o corte vertical em 9:16, cada caixa desenhada na proporção real do seu formato</title>
+
+            <rect class="arv-fonte" x="30" y="14" width="300" height="26" rx="2"/>
+            <text class="arv-rot arv-titulo" x="180" y="31">GRAVAÇÃO</text>
+
+            <path class="arv-ramo" d="M180 40v14H75v16M180 54h105v16M180 54v16"/>
+
+            <rect class="arv-saida" x="30"  y="70" width="90" height="51" rx="2"/>
+            <rect class="arv-saida" x="152" y="70" width="56" height="32" rx="2"/>
+            <rect class="arv-saida arv-alta" x="264" y="70" width="42" height="75" rx="2"/>
+
+            <text class="arv-rot" x="75"  y="167">AULA</text>
+            <text class="arv-rot" x="180" y="167">APOIO</text>
+            <text class="arv-rot" x="285" y="167">VERTICAL</text>
+
+            <text class="arv-rot arv-dado" x="75"  y="184">16:9</text>
+            <text class="arv-rot arv-dado" x="180" y="184">16:9</text>
+            <text class="arv-rot arv-dado" x="285" y="184">9:16 · 4K</text>
+          </svg>
+        </div>
+      </div>
+
+      <div data-anim>
+        <p class="video-lead">Uma gravação de uma hora não vira um vídeo de uma hora.</p>
+        <p class="video-texto">Vira a aula, as peças curtas que levam até ela, e os cortes
+          verticais que param o dedo de quem nunca ouviu falar de você. Três destinos,
+          três cortes, o mesmo material.</p>
+        <p class="video-texto">O vertical não é a aula encolhida — é outra peça. Ele começa
+          no meio da frase que interessa, porque não tem os dez segundos de cortesia que
+          uma aula tem. <em>O que segura quem já te acompanha não é o que para quem ainda
+          não te conhece.</em></p>
+
+        <dl class="ficha">
+          <div class="ficha-linha"><dt>Formatos</dt><dd>1920×1080 e 2160×3840 — o vertical sai em 4K</dd></div>
+          <div class="ficha-linha"><dt>Entregas</dt><dd>Aula de 16 min · peça de apoio de 1 a 2 min · corte vertical de ~1 min</dd></div>
+          <div class="ficha-linha"><dt>No corte</dt><dd>Ritmo, som nivelado, cor e legenda queimada</dd></div>
+          <div class="ficha-linha"><dt>A decisão</dt><dd>Uma gravação vira várias peças — e o corte muda com o destino</dd></div>
+        </dl>
+
+        <!--# ALEX: descomente quando me mandar os endereços públicos.
+             O <p class="video-links"> já tem estilo em css/57-video.css.
+        <p class="video-links">
+          Peças no ar:
+          <a href="COLE-AQUI" target="_blank" rel="noopener noreferrer">perfil</a> ·
+          <a href="COLE-AQUI" target="_blank" rel="noopener noreferrer">canal</a>
+        </p>
+        -->
+
+        <div class="acoes-projeto">
+          <a href="#contato" class="botao botao-fantasma">Falar sobre um vídeo</a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

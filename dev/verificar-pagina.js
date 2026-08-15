@@ -80,6 +80,17 @@ async function rolarTudo(p) {
 
     const antes = await p.evaluate(`({
       blocos: document.querySelectorAll("#v1 .bloco").length,
+      /* A régua, o menu de celular e a lista CLIPES do 70-regua.js dizem a
+         MESMA coisa em três lugares — e o comentário de cada um manda mexer
+         nos outros. Comparar com um número fixo aqui só provava que ninguém
+         tinha mexido; a seção de Vídeo, em 15/08, reprovou este teste sendo
+         uma adição correta. O que interessa é a CONSISTÊNCIA entre os três,
+         não a quantidade: a régua tem os do menu mais o cold open, que é o
+         topo da página e por isso não aparece na navegação. */
+      menu: document.querySelectorAll('#menu a[href^="#"]').length,
+      alvosOrfaos: [].slice.call(document.querySelectorAll("#v1 .bloco"))
+        .filter(function (bl) { return !document.getElementById(bl.dataset.alvo); })
+        .map(function (bl) { return bl.dataset.alvo; }),
       tc: document.getElementById("tc-agora").textContent,
       externas: performance.getEntriesByType("resource")
         .filter(function (r) { return !/127\\.0\\.0\\.|localhost/.test(r.name); })
@@ -105,7 +116,10 @@ async function rolarTudo(p) {
       overflow: document.documentElement.scrollWidth - document.documentElement.clientWidth
     })`);
 
-    ok(antes.blocos === 7, `a régua montou os 7 clipes (${antes.blocos})`);
+    ok(antes.blocos === antes.menu + 1,
+       `a régua tem um clipe por seção do menu, mais o cold open (${antes.blocos} × ${antes.menu}+1)`);
+    ok(antes.alvosOrfaos.length === 0,
+       `todo clipe da régua aponta para uma seção que existe (órfãos: ${antes.alvosOrfaos.join(", ") || "nenhum"})`);
     ok(antes.reguaFixa, `a régua está fixa no rodapé da janela (${antes.reguaPos}, bottom ${antes.reguaBottom} de ${antes.janela})`);
     ok(depois.escondidos === 0, `todo bloco revelou ao rolar (${depois.total - depois.escondidos}/${depois.total})`);
     ok(antes.tc !== depois.tc, `o timecode andou (${antes.tc} → ${depois.tc})`);
@@ -125,17 +139,32 @@ async function rolarTudo(p) {
     /* textContent e não innerText: innerText aplica text-transform e
        devolveria tudo em maiúsculas, reprovando um site que está correto */
     const txt = (await p.locator("#pm-site").textContent()).replace(/\s+/g, " ");
-    /* Os quatro projetos por nome: se um sair da seção sem querer, este
-       teste é quem avisa. (Foi assim que a troca do Come-Come pelo Prato,
-       em 10/08, apareceu aqui antes de ir para o ar.) */
+    /* O texto visível não pega href. Um link para o endereço morto continua
+       parecendo certo na tela — o rótulo é "Abrir", não a URL. */
+    const htmlCru = await p.locator("#pm-site").innerHTML();
+    /* Os cinco projetos por nome: se um sair da seção sem querer, este teste
+       é quem avisa. (Foi assim que a troca do Come-Come pelo Prato, em 10/08,
+       apareceu aqui antes de ir para o ar — e é por isso que "Prato" saiu
+       daqui em 15/08, quando o repositório foi renomeado para "corpo" e o
+       endereço antigo virou 404.)
+
+       "A outra metade" está na lista porque a seção de Vídeo é a única prova
+       de METADE da promessa do hero. Ela sumir em silêncio é justamente o
+       defeito que ninguém percebe olhando a página no desktop. */
     const precisa = ["Seu site e seu vídeo, feitos pela mesma pessoa.", "O que eu entrego",
-                     "Explorador do Sistema Solar", "Vitrola", "Acervo", "Prato",
+                     "Explorador do Sistema Solar", "Vitrola", "Rotina", "Corpo", "Acervo",
+                     "A outra metade", "Uma gravação de uma hora não vira um vídeo de uma hora.",
                      "Uma pessoa, as duas entregas", "Como cheguei aqui", "alexsandermmj@gmail.com"];
+    /* Renome de repositório mata o Pages sem avisar (o GitHub redireciona o
+       repo, não a página). Nome antigo no ar = link quebrado no portfólio. */
+    const proibido = ["Prato", "central-pessoal", "pixelmartins-site", "/prato/"];
+    const sobrando = proibido.filter(t => txt.includes(t) || htmlCru.includes(t));
+    ok(sobrando.length === 0, `nenhum nome de repositório antigo sobrou (${sobrando.join(", ") || "nenhum"})`);
     const faltando = precisa.filter(t => !txt.includes(t));
     ok(faltando.length === 0, `todo o conteúdo está no documento (faltando: ${faltando.join(", ") || "nada"})`);
 
     const alturas = {};
-    for (const s of ["servicos", "projetos", "sobre", "ia", "trajetoria", "contato"]) {
+    for (const s of ["servicos", "projetos", "video", "sobre", "ia", "trajetoria", "contato"]) {
       const bb = await p.locator("#" + s).boundingBox();
       alturas[s] = bb ? Math.round(bb.height) : 0;
     }

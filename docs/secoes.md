@@ -24,7 +24,7 @@ mesma pessoa"*. Qualquer um **escreve** isso; só quem faz as duas coisas
 
 ## A ordem da página, e por que ela é essa
 
-**Hero → Serviços → Projetos → Sobre → IA → Trajetória → Contato**
+**Hero → Serviços → Projetos → Vídeo → Sobre → IA → Trajetória → Contato**
 
 A ordem foi decidida em 01/08/2026 e não é a ordem "natural" de um portfólio
 (que costuma ser Sobre logo depois do Hero). O motivo:
@@ -32,9 +32,14 @@ A ordem foi decidida em 01/08/2026 e não é a ordem "natural" de um portfólio
 > A primeira pergunta do visitante é **"o que você faz por mim"**, não **"quem
 > é você"**.
 
-Por isso Serviços vem em segundo e Sobre só em quarto — depois de o visitante
-já saber o que pode contratar e já ter visto trabalho. "Sobre" deixa de ser
+Por isso Serviços vem em segundo e Sobre só depois da prova — quando o
+visitante já sabe o que pode contratar e já viu trabalho. "Sobre" deixa de ser
 apresentação e vira confirmação.
+
+**Vídeo entrou em 15/08/2026**, colado em Projetos e não no fim. O hero promete
+duas frentes; se a prova das duas não vier junta, a promessa lê como uma frente
+e um complemento. Projetos + Vídeo são um bloco só — *"aqui está o que eu
+faço"* — e o Sobre continua chegando como confirmação, agora das duas metades.
 
 A ordem vive em **dois** lugares, e os dois têm de concordar:
 
@@ -42,9 +47,12 @@ A ordem vive em **dois** lugares, e os dois têm de concordar:
 |---|---|
 | `src/html/index.html` | a ordem real dos blocos na página |
 | `CLIPES`, em `src/js/70-regua.js` | os clipes da régua e os timecodes |
+| `parciais/navbar.html` | o menu do topo e o de celular (que repete os timecodes) |
+| o `.clipe-cabeca` de cada seção | o timecode e o número `V1 · NN` impressos nela |
 
 Trocar duas seções de lugar é trocar duas linhas em cada um. Mudar só um deixa
-a régua mentindo.
+a régua mentindo — e por isso a bancada parou de contar clipes com número fixo
+e passou a exigir que a régua e o menu **concordem** (`dev/verificar-pagina.js`).
 
 ---
 
@@ -114,17 +122,64 @@ notícia?"*. Daí os textos serem sobre previsibilidade ("sem surpresa depois",
 
 **Um projeto contado inteiro** (Explorador do Sistema Solar), com ficha técnica
 — Ferramentas, Papel, A decisão — e o diagrama de órbitas ao lado. Abaixo,
-**"Também no ar"**: Vitrola e Come-Come, como clipes menores na mesma faixa.
+**"Também no ar"**: Vitrola, Rotina, Corpo e Acervo, como clipes menores na
+mesma faixa, em grade 2×2.
 
 A frase de abertura ("um projeto contado inteiro vale mais que uma vitrine de
-miniaturas") continua verdadeira com três projetos justamente porque os outros
-dois são **lista**, não vitrine. Se um dia virarem seis cards iguais, a frase
-deixa de valer e tem de sair junto.
+miniaturas") continua verdadeira com cinco projetos porque só **um** é contado:
+os outros quatro são **lista**, não vitrine. O que mataria a frase é o destaque
+virar mais um card igual aos outros.
+
+⚠️ **15/08/2026 — esta seção apontava para um endereço morto.** O cartão
+"Prato" linkava `skotalexsander.github.io/prato/`, que virou 404 quando o
+repositório foi renomeado para `corpo`: o GitHub redireciona a URL do
+**repositório**, mas não a do **Pages**. A bancada ganhou uma lista de nomes
+proibidos (`Prato`, `central-pessoal`, `pixelmartins-site`) que reprova se
+qualquer um voltar a aparecer no que vai ao ar.
 
 O diagrama de órbitas é SVG autoral e gira por CSS (`--dur` inline em cada
 planeta). É data graphic, não ilustração.
 
-### 4. Sobre — `secoes/sobre.html`
+### 4. Vídeo — `secoes/video.html`
+
+**Por que existe.** O hero promete *"seu site **e** seu vídeo, feitos pela mesma
+pessoa"* — e até 15/08/2026 a página mostrava cinco projetos de código e **zero
+frame de vídeo**. Metade da oferta era afirmação. Quem chegava pelo vídeo saía
+sem ver nada do que veio buscar.
+
+**Por que não tem footage, e isso é decisão e não falta.** O material de vídeo é
+trabalho **de cliente**. Publicar clipe de cliente num portfólio sem autorização
+escrita não é escolha do desenvolvedor — nem quando o arquivo está na máquina
+dele. Então a seção mostra o **método**, que é do Alex, em vez do material, que
+não é.
+
+O bloco `.video-links` existe no fonte, **comentado**, para o dia em que ele
+mandar os endereços públicos. A regra escrita lá: só entra o que a **dona** do
+conteúdo já publicou no perfil dela. Link para o que já é público não pede
+licença; hospedar cópia, pede.
+
+**A árvore de entrega** (`.arvore`) é data graphic autoral, mesma categoria do
+diagrama de órbitas: as três caixas têm a **proporção real** do formato que
+nomeiam — 90×51 e 56×32 são 16:9, 42×75 é 9:16. A forma informa antes de o
+rótulo ser lido. Mexer nas medidas sem manter a razão quebra a única coisa que
+ela faz.
+
+Sem animação aqui, e é decisão: a seção anterior já tem órbitas girando e o
+playhead anda no rodapé. O critério de animação deste projeto é *"explica
+hierarquia, confirma ação, guia o olho ou mantém continuidade"* — esta não faria
+nenhum dos quatro.
+
+**Os números da ficha são medidos**, com `ffprobe`, nos arquivos entregues:
+
+| | Medido |
+|---|---|
+| aulas prontas | 15m51 e 16m16 · 1920×1080 |
+| peças de apoio | 83 s, 108 s, 113 s · 1920×1080 |
+| cortes verticais | 51 s a 66 s · 2160×3840 (9:16 em 4K) |
+
+Mudaram? Medir de novo antes de reescrever.
+
+### 5. Sobre — `secoes/sobre.html`
 
 O retrato de 150 frames dentro de um **monitor de programa**: rótulo `PROGRAM`,
 timecode no topo, `retrato.seq` e a contagem de frames no rodapé.
@@ -139,7 +194,7 @@ Ao lado, a apresentação e quatro capacidades (front-end, vídeo, IA, motion).
 Vem **depois** de Projetos por decisão de ordem: quando o visitante chega aqui,
 ele já viu o que você entrega.
 
-### 5. IA & automação — `secoes/ia.html`
+### 6. IA & automação — `secoes/ia.html`
 
 Duas colunas: texto com etiquetas à esquerda, um **log de render** à direita.
 
@@ -150,7 +205,7 @@ enfeite de landing de dev.
 É uma seção curta de propósito: "uso IA no processo" é uma afirmação que se
 enfraquece quanto mais você explica.
 
-### 6. Trajetória — `secoes/trajetoria.html`
+### 7. Trajetória — `secoes/trajetoria.html`
 
 Três marcos **em ordem inversa**: Hoje → A virada → O começo.
 
@@ -163,7 +218,7 @@ rodapé. É o que amarra a seção ao resto da página. E os marcos não têm da
 ano em portfólio envelhece sozinho e convida a comparar tempo de estrada, que
 não é o argumento aqui.
 
-### 7. Contato — `secoes/contato.html`
+### 8. Contato — `secoes/contato.html`
 
 E-mail em destaque (`FIM DA SEQUÊNCIA` no cabeçalho do clipe) e quatro
 atalhos: WhatsApp, GitHub, LinkedIn e Discord.

@@ -1,0 +1,84 @@
+/* ==========================================================================
+   VÍDEO — a árvore de entrega
+
+   Mora entre PROJETOS (55) e SOBRE (50 já veio antes na cascata? não: a
+   ordem é a de ORDEM_CSS no build, e lá este arquivo entra depois do 55).
+   Reaproveita .janela, .janela-topo, .ficha e .acoes-projeto de 55-projetos —
+   de propósito: as duas seções são a mesma ideia com material diferente, e
+   componente repetido é o que faz a página parecer UMA coisa.
+
+   A ÁRVORE não é ilustração, é data graphic — mesma categoria do diagrama de
+   órbitas do solarsys. As três caixas têm a proporção REAL do formato que
+   nomeiam: 90×51 e 56×32 são 16:9, 42×75 é 9:16. Quem olha entende a
+   diferença entre os formatos antes de ler o rótulo, que é o trabalho de um
+   diagrama. Mexer nas medidas sem manter a razão quebra a única coisa que
+   ele faz.
+
+   Sem animação aqui, e isso é decisão: a página já tem órbitas girando na
+   seção anterior e o playhead andando no rodapé. Uma terceira coisa em
+   movimento na mesma rolagem disputa atenção com as duas — e o critério de
+   animação deste projeto é "explica hierarquia, confirma ação, guia o olho
+   ou mantém continuidade". Esta não faria nenhum dos quatro.
+   ========================================================================== */
+.video-grade {
+  display: grid; gap: clamp(1.6rem, 4vw, 2.6rem);
+  margin-block-start: clamp(2rem, 5vw, 3rem);
+}
+/* A janela vem PRIMEIRO no HTML e continua primeira no celular: o diagrama é
+   o que explica a seção, e explicação antes do argumento. No desktop ela vai
+   pra esquerda com a coluna menor — o texto é que precisa de medida de leitura. */
+@media (min-width: 62rem) { .video-grade { grid-template-columns: .95fr 1.05fr; align-items: center; } }
+
+.arvore { width: 100%; height: auto; padding: 1.1rem .8rem; }
+
+.arv-fonte {
+  fill: color-mix(in srgb, var(--marcador) 14%, transparent);
+  stroke: var(--marcador); stroke-width: 1;
+}
+.arv-ramo  { fill: none; stroke: var(--linha-forte); stroke-width: 1; }
+.arv-saida { fill: var(--faixa); stroke: var(--linha-forte); stroke-width: 1; }
+/* O vertical é o que a maioria dos editores entrega como sobra da peça
+   grande. Aqui ele é destacado porque é o que o cliente mais pede — e o
+   ciano é a cor de "selecionado" no vocabulário desta página. */
+.arv-alta  { fill: color-mix(in srgb, var(--playhead) 12%, var(--faixa)); stroke: var(--playhead); }
+
+.arv-rot {
+  fill: var(--texto-2); text-anchor: middle;
+  font-family: var(--mono); font-size: 9px;
+  letter-spacing: .12em; text-transform: uppercase;
+}
+.arv-titulo { fill: var(--marcador); letter-spacing: .18em; }
+.arv-dado   { fill: var(--texto-3); font-size: 8px; letter-spacing: .06em; }
+
+.video-lead {
+  font-family: var(--display); font-weight: 700;
+  font-size: clamp(1.15rem, 2.6vw, 1.5rem); line-height: 1.2;
+  letter-spacing: -.01em; text-wrap: balance;
+}
+/* O #pm-site NÃO é enfeite — sem ele esta margem não existe.
+   O reset em 01-tokens-e-base.css é "#pm-site p { margin: 0 }", que tem um
+   ID e vale (1,0,1). ".video-texto" vale (0,1,0) e PERDE, então a margem é
+   descartada em silêncio: nenhum erro, nenhum aviso, e os dois parágrafos
+   desta seção grudam num bloco só — foi assim que ela nasceu em 15/08.
+   É o mesmo defeito de especificidade que já derrubou a régua do rodapé
+   uma vez (ver o comentário em dev/verificar-pagina.js).
+   Só faz diferença onde há DOIS parágrafos seguidos: onde o pai tem `gap`,
+   o espaçamento vem de lá e a margem morta não faz falta. */
+#pm-site .video-texto {
+  color: var(--texto-2); margin-block-start: .9rem; max-width: 54ch;
+}
+.video-texto em { color: var(--texto); font-style: normal; }
+
+/* Fica escondido até o Alex mandar os endereços públicos — a regra está no
+   comentário de src/html/secoes/video.html. O estilo já existe para que
+   ligar a linha seja descomentar, e não escrever CSS com pressa depois. */
+.video-links {
+  margin-block-start: 1.2rem;
+  font-family: var(--mono); font-size: .72rem; letter-spacing: .03em;
+  color: var(--texto-3);
+}
+.video-links a {
+  display: inline-flex; align-items: center; min-height: 40px;
+  color: var(--playhead); text-decoration: underline; text-underline-offset: 3px;
+}
+.video-links a:hover { color: var(--texto); }
