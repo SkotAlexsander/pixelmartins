@@ -51,6 +51,19 @@ const TOQUE=`(function(){
   return maus;
 })()`;
 
+
+const ROTAS = ["/", "/trabalho", "/servicos", "/sobre", "/contato"];
+
+/* Abre uma rota e espera a troca assentar. Sem isto, cada medição teria de
+   repetir seis linhas de setup — e a que esquecesse uma delas mediria a página
+   errada sem avisar. */
+async function abrir(p, rota) {
+  await p.evaluate((r) => { location.hash = r === "/" ? "#/" : "#" + r; }, rota);
+  await p.waitForTimeout(420);
+  await p.evaluate(`document.querySelectorAll(".pagina.ativa .sobe").forEach(function(e){e.classList.add("dentro")})`);
+  await p.waitForTimeout(120);
+}
+
 (async()=>{
   const b=await chromium.launch();
 
@@ -66,21 +79,37 @@ const TOQUE=`(function(){
     await p.goto(U,{waitUntil:"networkidle"});
     await p.evaluate(`document.documentElement.classList.toggle("noite", ${noite})`);
     await p.waitForTimeout(2200);
-    await p.evaluate(`document.querySelectorAll(".sobe").forEach(function(e){e.classList.add("dentro")});
-                      document.documentElement.classList.add("aberto")`);
-    await p.waitForTimeout(250);
-    const r=await p.evaluate(CONTRASTE);
-    for(const x of r) ok(x.r>=x.min, `${x.s.padEnd(22)} ${x.r.toFixed(2)}  (${x.fs}px, min ${x.min})`);
+    await p.evaluate(`document.documentElement.classList.add("aberto")`);
+    /* Um seletor pode existir em mais de uma rota. Guarda o PIOR resultado de
+       cada um: aprovar pela melhor ocorrência é escolher a medição que
+       convém. */
+    const pior={};
+    for(const rota of ROTAS){
+      await abrir(p, rota);
+      const r=await p.evaluate(CONTRASTE);
+      for(const x of r){ if(!pior[x.s] || x.r < pior[x.s].r) pior[x.s]={...x, rota}; }
+    }
+    for(const k of Object.keys(pior)){
+      const x=pior[k];
+      ok(x.r>=x.min, `${x.s.padEnd(30)} ${x.r.toFixed(2)}  (${x.fs}px, min ${x.min}${x.rota==="/"?"":", em "+x.rota})`);
+    }
     await p.close();
   }
 
-  console.log("\n== alvo de toque (min 40px) ==");
+  console.log("\n== alvo de toque (mínimo 40px) ==");
   for(const w of [390,768,1440]){
     const p=await b.newPage({viewport:{width:w,height:900}});
     await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(2200);
-    await p.evaluate(`document.querySelectorAll(".sobe").forEach(function(e){e.classList.add("dentro")})`);
-    const m=await p.evaluate(TOQUE);
-    ok(m.length===0, `${w}px: ${m.length?m.join(", "):"nenhum abaixo de 40px"}`);
+    const maus=[];
+    for(const rota of ROTAS){
+      await abrir(p, rota);
+      const m=await p.evaluate(TOQUE);
+      m.forEach(x=>maus.push(rota+": "+x));
+    }
+    /* o menu de celular também tem alvos, e ele nasce fechado */
+    await p.evaluate(`document.documentElement.classList.add("aberto")`); await p.waitForTimeout(200);
+    (await p.evaluate(TOQUE)).forEach(x=>maus.push("menu: "+x));
+    ok(maus.length===0, `${w}px: ${maus.length?[...new Set(maus)].slice(0,6).join(", "):"nenhum abaixo de 40px"}`);
     await p.close();
   }
 
@@ -91,16 +120,20 @@ const TOQUE=`(function(){
      encolher a partir de 1440 o layout já tinha assentado de outro jeito.
      Quando falha, o teste diz QUEM vaza: sem o nome, o número manda a gente
      procurar no escuro. */
-  console.log("\n== rolagem lateral (carregado já na largura) ==");
+  console.log("\n== rolagem lateral (carregado já na largura, nas 5 rotas) ==");
   for(const w of [320,360,390,430,768,1024,1440,1920]){
     const p=await b.newPage({viewport:{width:w,height:900}});
     await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(2000);
-    await p.evaluate(`document.querySelectorAll(".sobe").forEach(function(e){e.classList.add("dentro")})`);
-    const r=await p.evaluate(`(function(){var lim=document.documentElement.clientWidth,fora=[];
-      document.querySelectorAll("*").forEach(function(e){var b=e.getBoundingClientRect();
-        if(b.right>lim+1) fora.push(e.tagName+"."+String(e.className).slice(0,22))});
-      return {o:document.documentElement.scrollWidth-lim, quem:fora.slice(0,3)}})()`);
-    ok(r.o===0, `${w}px -> overflow-x ${r.o}px${r.quem.length?"  vaza: "+r.quem.join(", "):""}`);
+    let pior=0, quem=[];
+    for(const rota of ROTAS){
+      await abrir(p, rota);
+      const r=await p.evaluate(`(function(){var lim=document.documentElement.clientWidth,fora=[];
+        document.querySelectorAll(".pagina.ativa *, .barra *").forEach(function(e){var b=e.getBoundingClientRect();
+          if(b.width && b.right>lim+1) fora.push(e.tagName+"."+String(e.className).slice(0,20))});
+        return {o:document.documentElement.scrollWidth-lim, quem:fora.slice(0,3)}})()`);
+      if(r.o>pior){ pior=r.o; quem=r.quem.map(x=>rota+" "+x); }
+    }
+    ok(pior===0, `${w}px -> overflow-x ${pior}px${quem.length?"  vaza: "+quem.join(", "):""}`);
     await p.close();
   }
 

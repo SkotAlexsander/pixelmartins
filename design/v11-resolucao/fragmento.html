@@ -42,13 +42,18 @@
   --marca-2:   #38D6FF;   /* o ciano do monograma — só no gradiente e no escuro */
   --marca-tex: #FFFFFF;
 
-  --display: "Sora", ui-sans-serif, system-ui, sans-serif;
+  --display: "Outfit", ui-sans-serif, system-ui, sans-serif;
+  /* O PESO DO TÍTULO É UM TOKEN porque o canvas do hero precisa ler o mesmo
+     valor que o CSS usa. Sem isso o desenho sai num peso e o texto real em
+     outro, e a troca entre eles pisca. */
+  --peso-display: 300;
   --corpo:   "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   --dado:    "DM Mono", ui-monospace, SFMono-Regular, monospace;
 
-  --gutter: clamp(1.15rem, 5vw, 4rem);
-  --larg:   82rem;
-  --secao:  clamp(4.5rem, 11vw, 9rem);
+  --gutter: clamp(1.25rem, 5.2vw, 5rem);
+  --larg:   96rem;                          /* era 82rem */
+  --secao:  clamp(5rem, 12vw, 11rem);
+  --topo:   68px;                           /* altura da barra, usada em 3 lugares */
 
   --ease: cubic-bezier(.2,.9,.3,1);
 }
@@ -106,8 +111,8 @@ html{
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }
 #pm{
   margin:0; background:var(--sala); color:var(--tinta);
-  font-family:var(--corpo); font-size:clamp(1rem,.97rem + .18vw,1.075rem);
-  line-height:1.6; -webkit-font-smoothing:antialiased;
+  font-family:var(--corpo); font-size:clamp(1.02rem,.98rem + .26vw,1.15rem);
+  line-height:1.65; -webkit-font-smoothing:antialiased;
   overflow-x:clip;
 }
 #pm h1,#pm h2,#pm h3,#pm h4,#pm p,#pm ul,#pm ol,#pm figure,#pm dl,#pm dd{margin:0}
@@ -115,7 +120,24 @@ html{
 #pm a{color:inherit;text-decoration:none}
 
 /* ═══ TIPOGRAFIA ═══════════════════════════════════════════════════════════
-   SORA no display. A Bricolage Grotesque estava aqui e saiu a pedido dele —
+   OUTFIT no display, em peso 300 — leve, e é aí que está a diferença.
+
+   Título grande em peso pesado é o padrão de portfólio há uma década: ele
+   grita. Em corpo grande a letra já tem presença por TAMANHO, e o peso extra
+   só engrossa a haste — a mesma frase fica mais moderna e mais legível fina,
+   porque o contraforma (o branco dentro do "o", do "e", do "a") volta a
+   respirar. É a razão de Apple, Linear e Stripe terem ido para lá.
+
+   A Outfit é geométrica pura: círculo quase perfeito no "o", terminações
+   cortadas na horizontal, contraste de espessura próximo de zero. Em 300 ela
+   fica fina sem ficar frágil, porque a geometria segura a forma.
+
+   ⚠️ Peso leve tem um preço, e ele é medido: em corpo PEQUENO a haste fina
+   perde contraste efetivo. Por isso o peso sobe conforme o corpo desce — 300
+   nos títulos, 400 nos subtítulos, e o corpo do texto continua na Instrument
+   Sans, que não é fina. Nada abaixo de 20px usa a Outfit em 300.
+
+   Histórico: SORA no display. A Bricolage Grotesque estava aqui e saiu a pedido dele —
    ela tem idiossincrasias de desenho (junções irregulares, terminações que
    variam) que dão caráter e dividem opinião.
 
@@ -130,16 +152,16 @@ html{
    grandes passa a ser trabalho do letter-spacing aqui embaixo, e não da
    fonte. É por isso que a escala tem três valores de aperto em vez de um. */
 .d1,.d2,.d3{
-  font-family:var(--display); font-weight:800;
-  line-height:.92; letter-spacing:-.035em; text-wrap:balance;
+  font-family:var(--display); font-weight:var(--peso-display);
+  line-height:.98; letter-spacing:-.03em; text-wrap:balance;
 }
 /* Aperto por TAMANHO, que é o trabalho que a fonte anterior fazia sozinha:
    quanto maior o corpo, mais o espaço entre letras precisa fechar para o
    bloco não parecer solto. Abaixo de ~20px o aperto some — em corpo pequeno
    ele custa legibilidade e não devolve nada. */
-.d1{ font-size:clamp(2.6rem,9.6vw,7.4rem); letter-spacing:-.045em }
-.d2{ font-size:clamp(1.9rem,5.2vw,3.7rem); letter-spacing:-.035em }
-.d3{ font-size:clamp(1.3rem,2.5vw,1.8rem); letter-spacing:-.02em }
+.d1{ font-size:clamp(2.9rem,10.4vw,8.4rem); font-weight:var(--peso-display); letter-spacing:-.038em; line-height:.94 }
+.d2{ font-size:clamp(2.1rem,5.8vw,4.2rem);  font-weight:var(--peso-display); letter-spacing:-.03em }
+.d3{ font-size:clamp(1.4rem,2.7vw,2rem);    font-weight:400; letter-spacing:-.018em; line-height:1.25 }
 
 .rot{
   font-family:var(--dado); font-size:.72rem; font-weight:500;
@@ -174,7 +196,7 @@ html{
 }
 .marca{
   display:inline-flex; align-items:center; gap:.55rem; min-height:44px;
-  font-family:var(--display); font-weight:800; font-size:1.02rem; letter-spacing:-.02em;
+  font-family:var(--display); font-weight:500; font-size:1.06rem; letter-spacing:-.015em;
 }
 .mono-marca{
   width:22px; height:22px; border-radius:3px; flex:none;
@@ -190,6 +212,100 @@ html{
   transition:color .18s var(--ease), background .18s var(--ease);
 }
 .nav a:hover{color:var(--tinta); background:var(--sala-alta)}
+
+/* ═══ AS PÁGINAS ═══════════════════════════════════════════════════════════
+   Cinco páginas dentro de um arquivo só, trocadas sem recarregar.
+
+   POR QUE ASSIM, e não cinco páginas de verdade no WordPress: o site inteiro
+   vive num único widget HTML do Elementor. Cinco páginas reais seriam cinco
+   páginas para ele criar e cinco widgets para colar a cada alteração — e a
+   primeira vez que uma delas ficasse desatualizada, o site passaria a mentir
+   em algum canto. Uma publicação, cinco endereços.
+
+   O ENDEREÇO É REAL. Cada página tem um hash (#/trabalho), então o botão de
+   voltar funciona, dá para mandar o link de uma página específica por
+   WhatsApp, e recarregar cai no mesmo lugar. Navegação que só existe na
+   memória do JavaScript quebra as três coisas.
+
+   E O CONTEÚDO ESTÁ TODO NO HTML, sempre — as páginas inativas são escondidas
+   por CSS, não removidas. Quem chega sem JavaScript lê a página inteira de
+   uma vez em vez de encontrar um esqueleto vazio, e o buscador indexa tudo.
+   ═══════════════════════════════════════════════════════════════════════════ */
+.pagina{ display:none }
+.pagina.ativa{ display:block }
+/* Sem JS: todas visíveis, em sequência. É a página única de antes. */
+html:not(.js) .pagina{ display:block }
+html:not(.js) .pagina + .pagina{ border-block-start:1px solid var(--linha) }
+
+/* A TRANSIÇÃO: a página nova sobe e aparece. Só ela — a que sai é removida na
+   hora, porque cruzar as duas exigiria posicioná-las uma sobre a outra e
+   qualquer diferença de altura faria a barra de rolagem saltar no meio. */
+@keyframes entrar-pagina{
+  from{ opacity:0; transform:translate3d(0,18px,0) }
+  to  { opacity:1; transform:none }
+}
+html.js .pagina.ativa{ animation:entrar-pagina .42s var(--ease) both }
+@media (prefers-reduced-motion:reduce){ html.js .pagina.ativa{ animation:none } }
+
+/* o link da página atual, na barra e no menu */
+.nav a[aria-current="page"]{ color:var(--marca); background:var(--sala-alta) }
+#menu a[aria-current="page"]{ color:var(--marca) }
+
+/* ═══ O ÍNDICE DA HOME ═════════════════════════════════════════════════════
+   Com páginas separadas, o início deixa de ser "tudo" e passa a ser a porta.
+   Se ele não disser para onde se pode ir, a navegação inteira fica presa numa
+   barra de 12px no topo — e no celular, atrás de um botão de menu.
+
+   Cada linha diz o QUE tem lá dentro, com um número real, e não só o nome da
+   seção. "Trabalho" é um rótulo; "cinco projetos, todos no ar" é um motivo. */
+.indice{
+  margin-block-start:clamp(3rem,7vw,5rem);
+  border-block-start:1px solid var(--linha);
+}
+.indice a{
+  display:grid; gap:.35rem 2rem; align-items:baseline;
+  padding-block:clamp(1.2rem,2.8vw,1.8rem);
+  border-block-end:1px solid var(--linha);
+  position:relative; transition:padding-inline-start .3s var(--ease);
+}
+@media (min-width:48rem){
+  .indice a{ grid-template-columns:3rem minmax(0,1fr) auto; }
+  .indice a:hover,.indice a:focus-visible{ padding-inline-start:.9rem }
+}
+.indice .n{ font-family:var(--dado); font-size:.72rem; color:var(--tinta-3); letter-spacing:.1em }
+.indice .nome{
+  font-family:var(--display); font-weight:300;
+  font-size:clamp(1.5rem,3.6vw,2.4rem); letter-spacing:-.028em; line-height:1.05;
+  transition:color .2s var(--ease);
+}
+.indice a:hover .nome,.indice a:focus-visible .nome{ color:var(--marca) }
+.indice .oque{ grid-column:1/-1; color:var(--tinta-2); font-size:.95rem; max-width:46ch }
+@media (min-width:48rem){ .indice .oque{ grid-column:2; margin-block-start:.3rem } }
+.indice .seta{
+  grid-column:1/-1; justify-self:start;
+  font-family:var(--dado); font-size:.72rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--marca);
+  display:inline-flex; align-items:center; gap:.4rem; min-height:40px;
+}
+@media (min-width:48rem){ .indice .seta{ grid-column:3; grid-row:1/3; justify-self:end; align-self:center } }
+.indice .seta svg{ width:13px; height:13px; transition:transform .3s var(--ease) }
+.indice a:hover .seta svg,.indice a:focus-visible .seta svg{ transform:translateX(4px) }
+
+/* ═══ CABEÇA DE PÁGINA ═════════════════════════════════════════════════════
+   Toda página que não é o início abre igual: um rótulo, um título grande e uma
+   linha de resumo. Repetir a mesma abertura é o que faz cinco telas parecerem
+   um site em vez de cinco arquivos — a pessoa aprende a forma uma vez e depois
+   sabe onde olhar em qualquer uma. */
+.cabeca-pag{ padding-block:clamp(3rem,7vw,5.5rem) clamp(1.5rem,3vw,2.5rem) }
+.cabeca-pag .lead{ margin-block-start:1.1rem; max-width:48ch }
+.volta{
+  display:inline-flex; align-items:center; gap:.45rem; min-height:44px;
+  font-family:var(--dado); font-size:.72rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tinta-3);
+  transition:color .18s var(--ease);
+}
+.volta:hover,.volta:focus-visible{ color:var(--marca) }
+.volta svg{ width:12px; height:12px }
 
 /* ═══ ATMOSFERA — só no escuro ═════════════════════════════════════════════
    POR QUE SÓ NO ESCURO, e não é economia: no claro a página é uma sala com a
@@ -261,7 +377,7 @@ html.aberto #menu{ display:block }
   display:flex; align-items:center; justify-content:space-between; gap:1rem;
   min-height:52px; padding-block:.5rem;
   border-block-end:1px solid var(--linha);
-  font-family:var(--display); font-weight:800; font-size:1.3rem; letter-spacing:-.025em;
+  font-family:var(--display); font-weight:400; font-size:1.45rem; letter-spacing:-.02em;
 }
 #menu li:last-child a{ border-block-end:0 }
 #menu a span{
@@ -320,7 +436,7 @@ html.pintado #tela-titulo{ opacity:1 }
 .dado-item{ padding-block:1.1rem; padding-inline-end:1rem; border-block-end:1px solid var(--linha) }
 @media (min-width:44rem){ .dado-item{border-block-end:0} }
 .dado-item b{
-  display:block; font-family:var(--display); font-weight:800;
+  display:block; font-family:var(--display); font-weight:300;
   font-size:clamp(1.5rem,3.4vw,2.1rem);
   letter-spacing:-.03em; line-height:1;
 }
@@ -343,7 +459,7 @@ html.pintado #tela-titulo{ opacity:1 }
   .item{ grid-template-columns:5.5rem minmax(0,1fr) 12rem auto; align-items:baseline }
 }
 .item-n{ font-family:var(--dado); font-size:.72rem; color:var(--luz-3); letter-spacing:.1em; padding-block-start:.5em }
-.item-nome{ font-family:var(--display); font-weight:800; font-size:clamp(1.45rem,3.6vw,2.5rem); letter-spacing:-.03em; line-height:1.02 }
+.item-nome{ font-family:var(--display); font-weight:300; font-size:clamp(1.6rem,3.9vw,2.9rem); letter-spacing:-.028em; line-height:1.04 }
 /* A FICHA DE TRÊS COLUNAS — o problema, a decisão, a prova.
    Um parágrafo corrido sobre um projeto exige que a pessoa leia tudo para
    descobrir se lhe interessa. Estas três perguntas são as que um cliente faz
@@ -448,7 +564,7 @@ html.pintado #tela-titulo{ opacity:1 }
   font-family:var(--dado); font-size:.7rem; letter-spacing:.14em;
   text-transform:uppercase; color:var(--marca);
 }
-.marco h3{ font-family:var(--display); font-weight:800; font-size:1.2rem; letter-spacing:-.02em }
+.marco h3{ font-family:var(--display); font-weight:500; font-size:1.3rem; letter-spacing:-.015em }
 .marco p{ color:var(--tinta-2); font-size:.95rem; max-width:58ch; margin-block-start:.35rem }
 @media (min-width:48rem){ .marco h3, .marco p{ grid-column:2 } }
 
@@ -456,7 +572,7 @@ html.pintado #tela-titulo{ opacity:1 }
 .serv{ display:grid; gap:1px; background:var(--linha); border:1px solid var(--linha); border-radius:5px; overflow:hidden; margin-block-start:clamp(2rem,4vw,3rem) }
 @media (min-width:52rem){ .serv{grid-template-columns:repeat(3,1fr)} }
 .serv article{ background:var(--sala-alta); padding:clamp(1.4rem,3vw,2rem); display:flex; flex-direction:column; gap:.7rem }
-.serv h3{ font-family:var(--display); font-weight:800; font-size:1.25rem; letter-spacing:-.02em }
+.serv h3{ font-family:var(--display); font-weight:500; font-size:1.35rem; letter-spacing:-.015em }
 .serv p{ color:var(--tinta-2); font-size:.95rem }
 .serv ul{ list-style:none; padding:0; display:grid; gap:.45rem; margin-block-start:auto; padding-block-start:.9rem; border-block-start:1px solid var(--linha) }
 .serv li{ font-size:.9rem; color:var(--tinta-2); padding-inline-start:1.1rem; position:relative }
@@ -485,7 +601,7 @@ html.pintado #tela-titulo{ opacity:1 }
   letter-spacing:.14em; color:var(--marca);
 }
 .passo h4{
-  font-family:var(--display); font-weight:800; font-size:1.05rem; letter-spacing:-.02em; margin-block-start:.5rem;
+  font-family:var(--display); font-weight:500; font-size:1.12rem; letter-spacing:-.015em; margin-block-start:.5rem;
 }
 .passo p{ font-size:.9rem; color:var(--tinta-2); margin-block-start:.35rem }
 
@@ -496,8 +612,8 @@ html.pintado #tela-titulo{ opacity:1 }
    portfólio é um endereço; em azul e neste tamanho, é um convite. */
 .email{
   display:inline-flex; align-items:center; gap:.6rem; margin-block-start:1.5rem;
-  font-family:var(--display); font-weight:800;
-  font-size:clamp(1.25rem,4.4vw,2.6rem); letter-spacing:-.03em; color:var(--marca);
+  font-family:var(--display); font-weight:300;
+  font-size:clamp(1.3rem,4.6vw,2.9rem); letter-spacing:-.028em; color:var(--marca);
   min-height:48px;
   border-block-end:3px solid color-mix(in srgb, var(--marca) 25%, transparent);
   padding-block-end:.12em;
@@ -550,12 +666,12 @@ html:not(.js) .sobe{ opacity:1; transform:none }
 
 <header class="barra faixa">
   <div class="barra-int">
-    <a href="#topo" class="marca"><span class="mono-marca" aria-hidden="true"></span>pixelmartins</a>
+    <a href="#/" class="marca"><span class="mono-marca" aria-hidden="true"></span>pixelmartins</a>
     <nav class="nav" aria-label="Navegação principal">
-      <a href="#trabalho">Trabalho</a>
-      <a href="#servicos">Serviços</a>
-      <a href="#sobre">Sobre</a>
-      <a href="#contato">Contato</a>
+      <a href="#/trabalho">Trabalho</a>
+      <a href="#/servicos">Serviços</a>
+      <a href="#/sobre">Sobre</a>
+      <a href="#/contato">Contato</a>
     </nav>
 
     <div class="acoes">
@@ -569,7 +685,7 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         <svg class="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
 
-      <a href="#contato" class="btn">Começar</a>
+      <a href="#/contato" class="btn">Começar</a>
     </div>
   </div>
 
@@ -579,13 +695,13 @@ html:not(.js) .sobe{ opacity:1; transform:none }
        decide qual aparece. -->
   <nav id="menu" aria-label="Navegação principal (celular)">
     <ul>
-      <li><a href="#trabalho">Trabalho <span>o que roda</span></a></li>
-      <li><a href="#servicos">Serviços <span>o que entrego</span></a></li>
-      <li><a href="#sobre">Sobre <span>quem faz</span></a></li>
-      <li><a href="#contato">Contato <span>próximo passo</span></a></li>
+      <li><a href="#/trabalho">Trabalho <span>o que roda</span></a></li>
+      <li><a href="#/servicos">Serviços <span>o que entrego</span></a></li>
+      <li><a href="#/sobre">Sobre <span>quem faz</span></a></li>
+      <li><a href="#/contato">Contato <span>próximo passo</span></a></li>
     </ul>
     <p class="menu-cta">
-      <a href="#contato" class="btn">Começar um projeto
+      <a href="#/contato" class="btn">Começar um projeto
         <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
       </a>
     </p>
@@ -595,288 +711,353 @@ html:not(.js) .sobe{ opacity:1; transform:none }
 <main id="conteudo">
 
   <!-- ═══ HERO — a assinatura ═══════════════════════════════════════════ -->
+  <article class="pagina" data-rota="/" id="pag-topo">
   <section id="topo" class="hero faixa">
-    <div class="caixa">
-      <p class="hero-topo">
-        <span class="rot">Alex Martins</span>
-        <span class="rot">Porto Alegre · remoto</span>
-        <span class="rot" style="color:var(--marca)">disponível para projetos</span>
-      </p>
-
-      <div class="hero-titulo">
-        <h1 class="d1">Eu construo, testo e ponho no ar.</h1>
-        <canvas id="tela-titulo" aria-hidden="true"></canvas>
-      </div>
-
-      <div class="hero-pe">
-        <!--  Três verbos, e o terceiro é o que quase ninguém entrega. A maior
-              parte do que se contrata como "site" morre entre o segundo e o
-              terceiro: fica pronto e não sobe, ou sobe e ninguém testou. -->
-        <p class="lead">Site, landing page ou aplicativo. Entregue no ar,
-          testado, e com o código aberto para você conferir.</p>
-        <div class="hero-acoes">
-          <a href="#contato" class="btn">Começar um projeto
-            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-          </a>
-          <a href="#trabalho" class="btn btn-vazio">Ver o trabalho</a>
+      <div class="caixa">
+        <p class="hero-topo">
+          <span class="rot">Alex Martins</span>
+          <span class="rot">Porto Alegre · remoto</span>
+          <span class="rot" style="color:var(--marca)">disponível para projetos</span>
+        </p>
+  
+        <div class="hero-titulo">
+          <h1 class="d1">Eu construo, testo e ponho no ar.</h1>
+          <canvas id="tela-titulo" aria-hidden="true"></canvas>
         </div>
-      </div>
+  
+        <div class="hero-pe">
+          <!--  Três verbos, e o terceiro é o que quase ninguém entrega. A maior
+                parte do que se contrata como "site" morre entre o segundo e o
+                terceiro: fica pronto e não sobe, ou sobe e ninguém testou. -->
+          <p class="lead">Site, landing page ou aplicativo. Entregue no ar,
+            testado, e com o código aberto para você conferir.</p>
+          <div class="hero-acoes">
+            <a href="#/contato" class="btn">Começar um projeto
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </a>
+            <a href="#/trabalho" class="btn btn-vazio">Ver o trabalho</a>
+          </div>
+        </div>
+  
+        <!--  Quatro números, e os quatro se conferem CLICANDO. Um portfólio que
+              diz "+100 projetos entregues" pede fé; estes não pedem nada.
+              E os quatro falam da mesma coisa: software que existe. -->
+        <dl class="hero-dados">
+          <div class="dado-item"><b>6</b><span>aplicativos no ar</span></div>
+          <div class="dado-item"><b>3</b><span>instalam no celular</span></div>
+          <div class="dado-item"><b>100%</b><span>de código aberto</span></div>
+          <div class="dado-item"><b>1</b><span>pessoa, do briefing ao ar</span></div>
+        </dl>
 
-      <!--  Quatro números, e os quatro se conferem CLICANDO. Um portfólio que
-            diz "+100 projetos entregues" pede fé; estes não pedem nada.
-            E os quatro falam da mesma coisa: software que existe. -->
-      <dl class="hero-dados">
-        <div class="dado-item"><b>6</b><span>aplicativos no ar</span></div>
-        <div class="dado-item"><b>3</b><span>instalam no celular</span></div>
-        <div class="dado-item"><b>100%</b><span>de código aberto</span></div>
-        <div class="dado-item"><b>1</b><span>pessoa, do briefing ao ar</span></div>
-      </dl>
-    </div>
-  </section>
+        <!--# O ÍNDICE. Cada linha promete um número, não um rótulo: "cinco
+             projetos, todos no ar" é um motivo para clicar; "Trabalho", só um
+             nome de gaveta. O <nav> é explícito porque isto É a navegação
+             principal da home — a barra do topo é o atalho, não o caminho. -->
+        <nav class="indice sobe" aria-label="Seções do site">
+          <a href="#/trabalho">
+            <span class="n">01</span>
+            <span class="nome">Trabalho</span>
+            <span class="oque">Cinco projetos, todos no ar. Cada um contado pelo problema
+              que tinha, pela decisão que resolveu e pela prova de que funciona.</span>
+            <span class="seta">Ver
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+          <a href="#/servicos">
+            <span class="n">02</span>
+            <span class="nome">Serviços</span>
+            <span class="oque">Três frentes e as quatro etapas de como o trabalho anda,
+              do primeiro papo à rodada de ajustes.</span>
+            <span class="seta">Ver
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+          <a href="#/sobre">
+            <span class="n">03</span>
+            <span class="nome">Sobre</span>
+            <span class="oque">Quem constrói, como eu cheguei aqui e com o que eu
+              trabalho — inclusive o que uso para verificar.</span>
+            <span class="seta">Ver
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+          <a href="#/contato">
+            <span class="n">04</span>
+            <span class="nome">Contato</span>
+            <span class="oque">Me conta o que você precisa. Respondo no mesmo dia útil.</span>
+            <span class="seta">Falar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+            </span>
+          </a>
+        </nav>
+      </div>
+    </section>
+  </article>
 
   <!--# A entrada do Trabalho não tem anúncio nenhum, e é decisão: uma mudança
        de fundo de ponta a ponta já é o sinal. Anunciá-la seria explicar a
        piada. -->
 
   <!-- ═══ TRABALHO ═════════════════════════════════════════════════════ -->
+  <article class="pagina" data-rota="/trabalho" id="pag-trabalho" hidden>
   <section id="trabalho" class="escuro secao faixa">
-    <div class="caixa">
-      <div class="trab-cab sobe">
-        <h2 class="d2">Tudo aqui roda</h2>
-        <p class="lead">Ou tem endereço para abrir agora, ou tem instalador assinado.
-          Nenhum é maquete — e cada um diz o que <em>não</em> foi verificado.</p>
-      </div>
-
-      <div class="lista">
-        <article class="item sobe">
-          <span class="item-n">01</span>
-          <h3 class="item-nome">Sistema Solar</h3>
-          <div class="item-caso">
-            <div><h4>O problema</h4><p>As distâncias reais tornam qualquer visualização honesta inutilizável. Netuno está a 30 unidades astronômicas; Mercúrio, a 0,39. Numa régua linear em que Mercúrio apareça, o visitante passa a viagem inteira atravessando vazio.</p></div>
-            <div><h4>A decisão</h4><p>Escala orbital <em>logarítmica</em>: preserva a ordem e a proporção relativa entre as órbitas, e descarta a distância absoluta. É uma troca consciente — a cena passa a ser sobre a estrutura do sistema, não sobre o tamanho dele.</p></div>
-            <div class="prova"><h4>A prova</h4><p>100 corpos catalogados, incluindo as luas grandes de Júpiter e Saturno e as sondas. Modo infravermelho por temperatura, e modo vórtice — que mostra a espiral helicoidal real de cada planeta.</p></div>
-          </div>
-          <span class="item-pilha">Three.js · WebGL<br>arquivo único, sem build</span>
-          <span class="item-links">
-            <a href="https://skotalexsander.github.io/solarsys/" target="_blank" rel="noopener">Abrir
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
-            <a class="sec" href="https://github.com/SkotAlexsander/solarsys" target="_blank" rel="noopener">Código</a>
-          </span>
-        </article>
-
-        <article class="item sobe">
-          <span class="item-n">02</span>
-          <h3 class="item-nome">Vitrola</h3>
-          <div class="item-caso">
-            <div><h4>O problema</h4><p>Um player mostra os mesmos controles para qualquer música. A interface não sabe o que está tocando, e por isso não ajuda a pessoa a sentir que está tocando alguma coisa.</p></div>
-            <div><h4>A decisão</h4><p>Extrair a cor dominante da capa e tematizar a interface inteira com ela. O círculo parado virou toca-discos de verdade: o prato gira e para <em>onde estava</em>, o braço desce e caminha.</p></div>
-            <div class="prova"><h4>A prova</h4><p>Web e Android da mesma base de código. Na atualização, o banco migrou da versão 1 para a 2 <em>sem apagar</em> a biblioteca de quem já usava, e a instalação por cima manteve tudo no lugar.</p></div>
-          </div>
-          <span class="item-pilha">PWA · IndexedDB<br>web e Android, mesmo código</span>
-          <span class="item-links">
-            <a href="https://skotalexsander.github.io/vitrola/" target="_blank" rel="noopener">Abrir
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
-            <a class="sec" href="https://github.com/SkotAlexsander/vitrola" target="_blank" rel="noopener">Código</a>
-          </span>
-        </article>
-
-        <article class="item sobe">
-          <span class="item-n">03</span>
-          <h3 class="item-nome">Rotina</h3>
-          <div class="item-caso">
-            <div><h4>O problema</h4><p>Embrulhar um site num aplicativo não faz o lembrete tocar com o celular no bolso. Dentro do APK ele continua sendo uma WebView, e WebView fechada não acorda service worker: o alcance seria o mesmo do navegador, com o agravante de <em>parecer</em> resolvido.</p></div>
-            <div><h4>A decisão</h4><p>Registrar o aviso no AlarmManager do sistema operacional, e aplicar o horário de silêncio <em>no ato de agendar</em> — o alarme do Android não reavalia nada depois, então ele tocaria às três da manhã.</p></div>
-            <div class="prova"><h4>A prova</h4><p>O aplicativo é morto à força e o alarme continua registrado no sistema operacional. 408 testes de núcleo puro, mais 11 rodando dentro de um Android de verdade.</p></div>
-          </div>
-          <span class="item-pilha">React · TypeScript · Capacitor<br>408 testes de núcleo puro</span>
-          <span class="item-links">
-            <a href="https://github.com/SkotAlexsander/rotina/releases/latest" target="_blank" rel="noopener">Baixar
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
-            <a class="sec" href="https://github.com/SkotAlexsander/rotina" target="_blank" rel="noopener">Código</a>
-          </span>
-        </article>
-
-        <article class="item sobe">
-          <span class="item-n">04</span>
-          <h3 class="item-nome">Corpo</h3>
-          <div class="item-caso">
-            <div><h4>O problema</h4><p>Aplicativo de hábito costuma guardar um plano fixo. Quem atrasa um dia vê o plano vencer sozinho — e é aí que a pessoa desiste. Não por falta de disciplina: por falta de perdão do software.</p></div>
-            <div><h4>A decisão</h4><p>Não guardar o plano. Recalcular do que falta, sempre. Por isso <em>“agora não”</em> redistribui o resto do dia em vez de acumular atraso, e a meta de água vira copos com horário que se movem.</p></div>
-            <div class="prova"><h4>A prova</h4><p>344 testes de núcleo mais 157 em navegador real, e validação por mutação: 16 defeitos plantados de propósito, 16 reprovados pela bancada.</p></div>
-          </div>
-          <span class="item-pilha">PWA · Android<br>165 alimentos, busca por apelido</span>
-          <span class="item-links">
-            <a href="https://skotalexsander.github.io/corpo/" target="_blank" rel="noopener">Abrir
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
-            <a class="sec" href="https://github.com/SkotAlexsander/corpo" target="_blank" rel="noopener">Código</a>
-          </span>
-        </article>
-
-        <article class="item sobe">
-          <span class="item-n">05</span>
-          <h3 class="item-nome">Acervo</h3>
-          <div class="item-caso">
-            <div><h4>O problema</h4><p>Não dá para construir um organizador de arquivos sem arquivos — e reinstalar no celular a cada mudança torna o ciclo inviável. O aparelho vira gargalo do primeiro dia ao último.</p></div>
-            <div><h4>A decisão</h4><p>Deixar a camada de arquivos <em>trocável</em>: memória simulada no computador, sistema real no Android, a mesma interface para os dois. A decisão de arquitetura é o que compra a velocidade.</p></div>
-            <div class="prova"><h4>A prova</h4><p>O aplicativo inteiro foi construído e testado antes de tocar num celular. A criptografia é AES-GCM de 256 bits com PBKDF2 de 210 mil rodadas, conferida contra o <code>node:crypto</code>.</p></div>
-          </div>
-          <span class="item-pilha">React · Vite · Capacitor<br>cripto no próprio aparelho</span>
-          <span class="item-links">
-            <a href="https://github.com/SkotAlexsander/acervo" target="_blank" rel="noopener">Código
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
-          </span>
-        </article>
-      </div>
-    </div>
-  </section>
-
-  <!-- ═══ SERVIÇOS ═════════════════════════════════════════════════════ -->
-  <section id="servicos" class="secao faixa">
-    <div class="caixa">
-      <p class="rot sobe">O que eu entrego</p>
-      <h2 class="d2 sobe" style="margin-block-start:.6rem">Três frentes, um padrão</h2>
-
-      <div class="serv">
-        <article class="sobe">
-          <h3>Sites e landing pages</h3>
-          <p>Carrega rápido e converte.</p>
-          <ul>
-            <li>Institucional e portfólio</li>
-            <li>Landing de campanha</li>
-            <li>Responsivo do celular ao monitor grande</li>
-            <li>Estrutura pronta para busca</li>
-          </ul>
-        </article>
-        <article class="sobe">
-          <h3>Aplicativos</h3>
-          <p>Funciona sem internet e instala no celular.</p>
-          <ul>
-            <li>Instala pela tela de início, sem loja</li>
-            <li>Abre e trabalha offline</li>
-            <li>Instalador de Android quando precisa</li>
-            <li>Os dados ficam no aparelho de quem usa</li>
-          </ul>
-        </article>
-        <article class="sobe">
-          <h3>Automação com IA</h3>
-          <p>Menos trabalho manual, mais consistência.</p>
-          <ul>
-            <li>Fluxos sob medida</li>
-            <li>Modelos de linguagem no seu processo</li>
-            <li>Conteúdo assistido, com curadoria humana</li>
-            <li>Protótipo antes de investir pesado</li>
-          </ul>
-        </article>
-      </div>
-
-      <div class="processo sobe">
-        <p class="rot">Como funciona</p>
-        <div class="passos">
-          <article class="passo">
-            <b>01</b>
-            <h4>Briefing</h4>
-            <p>Uma conversa: objetivo, público, referências. Sem formulário quilométrico.</p>
+      <div class="caixa">
+        <div class="cabeca-pag sobe">
+          <a href="#/" class="volta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Início</a>
+          <p class="rot" style="margin-block-start:.9rem">Cinco projetos</p>
+          <h2 class="d2" style="margin-block-start:.6rem">Tudo aqui roda</h2>
+          <p class="lead">Ou tem endereço para abrir agora, ou tem instalador assinado.
+            Nenhum é maquete — e cada um diz, no próprio README, o que <em>não</em> foi
+            verificado. É a parte que costuma faltar num portfólio, e é a que decide se o
+            resto merece confiança.</p>
+        </div>
+  
+        <div class="lista">
+          <article class="item sobe">
+            <span class="item-n">01</span>
+            <h3 class="item-nome">Sistema Solar</h3>
+            <div class="item-caso">
+              <div><h4>O problema</h4><p>As distâncias reais tornam qualquer visualização honesta inutilizável. Netuno está a 30 unidades astronômicas; Mercúrio, a 0,39. Numa régua linear em que Mercúrio apareça, o visitante passa a viagem inteira atravessando vazio.</p></div>
+              <div><h4>A decisão</h4><p>Escala orbital <em>logarítmica</em>: preserva a ordem e a proporção relativa entre as órbitas, e descarta a distância absoluta. É uma troca consciente — a cena passa a ser sobre a estrutura do sistema, não sobre o tamanho dele.</p></div>
+              <div class="prova"><h4>A prova</h4><p>100 corpos catalogados, incluindo as luas grandes de Júpiter e Saturno e as sondas. Modo infravermelho por temperatura, e modo vórtice — que mostra a espiral helicoidal real de cada planeta.</p></div>
+            </div>
+            <span class="item-pilha">Three.js · WebGL<br>arquivo único, sem build</span>
+            <span class="item-links">
+              <a href="https://skotalexsander.github.io/solarsys/" target="_blank" rel="noopener">Abrir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+              <a class="sec" href="https://github.com/SkotAlexsander/solarsys" target="_blank" rel="noopener">Código</a>
+            </span>
           </article>
-          <article class="passo">
-            <b>02</b>
-            <h4>Proposta</h4>
-            <p>Escopo, prazo e valor por escrito. Sem surpresa depois.</p>
+  
+          <article class="item sobe">
+            <span class="item-n">02</span>
+            <h3 class="item-nome">Vitrola</h3>
+            <div class="item-caso">
+              <div><h4>O problema</h4><p>Um player mostra os mesmos controles para qualquer música. A interface não sabe o que está tocando, e por isso não ajuda a pessoa a sentir que está tocando alguma coisa.</p></div>
+              <div><h4>A decisão</h4><p>Extrair a cor dominante da capa e tematizar a interface inteira com ela. O círculo parado virou toca-discos de verdade: o prato gira e para <em>onde estava</em>, o braço desce e caminha.</p></div>
+              <div class="prova"><h4>A prova</h4><p>Web e Android da mesma base de código. Na atualização, o banco migrou da versão 1 para a 2 <em>sem apagar</em> a biblioteca de quem já usava, e a instalação por cima manteve tudo no lugar.</p></div>
+            </div>
+            <span class="item-pilha">PWA · IndexedDB<br>web e Android, mesmo código</span>
+            <span class="item-links">
+              <a href="https://skotalexsander.github.io/vitrola/" target="_blank" rel="noopener">Abrir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+              <a class="sec" href="https://github.com/SkotAlexsander/vitrola" target="_blank" rel="noopener">Código</a>
+            </span>
           </article>
-          <article class="passo">
-            <b>03</b>
-            <h4>Produção</h4>
-            <p>Mão na massa, com atualizações no caminho. Nada de sumir por semanas.</p>
+  
+          <article class="item sobe">
+            <span class="item-n">03</span>
+            <h3 class="item-nome">Rotina</h3>
+            <div class="item-caso">
+              <div><h4>O problema</h4><p>Embrulhar um site num aplicativo não faz o lembrete tocar com o celular no bolso. Dentro do APK ele continua sendo uma WebView, e WebView fechada não acorda service worker: o alcance seria o mesmo do navegador, com o agravante de <em>parecer</em> resolvido.</p></div>
+              <div><h4>A decisão</h4><p>Registrar o aviso no AlarmManager do sistema operacional, e aplicar o horário de silêncio <em>no ato de agendar</em> — o alarme do Android não reavalia nada depois, então ele tocaria às três da manhã.</p></div>
+              <div class="prova"><h4>A prova</h4><p>O aplicativo é morto à força e o alarme continua registrado no sistema operacional. 408 testes de núcleo puro, mais 11 rodando dentro de um Android de verdade.</p></div>
+            </div>
+            <span class="item-pilha">React · TypeScript · Capacitor<br>408 testes de núcleo puro</span>
+            <span class="item-links">
+              <a href="https://github.com/SkotAlexsander/rotina/releases/latest" target="_blank" rel="noopener">Baixar
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+              <a class="sec" href="https://github.com/SkotAlexsander/rotina" target="_blank" rel="noopener">Código</a>
+            </span>
           </article>
-          <article class="passo">
-            <b>04</b>
-            <h4>Entrega e ajustes</h4>
-            <p>Revisamos juntos, e a rodada de ajustes já está inclusa.</p>
+  
+          <article class="item sobe">
+            <span class="item-n">04</span>
+            <h3 class="item-nome">Corpo</h3>
+            <div class="item-caso">
+              <div><h4>O problema</h4><p>Aplicativo de hábito costuma guardar um plano fixo. Quem atrasa um dia vê o plano vencer sozinho — e é aí que a pessoa desiste. Não por falta de disciplina: por falta de perdão do software.</p></div>
+              <div><h4>A decisão</h4><p>Não guardar o plano. Recalcular do que falta, sempre. Por isso <em>“agora não”</em> redistribui o resto do dia em vez de acumular atraso, e a meta de água vira copos com horário que se movem.</p></div>
+              <div class="prova"><h4>A prova</h4><p>344 testes de núcleo mais 157 em navegador real, e validação por mutação: 16 defeitos plantados de propósito, 16 reprovados pela bancada.</p></div>
+            </div>
+            <span class="item-pilha">PWA · Android<br>165 alimentos, busca por apelido</span>
+            <span class="item-links">
+              <a href="https://skotalexsander.github.io/corpo/" target="_blank" rel="noopener">Abrir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+              <a class="sec" href="https://github.com/SkotAlexsander/corpo" target="_blank" rel="noopener">Código</a>
+            </span>
+          </article>
+  
+          <article class="item sobe">
+            <span class="item-n">05</span>
+            <h3 class="item-nome">Acervo</h3>
+            <div class="item-caso">
+              <div><h4>O problema</h4><p>Não dá para construir um organizador de arquivos sem arquivos — e reinstalar no celular a cada mudança torna o ciclo inviável. O aparelho vira gargalo do primeiro dia ao último.</p></div>
+              <div><h4>A decisão</h4><p>Deixar a camada de arquivos <em>trocável</em>: memória simulada no computador, sistema real no Android, a mesma interface para os dois. A decisão de arquitetura é o que compra a velocidade.</p></div>
+              <div class="prova"><h4>A prova</h4><p>O aplicativo inteiro foi construído e testado antes de tocar num celular. A criptografia é AES-GCM de 256 bits com PBKDF2 de 210 mil rodadas, conferida contra o <code>node:crypto</code>.</p></div>
+            </div>
+            <span class="item-pilha">React · Vite · Capacitor<br>cripto no próprio aparelho</span>
+            <span class="item-links">
+              <a href="https://github.com/SkotAlexsander/acervo" target="_blank" rel="noopener">Código
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+            </span>
           </article>
         </div>
       </div>
-    </div>
-  </section>
+    </section>
+  </article>
+
+  <!-- ═══ SERVIÇOS ═════════════════════════════════════════════════════ -->
+  <article class="pagina" data-rota="/servicos" id="pag-servicos" hidden>
+  <section id="servicos" class="secao faixa">
+      <div class="caixa">
+        <div class="cabeca-pag sobe">
+          <a href="#/" class="volta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Início</a>
+          <p class="rot" style="margin-block-start:.9rem">O que eu entrego</p>
+          <h2 class="d2" style="margin-block-start:.6rem">Três frentes, um padrão</h2>
+          <p class="lead">Site, aplicativo e automação. O que muda entre eles é o material;
+            o que não muda é o jeito de trabalhar — escopo por escrito antes de começar,
+            notícia no meio do caminho, e nada entregue sem passar por uma bancada.</p>
+        </div>
+  
+        <div class="serv">
+          <article class="sobe">
+            <h3>Sites e landing pages</h3>
+            <p>Carrega rápido e converte.</p>
+            <ul>
+              <li>Institucional e portfólio</li>
+              <li>Landing de campanha</li>
+              <li>Responsivo do celular ao monitor grande</li>
+              <li>Estrutura pronta para busca</li>
+            </ul>
+          </article>
+          <article class="sobe">
+            <h3>Aplicativos</h3>
+            <p>Funciona sem internet e instala no celular.</p>
+            <ul>
+              <li>Instala pela tela de início, sem loja</li>
+              <li>Abre e trabalha offline</li>
+              <li>Instalador de Android quando precisa</li>
+              <li>Os dados ficam no aparelho de quem usa</li>
+            </ul>
+          </article>
+          <article class="sobe">
+            <h3>Automação com IA</h3>
+            <p>Menos trabalho manual, mais consistência.</p>
+            <ul>
+              <li>Fluxos sob medida</li>
+              <li>Modelos de linguagem no seu processo</li>
+              <li>Conteúdo assistido, com curadoria humana</li>
+              <li>Protótipo antes de investir pesado</li>
+            </ul>
+          </article>
+        </div>
+  
+        <div class="processo sobe">
+          <p class="rot">Como funciona</p>
+          <div class="passos">
+            <article class="passo">
+              <b>01</b>
+              <h4>Briefing</h4>
+              <p>Uma conversa: objetivo, público, referências. Sem formulário quilométrico.</p>
+            </article>
+            <article class="passo">
+              <b>02</b>
+              <h4>Proposta</h4>
+              <p>Escopo, prazo e valor por escrito. Sem surpresa depois.</p>
+            </article>
+            <article class="passo">
+              <b>03</b>
+              <h4>Produção</h4>
+              <p>Mão na massa, com atualizações no caminho. Nada de sumir por semanas.</p>
+            </article>
+            <article class="passo">
+              <b>04</b>
+              <h4>Entrega e ajustes</h4>
+              <p>Revisamos juntos, e a rodada de ajustes já está inclusa.</p>
+            </article>
+          </div>
+        </div>
+      </div>
+    </section>
+  </article>
 
   <!-- ═══ SOBRE ════════════════════════════════════════════════════════
        Vem depois de tudo o que se contrata, e não logo após o hero: a primeira
        pergunta do visitante é "o que você faz por mim", não "quem é você".
        Chegando aqui, ele já viu a prova — e "sobre" deixa de ser apresentação
        e vira confirmação. -->
+  <article class="pagina" data-rota="/sobre" id="pag-sobre" hidden>
   <section id="sobre" class="secao faixa" style="padding-block-start:0">
-    <div class="caixa">
-      <p class="rot sobe">Quem faz</p>
-      <h2 class="d2 sobe" style="margin-block-start:.6rem">Uma pessoa, do briefing ao ar</h2>
-
-      <div class="sobre-grade">
-        <div class="sobe">
-          <div class="retrato-caixa">
-            <canvas id="retrato" aria-label="Retrato de Alex Martins em movimento" role="img"></canvas>
-            <p class="retrato-tarja" id="retrato-tarja">carregando retrato</p>
+      <div class="caixa">
+        <div class="cabeca-pag sobe">
+          <a href="#/" class="volta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Início</a>
+          <p class="rot" style="margin-block-start:.9rem">Quem faz</p>
+          <h2 class="d2" style="margin-block-start:.6rem">Uma pessoa, do briefing ao ar</h2>
+          <p class="lead">Sem repasse e sem a conversa de "isso é com o outro fornecedor".
+            Quem conversa com você é quem escreve o código.</p>
+        </div>
+  
+        <div class="sobre-grade">
+          <div class="sobe">
+            <div class="retrato-caixa">
+              <canvas id="retrato" aria-label="Retrato de Alex Martins em movimento" role="img"></canvas>
+              <p class="retrato-tarja" id="retrato-tarja">carregando retrato</p>
+            </div>
+          </div>
+  
+          <div class="sobre-texto sobe">
+            <p class="d3">Sou o Alex. Construo software que fica de pé depois que eu saio.</p>
+            <p>Aprendo fazendo, e o ciclo é sempre o mesmo: quebrar, consertar, refazer
+              melhor. É lento no começo e fica rápido depois, porque o que sobra da
+              terceira volta não é o resultado — é saber onde aquilo costuma quebrar.</p>
+            <p>Na prática, para quem me contrata, isso significa uma coisa só: o que eu
+              entrego já passou por engano — o meu, antes do seu. Cada projeto aqui em
+              cima tem uma bancada de testes que roda antes de qualquer entrega, e um
+              documento dizendo o que <em>não</em> foi verificado.</p>
+            <p>Uso modelos de linguagem no meio do fluxo, não no fim dele. O que me
+              interessa aí não é gerar resultado pronto: é encurtar a distância entre ter
+              a ideia e conseguir olhar para ela.</p>
+  
+            <div class="ferramentas">
+              <dl>
+                <div>
+                  <dt>Web</dt>
+                  <dd>React · TypeScript · Next.js · Vite · HTML e CSS · WordPress e Elementor</dd>
+                </div>
+                <div>
+                  <dt>Aplicativo</dt>
+                  <dd>PWA · Capacitor · Android · IndexedDB</dd>
+                </div>
+                <div>
+                  <dt>3D e movimento</dt>
+                  <dd>Three.js · WebGL · Canvas · SVG</dd>
+                </div>
+                <div>
+                  <dt>Verificação</dt>
+                  <dd>Playwright · testes de núcleo puro · teste de mutação · auditoria de contraste e teclado</dd>
+                </div>
+              </dl>
+            </div>
           </div>
         </div>
-
-        <div class="sobre-texto sobe">
-          <p class="d3">Sou o Alex. Construo software que fica de pé depois que eu saio.</p>
-          <p>Aprendo fazendo, e o ciclo é sempre o mesmo: quebrar, consertar, refazer
-            melhor. É lento no começo e fica rápido depois, porque o que sobra da
-            terceira volta não é o resultado — é saber onde aquilo costuma quebrar.</p>
-          <p>Na prática, para quem me contrata, isso significa uma coisa só: o que eu
-            entrego já passou por engano — o meu, antes do seu. Cada projeto aqui em
-            cima tem uma bancada de testes que roda antes de qualquer entrega, e um
-            documento dizendo o que <em>não</em> foi verificado.</p>
-          <p>Uso modelos de linguagem no meio do fluxo, não no fim dele. O que me
-            interessa aí não é gerar resultado pronto: é encurtar a distância entre ter
-            a ideia e conseguir olhar para ela.</p>
-
-          <div class="ferramentas">
-            <dl>
-              <div>
-                <dt>Web</dt>
-                <dd>React · TypeScript · Next.js · Vite · HTML e CSS · WordPress e Elementor</dd>
-              </div>
-              <div>
-                <dt>Aplicativo</dt>
-                <dd>PWA · Capacitor · Android · IndexedDB</dd>
-              </div>
-              <div>
-                <dt>3D e movimento</dt>
-                <dd>Three.js · WebGL · Canvas · SVG</dd>
-              </div>
-              <div>
-                <dt>Verificação</dt>
-                <dd>Playwright · testes de núcleo puro · teste de mutação · auditoria de contraste e teclado</dd>
-              </div>
-            </dl>
-          </div>
+  
+        <div class="marcos">
+          <article class="marco sobe">
+            <span class="quando">hoje</span>
+            <h3>Aplicativo, não só página</h3>
+            <p>React e TypeScript com núcleo puro — a lógica que decide fica separada da tela,
+              então ela é testável sem navegador. É o que permite os 408 testes do Rotina
+              rodarem em segundos, e é o que faz um app sobreviver a mudar de plataforma.</p>
+          </article>
+          <article class="marco sobe">
+            <span class="quando">a virada</span>
+            <h3>Quando parei de entregar tela</h3>
+            <p>O primeiro projeto que precisou funcionar <em>sem internet</em> mudou tudo:
+              deixou de ser "o que aparece" e passou a ser "o que acontece quando dá errado".
+              Bateria acabando, arquivo grande, o usuário fechando no meio. É aí que mora a
+              diferença entre um site bonito e um produto.</p>
+          </article>
+          <article class="marco sobe">
+            <span class="quando">o começo</span>
+            <h3>HTML, CSS e JavaScript puros</h3>
+            <p>Sem framework, sem build, sem nada para se esconder atrás. Aprender assim é
+              lento, e é a razão de eu conseguir hoje tirar uma biblioteca de um projeto
+              quando ela não está pagando o próprio peso — este site não usa nenhuma.</p>
+          </article>
         </div>
       </div>
-
-      <div class="marcos">
-        <article class="marco sobe">
-          <span class="quando">hoje</span>
-          <h3>Aplicativo, não só página</h3>
-          <p>React e TypeScript com núcleo puro — a lógica que decide fica separada da tela,
-            então ela é testável sem navegador. É o que permite os 408 testes do Rotina
-            rodarem em segundos, e é o que faz um app sobreviver a mudar de plataforma.</p>
-        </article>
-        <article class="marco sobe">
-          <span class="quando">a virada</span>
-          <h3>Quando parei de entregar tela</h3>
-          <p>O primeiro projeto que precisou funcionar <em>sem internet</em> mudou tudo:
-            deixou de ser "o que aparece" e passou a ser "o que acontece quando dá errado".
-            Bateria acabando, arquivo grande, o usuário fechando no meio. É aí que mora a
-            diferença entre um site bonito e um produto.</p>
-        </article>
-        <article class="marco sobe">
-          <span class="quando">o começo</span>
-          <h3>HTML, CSS e JavaScript puros</h3>
-          <p>Sem framework, sem build, sem nada para se esconder atrás. Aprender assim é
-            lento, e é a razão de eu conseguir hoje tirar uma biblioteca de um projeto
-            quando ela não está pagando o próprio peso — este site não usa nenhuma.</p>
-        </article>
-      </div>
-    </div>
-  </section>
+    </section>
+  </article>
 
   <!-- ═══ CONTATO ══════════════════════════════════════════════════════
        CLARO, e isso é correção de uma incoerência minha: a primeira versão
@@ -888,31 +1069,34 @@ html:not(.js) .sobe{ opacity:1; transform:none }
 
        O peso que o fecho perdeu no fundo, ele ganha no azul — a mesma cor que
        é ação na página inteira, agora no maior elemento dela. -->
+  <article class="pagina" data-rota="/contato" id="pag-contato" hidden>
   <section id="contato" class="secao faixa" style="padding-block-start:clamp(2rem,5vw,4rem)">
-    <div class="caixa contato">
-      <p class="rot sobe">Próximo passo</p>
-      <h2 class="d2 sobe" style="margin-block-start:.7rem; max-width:16ch; margin-inline:auto">Me conta o que você precisa</h2>
-      <p class="lead sobe" style="margin-block-start:1rem; margin-inline:auto">Site, landing page ou
-        aplicativo. Respondo no mesmo dia útil.</p>
-
-      <div class="sobe">
-        <a class="email" href="mailto:alexsandermmj@gmail.com">alexsandermmj@gmail.com</a>
-      </div>
-
-      <div class="sociais sobe">
-        <a href="https://wa.me/5551982476737" target="_blank" rel="noopener">WhatsApp</a>
-        <a href="https://github.com/SkotAlexsander" target="_blank" rel="noopener">GitHub</a>
-        <a href="https://www.linkedin.com/in/alexsander-martins-7aa134380/" target="_blank" rel="noopener">LinkedIn</a>
-      </div>
-
-      <footer class="rodape">
-        <div class="rodape-int">
-          <span>© <span id="ano">2026</span> Alex Martins · pixelmartins.com</span>
-          <span>Direção <b style="color:var(--marca)">Resolução</b> · proposta v11</span>
+      <div class="caixa contato">
+        <div class="sobe" style="padding-block-start:clamp(1rem,3vw,2rem)"><a href="#/" class="volta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Início</a></div>
+        <p class="rot sobe" style="margin-block-start:1.4rem">Próximo passo</p>
+        <h2 class="d2 sobe" style="margin-block-start:.7rem; max-width:16ch; margin-inline:auto">Me conta o que você precisa</h2>
+        <p class="lead sobe" style="margin-block-start:1rem; margin-inline:auto">Site, landing page ou
+          aplicativo. Respondo no mesmo dia útil.</p>
+  
+        <div class="sobe">
+          <a class="email" href="mailto:alexsandermmj@gmail.com">alexsandermmj@gmail.com</a>
         </div>
-      </footer>
-    </div>
-  </section>
+  
+        <div class="sociais sobe">
+          <a href="https://wa.me/5551982476737" target="_blank" rel="noopener">WhatsApp</a>
+          <a href="https://github.com/SkotAlexsander" target="_blank" rel="noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/alexsander-martins-7aa134380/" target="_blank" rel="noopener">LinkedIn</a>
+        </div>
+  
+        <footer class="rodape">
+          <div class="rodape-int">
+            <span>© <span id="ano">2026</span> Alex Martins · pixelmartins.com</span>
+            <span>Direção <b style="color:var(--marca)">Resolução</b> · proposta v11</span>
+          </div>
+        </footer>
+      </div>
+    </section>
+  </article>
 
 </main>
 </div>
@@ -1141,6 +1325,101 @@ html:not(.js) .sobe{ opacity:1; transform:none }
   /* Trocou o tema: repinta na hora, sem reanimar. Reanimar a cada clique no
      botão transformaria uma preferência de leitura num espetáculo. */
   window.addEventListener("pm-tema", function () { if (linhas && estilo) desenhar(260); });
+  /* Voltou para o início: o título esteve com display:none, e um canvas medido
+     enquanto o pai estava escondido teria caixa zero. Remede antes de pintar —
+     e não reanima, porque quem já viu a animação uma vez não precisa dela toda
+     vez que volta para a home. */
+  window.addEventListener("pm-rota", function () {
+    if (titulo.offsetParent === null) return;
+    if (medir()) { document.documentElement.classList.add("pintado"); desenhar(260); }
+  });
+})();
+
+/* ═══ O ROTEADOR ════════════════════════════════════════════════════════════
+   Cinco páginas, um arquivo, endereços de verdade.
+
+   AS DECISÕES QUE FAZEM ISTO NÃO SER UM MENU QUE ESCONDE DIVS:
+
+   1. O ENDEREÇO MUDA (#/trabalho). Voltar funciona, o link é compartilhável,
+      e recarregar cai no mesmo lugar. Sem isso a pessoa que aperta "voltar"
+      sai do site inteiro em vez de voltar uma página — e é o que ela vai
+      fazer, porque é o que todo site faz.
+
+   2. O FOCO VAI PARA O TÍTULO DA PÁGINA NOVA. Numa troca de página de verdade
+      o navegador reposiciona o foco; aqui ninguém faz isso por nós. Sem esse
+      passo, quem navega por teclado clica em "Trabalho", o conteúdo troca, e
+      o próximo Tab continua de onde estava — no meio do menu, lendo uma
+      página que já não existe.
+
+   3. O TÍTULO DO DOCUMENTO ACOMPANHA. É o que aparece na aba e no histórico.
+
+   4. NADA DE ROLAGEM SUAVE NA TROCA. Deslizar 4.000px até o topo depois de
+      trocar de página é vertigem, não elegância: o destino é outro documento,
+      não outro ponto do mesmo.
+
+   5. HASH DESCONHECIDO CAI NO INÍCIO em vez de mostrar tela em branco.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+  var paginas = [].slice.call(document.querySelectorAll(".pagina"));
+  if (!paginas.length) return;
+
+  var TITULOS = {
+    "/":         "Alex Martins — desenvolvedor",
+    "/trabalho": "Trabalho — Alex Martins",
+    "/servicos": "Serviços — Alex Martins",
+    "/sobre":    "Sobre — Alex Martins",
+    "/contato":  "Contato — Alex Martins"
+  };
+
+  var quieto = false;
+  try { quieto = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+
+  function rotaAtual() {
+    var h = location.hash.replace(/^#/, "");
+    if (!h || h === "/") return "/";
+    /* âncora antiga (#contato) continua funcionando: vira a rota dela */
+    if (h.charAt(0) !== "/") h = "/" + h;
+    for (var i = 0; i < paginas.length; i++) {
+      if (paginas[i].dataset.rota === h) return h;
+    }
+    return "/";
+  }
+
+  function marcarLinks(rota) {
+    var todos = document.querySelectorAll('.nav a[href^="#/"], #menu a[href^="#/"]');
+    for (var i = 0; i < todos.length; i++) {
+      var alvo = todos[i].getAttribute("href").replace(/^#/, "");
+      if (alvo === rota) todos[i].setAttribute("aria-current", "page");
+      else todos[i].removeAttribute("aria-current");
+    }
+  }
+
+  function ir(rota, primeiraVez) {
+    for (var i = 0; i < paginas.length; i++) {
+      var p = paginas[i], ativa = p.dataset.rota === rota;
+      p.classList.toggle("ativa", ativa);
+      /* hidden além do display: leitor de tela ignora, e a busca do navegador
+         (Ctrl+F) para de achar texto de página que não está aberta. */
+      if (ativa) p.removeAttribute("hidden"); else p.setAttribute("hidden", "");
+    }
+    marcarLinks(rota);
+    document.title = TITULOS[rota] || TITULOS["/"];
+
+    if (primeiraVez) return;
+    window.scrollTo(0, 0);
+
+    var alvo = document.querySelector(".pagina.ativa h1, .pagina.ativa h2");
+    if (alvo) {
+      /* tabindex -1 para poder receber foco sem entrar na ordem de tabulação */
+      alvo.setAttribute("tabindex", "-1");
+      try { alvo.focus({ preventScroll: true }); } catch (e) { alvo.focus(); }
+    }
+    window.dispatchEvent(new Event("pm-rota"));
+  }
+
+  window.addEventListener("hashchange", function () { ir(rotaAtual(), false); });
+  ir(rotaAtual(), true);
 })();
 
 /* ─── tema ──────────────────────────────────────────────────────────────────
@@ -1389,17 +1668,43 @@ html:not(.js) .sobe{ opacity:1; transform:none }
       });
     }, { rootMargin: "200px" });
     obs.observe(tela);
+    /* O retrato mora na página Sobre. Enquanto ela está fechada o canvas tem
+       display:none e o observador nunca dispara — o que é exatamente o que se
+       quer (150 imagens não baixam para quem não foi lá). Ao abrir a página, o
+       elemento passa a ter retângulo, mas o observador só reavalia na próxima
+       rolagem: sem este empurrão, quem abre Sobre e não rola vê a tarja
+       "carregando retrato" parada para sempre. */
+    window.addEventListener("pm-rota", function () {
+      if (tela.offsetParent === null) { rodando = false; return; }
+      comecar();
+      if (!quieto && carregados > 0 && !rodando) { rodando = true; requestAnimationFrame(laco); }
+      else if (carregados > 0) { dim(); pintar(); }
+    });
   } else { comecar(); }
 
   window.addEventListener("resize", function () { dim(); pintar(); });
 })();
 
-/* ─── revelar ao rolar ──────────────────────────────────────────────────── */
+/* ─── revelar ao rolar ──────────────────────────────────────────────────────
+   COM PÁGINAS, ISTO PRECISOU MUDAR. Um IntersectionObserver não dispara para
+   elemento com display:none — ele não tem retângulo. Na versão de página única
+   bastava observar todo mundo uma vez; aqui, os blocos das páginas fechadas
+   nunca entrariam em interseção, e ao abrir a página o conteúdo ficaria
+   invisível para sempre, esperando um evento que já passou.
+
+   Então a observação é REFEITA a cada troca de rota, e só sobre a página que
+   está aberta. O `unobserve` continua: revelar é de mão única, e manter o
+   observador vivo depois disso é trabalho por nada a cada rolagem.
+   ─────────────────────────────────────────────────────────────────────────── */
 (function () {
   "use strict";
-  var alvos = document.querySelectorAll(".sobe");
+  function todos() {
+    var pag = document.querySelector(".pagina.ativa");
+    return (pag || document).querySelectorAll(".sobe:not(.dentro)");
+  }
   if (!("IntersectionObserver" in window)) {
-    for (var i = 0; i < alvos.length; i++) alvos[i].classList.add("dentro");
+    var t = document.querySelectorAll(".sobe");
+    for (var i = 0; i < t.length; i++) t[i].classList.add("dentro");
     return;
   }
   var obs = new IntersectionObserver(function (linhas) {
@@ -1407,7 +1712,13 @@ html:not(.js) .sobe{ opacity:1; transform:none }
       if (l.isIntersecting) { l.target.classList.add("dentro"); obs.unobserve(l.target); }
     });
   }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
-  for (var j = 0; j < alvos.length; j++) obs.observe(alvos[j]);
+
+  function observar() {
+    var a = todos();
+    for (var j = 0; j < a.length; j++) obs.observe(a[j]);
+  }
+  observar();
+  window.addEventListener("pm-rota", observar);
 })();
 
 document.getElementById("ano").textContent = new Date().getFullYear();
