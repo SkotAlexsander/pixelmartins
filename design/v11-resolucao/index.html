@@ -92,6 +92,9 @@
   --luz-3:     #838A96;   /* 5.2:1 sobre --tela */
 
   --marca:     #1B3AE0;   /* o azul do monograma, mais profundo */
+  /* O verde de "no ar". Escuro no tema claro porque ele e TEXTO no painel
+     ("6 no ar"), e verde de semaforo sobre fundo claro nao passa AA. */
+  --ok:        #14724A;
   --marca-2:   #38D6FF;   /* o ciano do monograma — só no gradiente e no escuro */
   --marca-tex: #FFFFFF;
 
@@ -147,6 +150,7 @@ html.noite{
   --luz-3:     #939BA8;
 
   --marca:     #6E97FF;   /* o azul clareia: #1B3AE0 sobre preto dá 2,2 */
+  --ok:        #3DDC97;
   --marca-tex: #05070C;
 }
 
@@ -251,10 +255,16 @@ a{color:inherit;text-decoration:none}
   display:inline-flex; align-items:center; gap:.55rem; min-height:44px;
   font-family:var(--display); font-weight:500; font-size:1.06rem; letter-spacing:-.015em;
 }
-.mono-marca{
-  width:22px; height:22px; border-radius:3px; flex:none;
-  background:linear-gradient(135deg,var(--marca),var(--marca-2));
-}
+/* O monograma desenhado e a logo real ocupam a MESMA caixa, e só um aparece.
+   Sem tamanho igual, a barra saltaria no instante em que a imagem chegasse —
+   e saltar depois de carregada é pior que nunca carregar, porque acontece
+   exatamente quando a pessoa já começou a ler. */
+.mono-marca,.marca .logo{ width:26px; height:26px; flex:none; border-radius:4px }
+.mono-marca{ background:linear-gradient(135deg,var(--marca),var(--marca-2)) }
+.marca .logo{ display:none; object-fit:contain; border-radius:0 }
+/* a classe só entra no onload da imagem: se ela falhar, o monograma fica */
+.marca.com-logo .logo{ display:block }
+.marca.com-logo .mono-marca{ display:none }
 .nav{display:none; gap:.3rem}
 @media (min-width:56rem){ .nav{display:flex} }
 .nav a{
@@ -288,7 +298,28 @@ a{color:inherit;text-decoration:none}
 .pagina.ativa{ display:block }
 /* Sem JS: todas visíveis, em sequência. É a página única de antes. */
 html:not(.js) .pagina{ display:block }
-html:not(.js) .pagina + .pagina{ border-block-start:1px solid var(--linha) }
+
+/* ═══ A HOME MOSTRA TUDO ════════════════════════════════════════════════════
+   Duas leituras do mesmo conteúdo, e as duas são legítimas:
+
+     #/            a página inteira, para quem chegou agora e quer só rolar
+     #/trabalho    só aquela seção, para quem sabe o que veio buscar
+
+   Quem chega pela primeira vez não sabe o que tem no site — obrigar a
+   escolher uma porta antes de mostrar o que há atrás delas é pedir uma
+   decisão que a pessoa ainda não tem como tomar. E quem volta, ou quem
+   recebeu um link específico, não quer rolar quatro telas até o que
+   interessa. O menu serve o segundo caso sem tirar o primeiro.
+
+   Na home a "cabeça de página" perde o botão Voltar (voltar para onde? já
+   está no início) e o índice vira atalho, não a única saída. */
+html.home .pagina{ display:block }
+html.home .volta{ display:none }
+html.home .cabeca-pag{ padding-block-start:clamp(2rem,5vw,3.5rem) }
+/* A costura entre as seções na leitura corrida: um filete só onde duas claras
+   se encontram. Entre clara e escura a própria troca de fundo já divide. */
+html.home .pagina + .pagina:not(.escuro-fora) > .secao{ border-block-start:1px solid var(--linha) }
+html.home .pagina:has(.escuro) + .pagina > .secao{ border-block-start:0 }
 
 /* A TRANSIÇÃO: a página nova sobe e aparece. Só ela — a que sai é removida na
    hora, porque cruzar as duas exigiria posicioná-las uma sobre a outra e
@@ -298,11 +329,84 @@ html:not(.js) .pagina + .pagina{ border-block-start:1px solid var(--linha) }
   to  { opacity:1; transform:none }
 }
 html.js .pagina.ativa{ animation:entrar-pagina .42s var(--ease) both }
+/* NA HOME NÃO. Lá as cinco estão abertas ao mesmo tempo, e animar as cinco
+   juntas seria a página inteira tremendo de uma vez — cinco blocos subindo
+   em uníssono lê como falha de renderização, não como entrada. Quem revela
+   ali é o "revelar ao rolar", um bloco por vez, que é o comportamento certo
+   para leitura corrida. */
+html.home .pagina.ativa{ animation:none }
 @media (prefers-reduced-motion:reduce){ html.js .pagina.ativa{ animation:none } }
 
 /* o link da página atual, na barra e no menu */
 .nav a[aria-current="page"]{ color:var(--marca); background:var(--sala-alta) }
 #menu a[aria-current="page"]{ color:var(--marca) }
+
+/* ═══ O PAINEL DE ESTADO ═══════════════════════════════════════════════════
+   O hero tinha tipografia grande e ar. Bonito, e mudo sobre o ofício: aquele
+   mesmo bloco serviria a um fotógrafo.
+
+   Isto aqui é a linguagem nativa de quem programa — uma STATUS PAGE. Todo dev
+   reconhece a forma em meio segundo: serviço, bolinha, estado. E ela diz a
+   coisa mais difícil de provar num portfólio: que o que está listado
+   continua de pé HOJE, não no dia em que foi entregue.
+
+   O que ele não é, de propósito: um terminal com texto verde se digitando.
+   Terminal em hero virou papel de parede — aparece em portfólio de gente que
+   nunca abriu um, e não informa nada. Uma status page informa.
+
+   ⚠️ HONESTIDADE DO SINAL: a bolinha verde diz "publicado e acessível", que é
+   um fato conferido por link, e NÃO "medi agora por HTTP". Um verde que finge
+   monitoramento ao vivo é mentira de interface — e cara, porque no dia em que
+   um deles cair o site continuaria dizendo que está tudo bem. Por isso o
+   rodapé do painel diz de quando é a conferência. */
+.painel{
+  border:1px solid var(--linha); border-radius:6px; background:var(--sala-alta);
+  overflow:hidden; font-family:var(--dado);
+}
+.painel-topo{
+  display:flex; align-items:center; gap:.6rem;
+  padding:.7rem .9rem; border-block-end:1px solid var(--linha);
+  background:var(--sala);
+}
+.painel-topo b{ font-size:.68rem; font-weight:500; letter-spacing:.14em; text-transform:uppercase; color:var(--tinta-3) }
+.painel-topo .tudo-ok{
+  margin-inline-start:auto; display:inline-flex; align-items:center; gap:.4rem;
+  font-size:.66rem; letter-spacing:.1em; text-transform:uppercase; color:var(--ok);
+}
+.painel ul{ list-style:none; margin:0; padding:0 }
+.painel li{
+  display:grid; grid-template-columns:auto 1fr auto; gap:.7rem; align-items:center;
+  padding:.62rem .9rem; border-block-end:1px solid var(--linha); font-size:.78rem;
+}
+.painel li:last-child{ border-block-end:0 }
+.painel .nome{ color:var(--tinta); letter-spacing:.02em }
+.painel .tipo{ color:var(--tinta-3); font-size:.68rem; letter-spacing:.06em; text-align:end }
+.pulso{
+  width:7px; height:7px; border-radius:50%; background:var(--ok); flex:none;
+  position:relative;
+}
+/* O anel que pulsa é UM só, no primeiro item, e não em todos: seis bolinhas
+   piscando em ritmos diferentes viram uma árvore de natal e param de
+   significar "estável". */
+.painel li:first-child .pulso::after{
+  content:""; position:absolute; inset:-3px; border-radius:50%;
+  border:1px solid var(--ok); animation:pulsar 2.6s ease-out infinite;
+}
+@keyframes pulsar{
+  0%  { transform:scale(.6); opacity:.9 }
+  70% { transform:scale(1.7); opacity:0 }
+  100%{ transform:scale(1.7); opacity:0 }
+}
+@media (prefers-reduced-motion:reduce){ .painel li:first-child .pulso::after{ animation:none; opacity:.5 } }
+.painel-pe{
+  padding:.62rem .9rem; border-block-start:1px solid var(--linha);
+  background:var(--sala); font-size:.64rem; letter-spacing:.06em; color:var(--tinta-3);
+}
+
+/* No hero, painel e texto dividem a linha a partir de 62rem. Abaixo disso o
+   painel vai para baixo do texto — e não some: ele é conteúdo, não enfeite. */
+.hero-grade{ display:grid; gap:clamp(2rem,4vw,3.5rem); align-items:start }
+@media (min-width:62rem){ .hero-grade{ grid-template-columns:minmax(0,1.15fr) minmax(19rem,.85fr) } }
 
 /* ═══ O ÍNDICE DA HOME ═════════════════════════════════════════════════════
    Com páginas separadas, o início deixa de ser "tudo" e passa a ser a porta.
@@ -714,7 +818,24 @@ html:not(.js) .sobe{ opacity:1; transform:none }
 
 <header class="barra faixa">
   <div class="barra-int">
-    <a href="#/" class="marca"><span class="mono-marca" aria-hidden="true"></span>pixelmartins</a>
+    <!--# A LOGO É A DELE, servida pelo próprio WordPress. Dentro do site ela é
+         uma URL do mesmo domínio e sempre resolve.
+
+         O <span class="mono-marca"> continua embaixo como REDE: se a imagem
+         não vier — site fora do ar, caminho mudado, alguém limpando a
+         biblioteca de mídia — o monograma desenhado aparece no lugar e a barra
+         não fica com um retângulo quebrado. Foi útil no mesmo dia: em 17/08 o
+         pixelmartins.com estava fora do ar e a imagem não carregava.
+
+         width/height declaram a proporção real (900×700) para o navegador
+         reservar o espaço certo e a barra não pular quando a imagem chega. -->
+    <a href="#/" class="marca" aria-label="pixelmartins — início">
+      <span class="mono-marca" aria-hidden="true"></span>
+      <img class="logo" src="https://pixelmartins.com/wp-content/uploads/2026/08/5.png"
+           alt="" width="900" height="700" loading="eager" decoding="async"
+           onload="this.closest('.marca').classList.add('com-logo')">
+      <span class="marca-txt">pixelmartins</span>
+    </a>
     <nav class="nav" aria-label="Navegação principal">
       <a href="#/trabalho">Trabalho</a>
       <a href="#/servicos">Serviços</a>
@@ -773,17 +894,44 @@ html:not(.js) .sobe{ opacity:1; transform:none }
           <canvas id="tela-titulo" aria-hidden="true"></canvas>
         </div>
   
-        <div class="hero-pe">
-          <!--  Três verbos, e o terceiro é o que quase ninguém entrega. A maior
-                parte do que se contrata como "site" morre entre o segundo e o
-                terceiro: fica pronto e não sobe, ou sobe e ninguém testou. -->
-          <p class="lead">Site, landing page ou aplicativo. Entregue no ar,
-            testado, e com o código aberto para você conferir.</p>
-          <div class="hero-acoes">
-            <a href="#/contato" class="btn">Começar um projeto
-              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
-            </a>
-            <a href="#/trabalho" class="btn btn-vazio">Ver o trabalho</a>
+        <div class="hero-grade">
+          <div>
+            <!--  Três verbos, e o terceiro é o que quase ninguém entrega. A
+                  maior parte do que se contrata como "site" morre entre o
+                  segundo e o terceiro: fica pronto e não sobe, ou sobe e
+                  ninguém testou. -->
+            <p class="lead">Site, landing page ou aplicativo. Entregue no ar,
+              testado, e com o código aberto para você conferir.</p>
+            <div class="hero-acoes" style="margin-block-start:clamp(1.6rem,3.5vw,2.3rem)">
+              <a href="#/contato" class="btn">Começar um projeto
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+              </a>
+              <a href="#/trabalho" class="btn btn-vazio">Ver o trabalho</a>
+            </div>
+          </div>
+
+          <!--# O PAINEL DE ESTADO — a peça que faz o hero falar do ofício.
+               Todo dev reconhece a forma de uma status page em meio segundo, e
+               ela diz o que é mais difícil de provar num portfólio: que o que
+               está listado continua de pé HOJE.
+
+               O rodapé com a data não é rodapé: é a diferença entre informar e
+               fingir. A bolinha verde diz "publicado e acessível", conferido
+               por link — não "medido agora por HTTP". -->
+          <div class="painel sobe" role="group" aria-label="Estado dos projetos publicados">
+            <div class="painel-topo">
+              <b>estado dos projetos</b>
+              <span class="tudo-ok"><span class="pulso" aria-hidden="true"></span>6 no ar</span>
+            </div>
+            <ul>
+              <li><span class="pulso" aria-hidden="true"></span><span class="nome">solarsys</span><span class="tipo">web · 3D</span></li>
+              <li><span class="pulso" aria-hidden="true"></span><span class="nome">vitrola</span><span class="tipo">web · APK</span></li>
+              <li><span class="pulso" aria-hidden="true"></span><span class="nome">rotina</span><span class="tipo">APK</span></li>
+              <li><span class="pulso" aria-hidden="true"></span><span class="nome">corpo</span><span class="tipo">web · APK</span></li>
+              <li><span class="pulso" aria-hidden="true"></span><span class="nome">acervo</span><span class="tipo">código</span></li>
+              <li><span class="pulso" aria-hidden="true"></span><span class="nome">come-come</span><span class="tipo">web</span></li>
+            </ul>
+            <p class="painel-pe">publicados e acessíveis · conferido em 17/08/2026</p>
           </div>
         </div>
   
@@ -1442,8 +1590,15 @@ html:not(.js) .sobe{ opacity:1; transform:none }
   }
 
   function ir(rota, primeiraVez) {
+    /* NA HOME, TODAS. É a leitura corrida de quem chegou agora; nas outras
+       rotas, só a seção pedida. A classe vai no <html> para o CSS poder
+       ajustar o que muda de comportamento entre os dois modos — o botão
+       Voltar some, as costuras entre seções aparecem. */
+    var tudo = rota === "/";
+    document.documentElement.classList.toggle("home", tudo);
+
     for (var i = 0; i < paginas.length; i++) {
-      var p = paginas[i], ativa = p.dataset.rota === rota;
+      var p = paginas[i], ativa = tudo || p.dataset.rota === rota;
       p.classList.toggle("ativa", ativa);
       /* hidden além do display: leitor de tela ignora, e a busca do navegador
          (Ctrl+F) para de achar texto de página que não está aberta. */
