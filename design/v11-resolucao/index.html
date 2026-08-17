@@ -1,0 +1,878 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>pixelmartins.com — direção RESOLUÇÃO (v11, proposta)</title>
+<meta name="description" content="Site e vídeo, feitos pela mesma pessoa. Alex Martins — Porto Alegre, remoto.">
+
+<!-- ─────────────────────────────────────────────────────────────────────────
+     DIREÇÃO: RESOLUÇÃO                                   proposta · 15/08/2026
+
+     O POSICIONAMENTO (corrigido pelo Alex em 15/08, e é a decisão que manda
+     em tudo aqui): o FOCO é PROGRAMAÇÃO. Edição de vídeo é DIFERENCIAL.
+
+     Isso derruba a frase que o site usava desde julho — "seu site E seu vídeo,
+     feitos pela mesma pessoa". Um "e" põe as duas coisas no mesmo peso, e
+     quem oferece duas profissões com o mesmo peso lê como quem não fechou
+     nenhuma. Diferencial não divide o palco: ele entra depois da prova, quando
+     o visitante já decidiu que o sujeito constrói, e vira a razão de escolher
+     este e não outro. Por isso Vídeo desceu para depois de Serviços, e o
+     argumento dela agora é comparativo, não somativo.
+
+     A TESE: RESOLUÇÃO. O nome da marca é pixelmartins e o pixel é a unidade
+     da tela. O trabalho dele é levar algo de borrado a resolvido — briefing
+     vira produto no ar. A Sala de Edição (v5–v10) escolhia o vocabulário de
+     mesa de corte (régua, timecode, playhead, monitor de programa) e encaixava
+     o código lá dentro como conteúdo; com o foco em programação, essa metáfora
+     passou a vender a metade errada.
+
+     O SISTEMA: a página se organiza por LUZ.
+       claro   o argumento — quem fala, o que entrega, quanto custa de risco
+       escuro  o produto rodando — software se vê numa tela acesa no escuro
+     Portfólio de dev é escuro do começo ao fim por hábito, não por decisão.
+     Aqui o escuro é reservado, então quando ele chega significa alguma coisa.
+     E o claro ganha a leitura no celular de dia, que é onde o cliente está.
+
+     A ASSINATURA: o hero resolve POR DENTRO DAS LETRAS. Máscara é vocabulário
+     dos dois mundos (matte em composição, background-clip em CSS). É o único
+     lugar onde gasto ousadia — o resto é disciplina.
+
+     A OUSADIA MENOR, uma vez só: a faixa de calibração SMPTE marca a passagem
+     da sala para a tela. É o artefato mais reconhecível da produção de vídeo e
+     traz a única cor saturada da página.
+
+     O QUE NÃO MUDEI, e por quê: o azul da marca. Trocar a cor do logo não é
+     reformular design, é rebranding — não me cabe sem ele pedir.
+     ───────────────────────────────────────────────────────────────────────── -->
+
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+
+<style>
+/* ═══ TOKENS ═══════════════════════════════════════════════════════════════
+   Duas luzes, uma tinta, uma marca. Nada além disso — a página tem quatro
+   cores e uma faixa de calibração; toda a variedade vem de peso e escala. */
+:root{
+  /* a sala: cinza frio de luz de trabalho. NÃO é cream — cream com serif de
+     alto contraste é o visual que todo gerador entrega, e não é dele. */
+  --sala:      #EDEDF0;
+  --sala-alta: #FFFFFF;
+  --linha:     #D8D9DE;
+
+  /* a tela: preto de monitor apagado, levemente frio */
+  --tela:      #0C0D10;
+  --tela-2:    #16181D;
+
+  --tinta:     #0C0D10;
+  --tinta-2:   #565C66;   /* 6.4:1 sobre --sala */
+  /* Era #767D88 e dava 3,55 sobre --sala: reprovava AA para texto normal, e
+     esta é a cor de TODO rótulo pequeno da página (mono, 10-12px) — justo o
+     tamanho que menos perdoa. Escurecida para 4,72. */
+  --tinta-3:   #636974;
+
+  /* invertidos, para dentro dos blocos escuros */
+  --luz:       #F4F5F7;
+  --luz-2:     #A2A9B4;   /* 7.3:1 sobre --tela */
+  --luz-3:     #838A96;   /* 5.2:1 sobre --tela */
+
+  --marca:     #1B3AE0;   /* o azul do monograma, mais profundo */
+  --marca-2:   #38D6FF;   /* o ciano do monograma — só no gradiente e no escuro */
+  --marca-tex: #FFFFFF;
+
+  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --corpo:   "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
+  --dado:    "DM Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --gutter: clamp(1.15rem, 5vw, 4rem);
+  --larg:   82rem;
+  --secao:  clamp(4.5rem, 11vw, 9rem);
+
+  --ease: cubic-bezier(.2,.9,.3,1);
+}
+
+*,*::before,*::after{box-sizing:border-box}
+html{-webkit-text-size-adjust:100%}
+body{
+  margin:0; background:var(--sala); color:var(--tinta);
+  font-family:var(--corpo); font-size:clamp(1rem,.97rem + .18vw,1.075rem);
+  line-height:1.6; -webkit-font-smoothing:antialiased;
+  overflow-x:clip;
+}
+h1,h2,h3,h4,p,ul,ol,figure,dl,dd{margin:0}
+img,canvas,svg{display:block;max-width:100%}
+a{color:inherit;text-decoration:none}
+
+/* ═══ TIPOGRAFIA ═══════════════════════════════════════════════════════════
+   Bricolage Grotesque é variável em tamanho ÓPTICO: nos títulos grandes ela
+   aperta o espacejamento e afina as junções sozinha; no rótulo pequeno, abre.
+   É por isso que ela está aqui e não uma grotesca comum — o mesmo desenho
+   serve os dois extremos da escala sem parecer duas fontes. */
+.d1,.d2,.d3{
+  font-family:var(--display); font-weight:800;
+  line-height:.92; letter-spacing:-.035em; text-wrap:balance;
+}
+.d1{ font-size:clamp(2.8rem,10.5vw,8.2rem); font-variation-settings:"opsz" 96 }
+.d2{ font-size:clamp(2rem,5.6vw,4rem);     font-variation-settings:"opsz" 72 }
+.d3{ font-size:clamp(1.35rem,2.6vw,1.9rem);font-variation-settings:"opsz" 40; letter-spacing:-.025em }
+
+.rot{
+  font-family:var(--dado); font-size:.72rem; font-weight:500;
+  letter-spacing:.16em; text-transform:uppercase; color:var(--tinta-3);
+}
+.escuro .rot{color:var(--luz-3)}
+
+.lead{ font-size:clamp(1.1rem,1.02rem + .5vw,1.35rem); color:var(--tinta-2); max-width:34ch }
+.escuro .lead{color:var(--luz-2)}
+
+/* ═══ ESTRUTURA ════════════════════════════════════════════════════════════ */
+.faixa{ padding-inline:var(--gutter) }
+.caixa{ max-width:var(--larg); margin-inline:auto; width:100% }
+.secao{ padding-block:var(--secao) }
+
+/* A TELA: bloco escuro que sangra até a borda. Não é "seção com fundo
+   diferente" — é a luz apagando. Por isso vai de ponta a ponta. */
+.escuro{ background:var(--tela); color:var(--luz) }
+.escuro a{color:var(--luz)}
+
+/* ═══ BARRA ════════════════════════════════════════════════════════════════ */
+.barra{
+  position:sticky; top:0; z-index:50;
+  background:color-mix(in srgb, var(--sala) 88%, transparent);
+  backdrop-filter:saturate(1.4) blur(10px);
+  border-block-end:1px solid var(--linha);
+}
+.barra-int{
+  max-width:var(--larg); margin-inline:auto;
+  display:flex; align-items:center; justify-content:space-between; gap:1rem;
+  min-height:60px;
+}
+.marca{
+  display:inline-flex; align-items:center; gap:.55rem; min-height:44px;
+  font-family:var(--display); font-weight:800; font-size:1.02rem;
+  font-variation-settings:"opsz" 14; letter-spacing:-.02em;
+}
+.mono-marca{
+  width:22px; height:22px; border-radius:3px; flex:none;
+  background:linear-gradient(135deg,var(--marca),var(--marca-2));
+}
+.nav{display:none; gap:.3rem}
+@media (min-width:56rem){ .nav{display:flex} }
+.nav a{
+  font-family:var(--dado); font-size:.76rem; letter-spacing:.1em;
+  text-transform:uppercase; color:var(--tinta-2);
+  display:inline-flex; align-items:center; min-height:44px;
+  padding:.6rem .7rem; border-radius:4px;
+  transition:color .18s var(--ease), background .18s var(--ease);
+}
+.nav a:hover{color:var(--tinta); background:var(--sala-alta)}
+
+/* ═══ BOTÕES ═══════════════════════════════════════════════════════════════ */
+.btn{
+  display:inline-flex; align-items:center; gap:.5rem;
+  min-height:48px; padding:.85rem 1.35rem; border-radius:4px;
+  font-family:var(--dado); font-size:.8rem; font-weight:500;
+  letter-spacing:.06em; text-transform:uppercase;
+  background:var(--marca); color:var(--marca-tex);
+  border:1px solid var(--marca);
+  transition:transform .16s var(--ease), background .2s var(--ease);
+}
+.btn:hover{background:#152FB4; transform:translateY(-1px)}
+.btn:active{transform:none}
+.btn svg{width:14px;height:14px}
+.btn-vazio{background:transparent; color:var(--tinta); border-color:var(--linha)}
+.btn-vazio:hover{background:var(--sala-alta); border-color:var(--tinta-3); transform:translateY(-1px)}
+.escuro .btn-vazio{color:var(--luz); border-color:#2C3038}
+.escuro .btn-vazio:hover{background:var(--tela-2); border-color:#4A505C}
+
+/* ═══ HERO ═════════════════════════════════════════════════════════════════
+   A ASSINATURA. O <h1> real fica no documento (leitor de tela, SEO, e o que
+   aparece se o JS não rodar). Quando o canvas está pronto, o texto some por
+   opacidade e o canvas ocupa o mesmo espaço — o bloco NÃO muda de altura,
+   porque o canvas é dimensionado a partir da caixa que o h1 já ocupava. */
+.hero{ padding-block:clamp(3.5rem,9vw,7rem) clamp(3rem,7vw,5.5rem) }
+.hero-topo{ display:flex; flex-wrap:wrap; gap:.6rem 1.4rem; align-items:baseline; margin-block-end:clamp(1.6rem,4vw,2.6rem) }
+.hero-titulo{ position:relative }
+.hero-titulo .d1{ transition:opacity .35s var(--ease) }
+html.pintado .hero-titulo .d1{ opacity:0 }
+#tela-titulo{
+  position:absolute; inset:0; width:100%; height:100%;
+  opacity:0; transition:opacity .35s var(--ease);
+  pointer-events:none;
+}
+html.pintado #tela-titulo{ opacity:1 }
+
+.hero-pe{
+  margin-block-start:clamp(2rem,5vw,3rem);
+  display:grid; gap:clamp(1.4rem,3vw,2.4rem);
+}
+@media (min-width:52rem){ .hero-pe{grid-template-columns:1fr auto; align-items:end} }
+.hero-acoes{display:flex; flex-wrap:wrap; gap:.7rem}
+
+.hero-dados{
+  margin-block-start:clamp(2.4rem,5vw,3.4rem);
+  border-block-start:1px solid var(--linha);
+  display:grid; grid-template-columns:repeat(2,1fr);
+}
+@media (min-width:44rem){ .hero-dados{grid-template-columns:repeat(4,1fr)} }
+.dado-item{ padding-block:1.1rem; padding-inline-end:1rem; border-block-end:1px solid var(--linha) }
+@media (min-width:44rem){ .dado-item{border-block-end:0} }
+.dado-item b{
+  display:block; font-family:var(--display); font-weight:800;
+  font-size:clamp(1.5rem,3.4vw,2.1rem); font-variation-settings:"opsz" 40;
+  letter-spacing:-.03em; line-height:1;
+}
+.dado-item span{ display:block; margin-block-start:.4rem; font-family:var(--dado); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--tinta-3) }
+
+/* ═══ CALIBRAÇÃO ═══════════════════════════════════════════════════════════
+   As sete barras SMPTE a 75%. É a única cor saturada da página e aparece UMA
+   vez: onde a sala apaga e a tela acende. Como rótulo, não como decoração —
+   uma carta de calibração é literalmente o que se põe antes do material. */
+.calibra{ display:flex; align-items:stretch; background:var(--tela) }
+.calibra .barras{ display:flex; flex:none; width:clamp(140px,26vw,300px) }
+.calibra .barras i{ flex:1; height:34px }
+.calibra .leg{
+  display:flex; align-items:center; padding-inline:1rem;
+  font-family:var(--dado); font-size:.66rem; letter-spacing:.18em;
+  text-transform:uppercase; color:var(--luz-3); white-space:nowrap; overflow:hidden;
+}
+
+/* ═══ TRABALHO ═════════════════════════════════════════════════════════════
+   Lista, não grade de cartões. Um portfólio com seis cartões iguais diz "tenho
+   seis coisas"; uma lista tipográfica diz "tenho seis coisas e esta é a mais
+   importante". A resolução volta aqui, no bloco que preenche ao focar. */
+.trab-cab{ display:grid; gap:1rem; margin-block-end:clamp(2.2rem,5vw,3.4rem) }
+@media (min-width:52rem){ .trab-cab{grid-template-columns:1fr 30rem; align-items:end} }
+
+.lista{ border-block-start:1px solid #23262D }
+.item{
+  display:grid; gap:.25rem 1.5rem; padding-block:clamp(1.3rem,3vw,1.9rem);
+  border-block-end:1px solid #23262D; position:relative;
+  grid-template-columns:auto 1fr;
+}
+@media (min-width:60rem){
+  .item{ grid-template-columns:5.5rem minmax(0,1fr) 12rem auto; align-items:baseline }
+}
+.item-n{ font-family:var(--dado); font-size:.72rem; color:var(--luz-3); letter-spacing:.1em; padding-block-start:.5em }
+.item-nome{ font-family:var(--display); font-weight:800; font-size:clamp(1.45rem,3.6vw,2.5rem); font-variation-settings:"opsz" 48; letter-spacing:-.03em; line-height:1.02 }
+.item-o-que{ grid-column:1/-1; color:var(--luz-2); font-size:.96rem; max-width:52ch }
+@media (min-width:60rem){ .item-o-que{grid-column:2; margin-block-start:.5rem} }
+.item-pilha{ grid-column:1/-1; font-family:var(--dado); font-size:.7rem; color:var(--luz-3); letter-spacing:.04em }
+@media (min-width:60rem){ .item-pilha{grid-column:3; grid-row:1/3; padding-block-start:.6em} }
+.item-links{ grid-column:1/-1; display:flex; gap:.9rem; flex-wrap:wrap; margin-block-start:.7rem }
+@media (min-width:60rem){ .item-links{grid-column:4; grid-row:1/3; margin-block-start:0; justify-content:flex-end} }
+.item-links a{
+  display:inline-flex; align-items:center; gap:.35rem; min-height:44px;
+  font-family:var(--dado); font-size:.72rem; letter-spacing:.08em; text-transform:uppercase;
+  color:var(--marca-2); transition:color .18s var(--ease);
+}
+.item-links a.sec{color:var(--luz-3)}
+.item-links a:hover,.item-links a:focus-visible{color:var(--luz); text-decoration:underline; text-underline-offset:4px}
+.item-links svg{width:11px;height:11px}
+
+/* o eco da resolução: uma barra que preenche em degraus ao passar/focar */
+.item::after{
+  content:""; position:absolute; inset-block-end:-1px; inset-inline-start:0;
+  height:1px; width:0; background:var(--marca-2);
+  transition:width .5s steps(9,end);
+}
+.item:hover::after,.item:focus-within::after{ width:100% }
+
+/* ═══ VÍDEO ════════════════════════════════════════════════════════════════ */
+.v-grade{ display:grid; gap:clamp(1.8rem,4vw,3rem); margin-block-start:clamp(2rem,4vw,3rem) }
+@media (min-width:58rem){ .v-grade{grid-template-columns:1fr 1fr; align-items:start} }
+
+/* As três saídas, na PROPORÇÃO REAL de cada formato. A forma informa antes de
+   o rótulo ser lido — e é por isso que elas não podem ser normalizadas. */
+.saidas{ display:flex; gap:clamp(.7rem,2vw,1.2rem); align-items:flex-end }
+.saida{ flex:1; display:flex; flex-direction:column; gap:.6rem; min-width:0 }
+/* Os quadros são pretos porque não há material de cliente para mostrar aqui —
+   e preto CHAPADO lê como imagem que não carregou. Um gradiente mínimo basta
+   para dizer "isto é uma superfície, não um buraco". O vertical fica com o
+   azul da marca porque é a peça que o cliente mais pede; a hierarquia entre os
+   três é a única coisa que estas caixas precisam comunicar, além da proporção. */
+.saida .quadro{
+  background:linear-gradient(155deg,#1E222B,#0C0D10 72%);
+  border-radius:3px; width:100%; position:relative; overflow:hidden;
+}
+.saida.h .quadro{ aspect-ratio:16/9 }
+.saida.v .quadro{ aspect-ratio:9/16; background:linear-gradient(160deg,var(--marca),#0C0D10 70%) }
+.saida .nome{ font-family:var(--dado); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--tinta-2) }
+.saida .fmt{ font-family:var(--dado); font-size:.66rem; color:var(--tinta-3) }
+
+.ficha{ border-block-start:1px solid var(--linha) }
+.ficha div{ display:grid; grid-template-columns:7.5rem 1fr; gap:1rem; padding-block:.75rem; border-block-end:1px solid var(--linha) }
+.ficha dt{ font-family:var(--dado); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; color:var(--tinta-3); padding-block-start:.25em }
+.ficha dd{ color:var(--tinta-2); font-size:.95rem }
+@media (max-width:34rem){ .ficha div{grid-template-columns:1fr; gap:.15rem} }
+
+/* ═══ SERVIÇOS ═════════════════════════════════════════════════════════════ */
+.serv{ display:grid; gap:1px; background:var(--linha); border:1px solid var(--linha); border-radius:5px; overflow:hidden; margin-block-start:clamp(2rem,4vw,3rem) }
+@media (min-width:52rem){ .serv{grid-template-columns:repeat(3,1fr)} }
+.serv article{ background:var(--sala-alta); padding:clamp(1.4rem,3vw,2rem); display:flex; flex-direction:column; gap:.7rem }
+.serv h3{ font-family:var(--display); font-weight:800; font-size:1.25rem; font-variation-settings:"opsz" 24; letter-spacing:-.02em }
+.serv p{ color:var(--tinta-2); font-size:.95rem }
+.serv ul{ list-style:none; padding:0; display:grid; gap:.45rem; margin-block-start:auto; padding-block-start:.9rem; border-block-start:1px solid var(--linha) }
+.serv li{ font-size:.9rem; color:var(--tinta-2); padding-inline-start:1.1rem; position:relative }
+.serv li::before{ content:""; position:absolute; inset-inline-start:0; inset-block-start:.62em; width:6px; height:6px; background:var(--marca); border-radius:1px }
+
+/* ═══ CONTATO ══════════════════════════════════════════════════════════════ */
+.contato{ text-align:center }
+/* O maior elemento da página depois do título, e no azul da marca: é a única
+   coisa aqui que se pede que a pessoa faça. Um e-mail em cinza no fim de um
+   portfólio é um endereço; em azul e neste tamanho, é um convite. */
+.email{
+  display:inline-flex; align-items:center; gap:.6rem; margin-block-start:1.5rem;
+  font-family:var(--display); font-weight:800; font-variation-settings:"opsz" 48;
+  font-size:clamp(1.25rem,4.4vw,2.6rem); letter-spacing:-.03em; color:var(--marca);
+  min-height:48px;
+  border-block-end:3px solid color-mix(in srgb, var(--marca) 25%, transparent);
+  padding-block-end:.12em;
+  transition:border-color .2s var(--ease);
+  word-break:break-word; max-width:100%;
+}
+.email:hover,.email:focus-visible{ border-color:var(--marca) }
+.sociais{ display:flex; justify-content:center; flex-wrap:wrap; gap:.5rem; margin-block-start:2.2rem }
+.sociais a{
+  display:inline-flex; align-items:center; gap:.5rem; min-height:48px; padding:.7rem 1.05rem;
+  border:1px solid var(--linha); border-radius:4px; background:var(--sala-alta);
+  font-family:var(--dado); font-size:.74rem; letter-spacing:.09em; text-transform:uppercase; color:var(--tinta-2);
+  transition:border-color .18s var(--ease), color .18s var(--ease);
+}
+.sociais a:hover,.sociais a:focus-visible{ border-color:var(--marca); color:var(--tinta) }
+
+.rodape{ border-block-start:1px solid var(--linha); padding-block:1.6rem; margin-block-start:clamp(3rem,7vw,5rem) }
+.rodape-int{ display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; justify-content:space-between; font-family:var(--dado); font-size:.7rem; letter-spacing:.06em; color:var(--tinta-3) }
+
+/* ═══ PISO DE QUALIDADE ════════════════════════════════════════════════════ */
+:focus-visible{ outline:2px solid var(--marca); outline-offset:3px; border-radius:2px }
+.escuro :focus-visible{ outline-color:var(--marca-2) }
+.pular{ position:absolute; left:-9999px; top:0; z-index:99; background:var(--marca); color:#fff; padding:.75rem 1.1rem; font-family:var(--dado); font-size:.8rem }
+.pular:focus{ left:.5rem; top:.5rem }
+.sr{ position:absolute; width:1px; height:1px; overflow:hidden; clip-path:inset(50%); white-space:nowrap }
+
+.sobe{ opacity:0; transform:translateY(14px); transition:opacity .55s var(--ease), transform .55s var(--ease) }
+.sobe.dentro{ opacity:1; transform:none }
+html:not(.js) .sobe{ opacity:1; transform:none }
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important }
+  .sobe{ opacity:1; transform:none }
+}
+</style>
+</head>
+
+<body>
+<a class="pular" href="#conteudo">Pular para o conteúdo</a>
+
+<header class="barra faixa">
+  <div class="barra-int">
+    <a href="#topo" class="marca"><span class="mono-marca" aria-hidden="true"></span>pixelmartins</a>
+    <nav class="nav" aria-label="Navegação principal">
+      <a href="#trabalho">Trabalho</a>
+      <a href="#servicos">Serviços</a>
+      <a href="#video">Vídeo</a>
+      <a href="#contato">Contato</a>
+    </nav>
+    <a href="#contato" class="btn">Começar</a>
+  </div>
+</header>
+
+<main id="conteudo">
+
+  <!-- ═══ HERO — a assinatura ═══════════════════════════════════════════ -->
+  <section id="topo" class="hero faixa">
+    <div class="caixa">
+      <p class="hero-topo">
+        <span class="rot">Alex Martins</span>
+        <span class="rot">Porto Alegre · remoto</span>
+        <span class="rot" style="color:var(--marca)">disponível para projetos</span>
+      </p>
+
+      <div class="hero-titulo">
+        <h1 class="d1">Eu construo, testo e ponho no ar.</h1>
+        <canvas id="tela-titulo" aria-hidden="true"></canvas>
+      </div>
+
+      <div class="hero-pe">
+        <!--  Três verbos, e o terceiro é o que quase ninguém entrega. A maior
+              parte do que se contrata como "site" morre entre o segundo e o
+              terceiro: fica pronto e não sobe, ou sobe e ninguém testou. -->
+        <p class="lead">Site, landing page ou aplicativo. Entregue funcionando —
+          e com o vídeo dele já pronto, porque eu também edito.</p>
+        <div class="hero-acoes">
+          <a href="#contato" class="btn">Começar um projeto
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
+          </a>
+          <a href="#trabalho" class="btn btn-vazio">Ver o trabalho</a>
+        </div>
+      </div>
+
+      <!--  Quatro números, e os quatro se conferem CLICANDO. Um portfólio que
+            diz "+100 projetos entregues" pede fé; estes não pedem nada.
+            Nenhum deles fala de vídeo — o hero é do foco, e o foco é código. -->
+      <dl class="hero-dados">
+        <div class="dado-item"><b>6</b><span>aplicativos no ar</span></div>
+        <div class="dado-item"><b>3</b><span>instalam no celular</span></div>
+        <div class="dado-item"><b>100%</b><span>de código aberto</span></div>
+        <div class="dado-item"><b>1</b><span>pessoa, do briefing ao ar</span></div>
+      </dl>
+    </div>
+  </section>
+
+  <!--# A carta de calibração ficava AQUI, anunciando a seção de código, e saiu
+       daqui em 15/08 junto com a virada de posicionamento. Ela é o artefato
+       mais reconhecível da produção de VÍDEO — pô-la a abrir a prova de
+       programação era anunciar a metade errada no primeiro corte da página.
+       Foi para onde é o assunto: a entrada da seção Vídeo.
+
+       E a entrada do Trabalho não ganhou substituto. Uma mudança de fundo de
+       ponta a ponta já é o sinal; anunciá-la seria explicar a piada. -->
+
+  <!-- ═══ TRABALHO ═════════════════════════════════════════════════════ -->
+  <section id="trabalho" class="escuro secao faixa">
+    <div class="caixa">
+      <div class="trab-cab sobe">
+        <h2 class="d2">Tudo aqui roda</h2>
+        <p class="lead">Ou tem endereço para abrir agora, ou tem instalador assinado.
+          Nenhum é maquete — e cada um diz o que <em>não</em> foi verificado.</p>
+      </div>
+
+      <div class="lista">
+        <article class="item sobe">
+          <span class="item-n">01</span>
+          <h3 class="item-nome">Sistema Solar</h3>
+          <p class="item-o-que">Cem corpos em órbita com física real. O problema não era desenhar —
+            era a escala: numa régua honesta em que Mercúrio apareça, você passa a viagem inteira
+            atravessando vazio. A saída foi uma escala logarítmica, que preserva a ordem e joga
+            fora a distância absoluta.</p>
+          <span class="item-pilha">Three.js · WebGL<br>arquivo único, sem build</span>
+          <span class="item-links">
+            <a href="https://skotalexsander.github.io/solarsys/" target="_blank" rel="noopener">Abrir
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+            <a class="sec" href="https://github.com/SkotAlexsander/solarsys" target="_blank" rel="noopener">Código</a>
+          </span>
+        </article>
+
+        <article class="item sobe">
+          <span class="item-n">02</span>
+          <h3 class="item-nome">Vitrola</h3>
+          <p class="item-o-que">Player que lê as etiquetas do arquivo, tira a cor da capa e
+            tematiza a interface inteira com ela. O círculo parado virou toca-discos: o prato gira
+            e para onde estava, o braço desce e caminha.</p>
+          <span class="item-pilha">PWA · IndexedDB<br>web e Android, mesmo código</span>
+          <span class="item-links">
+            <a href="https://skotalexsander.github.io/vitrola/" target="_blank" rel="noopener">Abrir
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+            <a class="sec" href="https://github.com/SkotAlexsander/vitrola" target="_blank" rel="noopener">Código</a>
+          </span>
+        </article>
+
+        <article class="item sobe">
+          <span class="item-n">03</span>
+          <h3 class="item-nome">Rotina</h3>
+          <p class="item-o-que">Agenda e lembretes que funcionam sem conta e sem servidor. O que eu
+            não sabia antes de construir: embrulhar um site num aplicativo <em>não</em> faz o
+            lembrete tocar com o celular no bolso. Quem toca é o alarme do sistema — e a prova é
+            matar o aplicativo à força e ver o alarme continuar de pé.</p>
+          <span class="item-pilha">React · TypeScript · Capacitor<br>408 testes de núcleo puro</span>
+          <span class="item-links">
+            <a href="https://github.com/SkotAlexsander/rotina/releases/latest" target="_blank" rel="noopener">Baixar
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+            <a class="sec" href="https://github.com/SkotAlexsander/rotina" target="_blank" rel="noopener">Código</a>
+          </span>
+        </article>
+
+        <article class="item sobe">
+          <span class="item-n">04</span>
+          <h3 class="item-nome">Corpo</h3>
+          <p class="item-o-que">Comida, água e treino. A meta de água vira copos com horário, e o
+            plano não é guardado: é recalculado do que falta — por isso <em>“agora não”</em>
+            redistribui o dia sozinho em vez de acumular atraso.</p>
+          <span class="item-pilha">PWA · Android<br>165 alimentos, busca por apelido</span>
+          <span class="item-links">
+            <a href="https://skotalexsander.github.io/corpo/" target="_blank" rel="noopener">Abrir
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+            <a class="sec" href="https://github.com/SkotAlexsander/corpo" target="_blank" rel="noopener">Código</a>
+          </span>
+        </article>
+
+        <article class="item sobe">
+          <span class="item-n">05</span>
+          <h3 class="item-nome">Acervo</h3>
+          <p class="item-o-que">Organizador dos arquivos do celular. A camada de arquivos é
+            trocável — memória simulada no computador, sistema real no aparelho — e foi isso que
+            permitiu construir e testar o aplicativo inteiro antes de tocar num celular.</p>
+          <span class="item-pilha">React · Vite · Capacitor<br>cripto no próprio aparelho</span>
+          <span class="item-links">
+            <a href="https://github.com/SkotAlexsander/acervo" target="_blank" rel="noopener">Código
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+          </span>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ SERVIÇOS ═════════════════════════════════════════════════════ -->
+  <section id="servicos" class="secao faixa">
+    <div class="caixa">
+      <p class="rot sobe">O que eu entrego</p>
+      <h2 class="d2 sobe" style="margin-block-start:.6rem">Três frentes, um padrão</h2>
+
+      <div class="serv">
+        <article class="sobe">
+          <h3>Sites e landing pages</h3>
+          <p>Carrega rápido e converte.</p>
+          <ul>
+            <li>Institucional e portfólio</li>
+            <li>Landing de campanha</li>
+            <li>Responsivo do celular ao monitor grande</li>
+            <li>Estrutura pronta para busca</li>
+          </ul>
+        </article>
+        <article class="sobe">
+          <h3>Aplicativos</h3>
+          <p>Funciona sem internet e instala no celular.</p>
+          <ul>
+            <li>Instala pela tela de início, sem loja</li>
+            <li>Abre e trabalha offline</li>
+            <li>Instalador de Android quando precisa</li>
+            <li>Os dados ficam no aparelho de quem usa</li>
+          </ul>
+        </article>
+        <article class="sobe">
+          <h3>Automação com IA</h3>
+          <p>Menos trabalho manual, mais consistência.</p>
+          <ul>
+            <li>Fluxos sob medida</li>
+            <li>Modelos de linguagem no seu processo</li>
+            <li>Conteúdo assistido, com curadoria humana</li>
+            <li>Protótipo antes de investir pesado</li>
+          </ul>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ VÍDEO — o diferencial, e ele entra DEPOIS da prova ═══════════
+       Não é a metade de nada. Vem depois de Trabalho e de Serviços porque
+       diferencial só vale para quem já acreditou na entrega principal — antes
+       disso é dispersão. E o argumento é COMPARATIVO ("o seu desenvolvedor não
+       faz isso"), não somativo ("também faço isso"), que é a diferença entre
+       vender uma vantagem e listar um hobby. -->
+  <div class="calibra" role="separator" aria-label="Início do bloco de vídeo">
+    <span class="barras" aria-hidden="true">
+      <i style="background:#C0C0C0"></i><i style="background:#C0C000"></i><i style="background:#00C0C0"></i><i style="background:#00C000"></i><i style="background:#C000C0"></i><i style="background:#C00000"></i><i style="background:#0000C0"></i>
+    </span>
+    <span class="leg" aria-hidden="true">carta de calibração</span>
+  </div>
+
+  <section id="video" class="secao faixa">
+    <div class="caixa">
+      <p class="rot sobe">O diferencial</p>
+      <h2 class="d2 sobe" style="margin-block-start:.6rem; max-width:19ch">Seu desenvolvedor não edita vídeo. O seu, edita.</h2>
+
+      <div class="v-grade">
+        <div class="sobe">
+          <p style="color:var(--tinta-2); max-width:48ch">O vídeo da página quase sempre chega
+            por último, de outro fornecedor, no formato errado e pesado demais. Aqui ele nasce
+            junto com a página — no tamanho que ela precisa, no corte que ela aguenta.</p>
+          <p style="color:var(--tinta-2); max-width:48ch; margin-block-start:1rem">E uma gravação
+            de uma hora não vira um vídeo de uma hora: vira a peça longa, as curtas que levam até
+            ela, e o corte vertical que para o dedo de quem ainda não te conhece. Três destinos,
+            três cortes, o mesmo material.</p>
+
+          <dl class="ficha" style="margin-block-start:1.6rem">
+            <div><dt>Formatos</dt><dd>1920×1080 e 2160×3840 — o vertical sai em 4K</dd></div>
+            <div><dt>Entregas</dt><dd>Peça longa de 16 min · apoio de 1 a 2 min · vertical de ~1 min</dd></div>
+            <div><dt>No corte</dt><dd>Ritmo, som nivelado, cor e legenda queimada</dd></div>
+          </dl>
+        </div>
+
+        <div class="sobe">
+          <div class="saidas">
+            <div class="saida h"><div class="quadro"></div><span class="nome">Longa</span><span class="fmt">16:9 · 16 min</span></div>
+            <div class="saida h"><div class="quadro"></div><span class="nome">Apoio</span><span class="fmt">16:9 · 1–2 min</span></div>
+            <div class="saida v"><div class="quadro"></div><span class="nome">Vertical</span><span class="fmt">9:16 · 4K</span></div>
+          </div>
+          <p class="rot" style="margin-block-start:1.2rem">As caixas estão na proporção real de cada formato</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ═══ CONTATO ══════════════════════════════════════════════════════
+       CLARO, e isso é correção de uma incoerência minha: a primeira versão
+       fechava a página no escuro porque "fecha bonito". Só que o sistema desta
+       direção diz que o escuro é a TELA — onde há produto rodando. Conversa
+       não é produto rodando. Uma regra que vale quando é conveniente não é
+       sistema, é decoração, e o visitante sente a diferença mesmo sem saber
+       nomear. O escuro ficou exclusivo do Trabalho: raro, e por isso pesado.
+
+       O peso que o fecho perdeu no fundo, ele ganha no azul — a mesma cor que
+       é ação na página inteira, agora no maior elemento dela. -->
+  <section id="contato" class="secao faixa" style="padding-block-start:clamp(2rem,5vw,4rem)">
+    <div class="caixa contato">
+      <p class="rot sobe">Próximo passo</p>
+      <h2 class="d2 sobe" style="margin-block-start:.7rem; max-width:16ch; margin-inline:auto">Me conta o que você precisa</h2>
+      <p class="lead sobe" style="margin-block-start:1rem; margin-inline:auto">Site, aplicativo ou vídeo.
+        Respondo no mesmo dia útil.</p>
+
+      <div class="sobe">
+        <a class="email" href="mailto:alexsandermmj@gmail.com">alexsandermmj@gmail.com</a>
+      </div>
+
+      <div class="sociais sobe">
+        <a href="https://wa.me/5551982476737" target="_blank" rel="noopener">WhatsApp</a>
+        <a href="https://github.com/SkotAlexsander" target="_blank" rel="noopener">GitHub</a>
+        <a href="https://www.linkedin.com/in/alexsander-martins-7aa134380/" target="_blank" rel="noopener">LinkedIn</a>
+      </div>
+
+      <footer class="rodape">
+        <div class="rodape-int">
+          <span>© <span id="ano">2026</span> Alex Martins · pixelmartins.com</span>
+          <span>Direção <b style="color:var(--marca)">Resolução</b> · proposta v11</span>
+        </div>
+      </footer>
+    </div>
+  </section>
+
+</main>
+
+<script>
+/* ═══════════════════════════════════════════════════════════════════════════
+   O TÍTULO QUE RESOLVE
+
+   O <h1> real está no documento e é ele que o leitor de tela e o buscador
+   leem. O canvas desenha o MESMO texto e usa 'source-in' para pintar, só por
+   dentro das letras, uma imagem que sobe de resolução — de blocos de 8 px até
+   nítida. Máscara é a palavra dos dois ofícios dele: matte em composição,
+   background-clip em CSS.
+
+   Nada disso roda antes de a fonte carregar (senão o canvas desenha em
+   Arial e o h1 troca de forma na frente do visitante), e nada disso roda com
+   'prefers-reduced-motion' — nesse caso o canvas é pintado UMA vez, já
+   resolvido, sem animação.
+   ═══════════════════════════════════════════════════════════════════════════ */
+(function () {
+  "use strict";
+  document.documentElement.classList.add("js");
+
+  var titulo = document.querySelector(".hero-titulo .d1");
+  var tela   = document.getElementById("tela-titulo");
+  if (!titulo || !tela || !tela.getContext) return;
+
+  var ctx = tela.getContext("2d");
+  var quieto = false;
+  try { quieto = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+
+  var linhas = null, estilo = null, animando = false, inicio = 0;
+
+  /* offscreen minúsculo: a "imagem" nasce com poucos pixels e é ampliada com o
+     alisamento DESLIGADO. É assim que a resolução aparece de verdade, em vez
+     de um blur — que é outra coisa e lê como foto fora de foco. */
+  var fonte = document.createElement("canvas");
+  var fctx  = fonte.getContext("2d");
+
+  /* AS LINHAS SÃO LIDAS DO NAVEGADOR, NÃO CALCULADAS.
+
+     A primeira versão quebrava a frase por conta própria, medindo palavra a
+     palavra com measureText. No monitor bateu com a quebra do <h1> por sorte;
+     no celular divergiu, o canvas produziu três linhas onde o texto real tinha
+     duas, e a última — "no ar." — ficou fora da altura da caixa. O visitante
+     lia "Eu construo, testo e ponho" e ponto.
+
+     Reimplementar o algoritmo de quebra do navegador é perder: ele considera
+     text-wrap: balance, hifenização, largura de espaço e a fonte carregada.
+     Então aqui a gente PERGUNTA: um Range por caractere, e cada mudança de
+     topo é uma linha nova. Funciona com qualquer regra de quebra que o CSS
+     inventar depois, inclusive as que ainda não existem. */
+  function aplicarFonte() {
+    ctx.font = estilo.font;
+    try { ctx.letterSpacing = estilo.espaco; } catch (e) {}
+    try { ctx.fontKerning = "normal"; } catch (e) {}
+  }
+
+  function linhasDoDOM(el, caixa) {
+    var no = el.firstChild;
+    if (!no || no.nodeType !== 3) return null;
+    var txt = no.textContent, r = document.createRange();
+    var fora = [], atual = null, topoAnt = null;
+    for (var i = 0; i < txt.length; i++) {
+      r.setStart(no, i); r.setEnd(no, i + 1);
+      var rect = r.getBoundingClientRect();
+      /* largura zero = espaço colapsado no fim da linha. Pular também tira o
+         espaço sobrando do texto de cada linha, de graça. */
+      if (!rect.width) continue;
+      var topo = Math.round(rect.top * 10);
+      if (topoAnt === null || Math.abs(topo - topoAnt) > 10) {
+        atual = { texto: "", topo: rect.top - caixa.top, altura: rect.height,
+                  esq: rect.left - caixa.left, largura: 0 };
+        fora.push(atual);
+        topoAnt = topo;
+      }
+      atual.texto += txt[i];
+      /* a borda direita real desta linha, para conferir o desenho contra ela */
+      atual.largura = Math.max(atual.largura, rect.right - caixa.left - atual.esq);
+    }
+    return fora.length ? fora : null;
+  }
+
+  function pintarFonte(passos) {
+    /* passos: 3 = grosseiro, ~243 = nítido */
+    var w = Math.max(2, Math.round(passos));
+    var h = Math.max(2, Math.round(passos * 0.62));
+    fonte.width = w; fonte.height = h;
+    var g = fctx.createLinearGradient(0, 0, w, h);
+    g.addColorStop(0,   "#1B3AE0");
+    g.addColorStop(0.55,"#2F6BF0");
+    g.addColorStop(1,   "#38D6FF");
+    fctx.fillStyle = g;
+    fctx.fillRect(0, 0, w, h);
+
+    /* O GRÃO SOME CONFORME RESOLVE, e isso não é detalhe: a primeira versão
+       mantinha a amplitude fixa até o fim, e o título terminava com uma textura
+       que lia como JPEG mal comprimido. Um título que resolve tem de CHEGAR
+       limpo — senão o movimento conta uma história e o estado final conta
+       outra. Em resolução baixa cada amostra é um bloco enorme, e é ele que
+       faz a coisa parecer que está chegando; perto do fim, amplitude zero. */
+    var amp = 26 * (1 - Math.min(1, passos / 200));
+    if (amp <= 0.4) return;
+    var img = fctx.getImageData(0, 0, w, h), d = img.data;
+    for (var i = 0; i < d.length; i += 4) {
+      var v = (Math.sin(i * 12.9898) * 43758.5453) % 1;
+      v = ((v < 0 ? v + 1 : v) * 2 - 1) * amp;
+      d[i] += v; d[i + 1] += v; d[i + 2] += v;
+    }
+    fctx.putImageData(img, 0, 0);
+  }
+
+  function desenhar(passos) {
+    var r = tela.width / (tela.clientWidth || 1);
+    ctx.setTransform(1, 0, 0, 1, 0, 0);
+    ctx.clearRect(0, 0, tela.width, tela.height);
+    ctx.scale(r, r);
+    aplicarFonte();
+    ctx.textBaseline = "alphabetic";
+    ctx.fillStyle = "#000";
+    for (var i = 0; i < linhas.length; i++) {
+      var L = linhas[i];
+      var y = L.topo + (L.altura - estilo.fs) / 2 + estilo.fs * 0.79;
+      /* A REDE: se o desenho ficou mais largo que a linha real, comprime só o
+         necessário. O certo é o ctx.letterSpacing abaixo resolver — mas ele é
+         recente, e um navegador sem ele cortaria o título na borda do canvas,
+         que é exatamente o defeito que isto existe para impedir. Ninguém vê
+         0,4% de compressão; todo mundo vê uma palavra faltando. */
+      var w = ctx.measureText(L.texto).width;
+      if (L.largura && w > L.largura + 0.5) {
+        ctx.save();
+        ctx.translate(L.esq, 0);
+        ctx.scale(L.largura / w, 1);
+        ctx.fillText(L.texto, 0, y);
+        ctx.restore();
+      } else {
+        ctx.fillText(L.texto, L.esq, y);
+      }
+    }
+    ctx.globalCompositeOperation = "source-in";
+    pintarFonte(passos);
+    ctx.imageSmoothingEnabled = false;
+    ctx.drawImage(fonte, 0, 0, tela.clientWidth, tela.clientHeight);
+    ctx.globalCompositeOperation = "source-over";
+    ctx.imageSmoothingEnabled = true;
+  }
+
+  function medir() {
+    var caixa = titulo.getBoundingClientRect();
+    if (!caixa.width || !caixa.height) return false;
+    var cs = getComputedStyle(titulo);
+    var r  = Math.min(window.devicePixelRatio || 1, 2);
+
+    tela.style.width  = caixa.width + "px";
+    tela.style.height = caixa.height + "px";
+    tela.width  = Math.round(caixa.width * r);
+    tela.height = Math.round(caixa.height * r);
+
+    estilo = {
+      font: cs.fontWeight + " " + cs.fontSize + "/" + cs.lineHeight + " " + cs.fontFamily,
+      fs:   parseFloat(cs.fontSize),
+      /* ctx.font NÃO carrega letter-spacing — o shorthand do canvas não tem
+         essa propriedade. O título é apertado em -.035em pelo CSS; sem isto o
+         desenho sai ~4% mais largo, vaza a caixa do canvas e a última palavra
+         some cortada. Achado medindo, não lendo: a captura em 390px mostrava
+         "Eu construo, test". */
+      espaco: cs.letterSpacing && cs.letterSpacing !== "normal" ? cs.letterSpacing : "0px"
+    };
+    ctx.setTransform(1, 0, 0, 1, 0, 0); ctx.scale(r, r);
+    aplicarFonte();
+
+    linhas = linhasDoDOM(titulo, caixa);
+    /* Se a leitura falhar (nó de texto inesperado, navegador sem Range útil),
+       NÃO desenha nada: o <h1> real continua visível porque a classe .pintado
+       só entra quando isto devolve true. Título pela metade é pior que título
+       sem efeito. */
+    if (!linhas) return false;
+    return true;
+  }
+
+  function quadro(agora) {
+    if (!inicio) inicio = agora;
+    var t = Math.min(1, (agora - inicio) / 1500);
+    /* desacelera no fim: a última metade da nitidez leva mais tempo, que é
+       como um carregamento progressivo se comporta de verdade */
+    var e = 1 - Math.pow(1 - t, 3);
+    desenhar(3 + e * 240);
+    if (t < 1) requestAnimationFrame(quadro);
+    else animando = false;
+  }
+
+  function ligar() {
+    if (!medir()) return;
+    document.documentElement.classList.add("pintado");
+    if (quieto) { desenhar(260); return; }
+    if (animando) return;
+    animando = true; inicio = 0;
+    requestAnimationFrame(quadro);
+  }
+
+  var prazo;
+  function aoRedimensionar() {
+    clearTimeout(prazo);
+    prazo = setTimeout(function () {
+      /* Ao girar o celular a frase quebra em outro número de linhas. Remedir é
+         obrigatório — e se a remedição falhar, o canvas volta a sumir e o <h1>
+         reaparece, em vez de ficar servindo um desenho da largura anterior. */
+      if (medir()) { desenhar(260); }
+      else { document.documentElement.classList.remove("pintado"); }
+    }, 140);
+  }
+
+  if (document.fonts && document.fonts.ready) {
+    document.fonts.ready.then(ligar).catch(ligar);
+  } else {
+    window.addEventListener("load", ligar);
+  }
+  window.addEventListener("resize", aoRedimensionar);
+})();
+
+/* ─── revelar ao rolar ──────────────────────────────────────────────────── */
+(function () {
+  "use strict";
+  var alvos = document.querySelectorAll(".sobe");
+  if (!("IntersectionObserver" in window)) {
+    for (var i = 0; i < alvos.length; i++) alvos[i].classList.add("dentro");
+    return;
+  }
+  var obs = new IntersectionObserver(function (linhas) {
+    linhas.forEach(function (l) {
+      if (l.isIntersecting) { l.target.classList.add("dentro"); obs.unobserve(l.target); }
+    });
+  }, { rootMargin: "0px 0px -8% 0px", threshold: 0.05 });
+  for (var j = 0; j < alvos.length; j++) obs.observe(alvos[j]);
+})();
+
+document.getElementById("ano").textContent = new Date().getFullYear();
+</script>
+</body>
+</html>
