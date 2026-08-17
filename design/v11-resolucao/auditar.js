@@ -26,7 +26,8 @@ const CONTRASTE=`(function(){
            ".saida .nome",".saida .fmt",".rodape-int",".sociais a",".email",".calibra .leg",".btn",".btn-vazio",
            ".sobre-texto p",".sobre-texto .d3",".marco .quando",".marco p",".marco h3",
            "#menu a","#menu a span",".retrato-tarja",".serv h3",".item-nome",
-           ".passo b",".passo h4",".passo p",".ferramentas dt",".ferramentas dd"];
+           ".passo b",".passo h4",".passo p",".ferramentas dt",".ferramentas dd",
+           ".item-caso h4",".item-caso p",".item-caso .prova h4",".item-caso .prova p"];
   var out=[];
   for(var i=0;i<sel.length;i++){
     var el=document.querySelector(sel[i]); if(!el) continue;

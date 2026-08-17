@@ -4,21 +4,27 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>pixelmartins.com — direção RESOLUÇÃO (v11, proposta)</title>
-<meta name="description" content="Site e vídeo, feitos pela mesma pessoa. Alex Martins — Porto Alegre, remoto.">
+<meta name="description" content="Alex Martins — desenvolvedor. Sites, landing pages e aplicativos que instalam no celular. Entregues no ar e testados. Porto Alegre, remoto.">
 
 <!-- ─────────────────────────────────────────────────────────────────────────
      DIREÇÃO: RESOLUÇÃO                                   proposta · 15/08/2026
 
-     O POSICIONAMENTO (corrigido pelo Alex em 15/08, e é a decisão que manda
-     em tudo aqui): o FOCO é PROGRAMAÇÃO. Edição de vídeo é DIFERENCIAL.
+     O POSICIONAMENTO (decidido pelo Alex em 17/08, e é o que manda em tudo
+     aqui): ESTE SITE É SÓ DE PROGRAMAÇÃO. Vídeo saiu.
 
-     Isso derruba a frase que o site usava desde julho — "seu site E seu vídeo,
-     feitos pela mesma pessoa". Um "e" põe as duas coisas no mesmo peso, e
-     quem oferece duas profissões com o mesmo peso lê como quem não fechou
-     nenhuma. Diferencial não divide o palco: ele entra depois da prova, quando
-     o visitante já decidiu que o sujeito constrói, e vira a razão de escolher
-     este e não outro. Por isso Vídeo desceu para depois de Serviços, e o
-     argumento dela agora é comparativo, não somativo.
+     A decisão foi em dois passos, e vale registrar os dois porque o segundo só
+     faz sentido depois do primeiro. Primeiro o vídeo deixou de ser metade e
+     virou diferencial — isso já derrubou a frase de julho, "seu site E seu
+     vídeo, feitos pela mesma pessoa", porque um "e" põe as duas coisas no
+     mesmo peso e quem oferece duas profissões com o mesmo peso lê como quem
+     não fechou nenhuma. Depois o vídeo saiu inteiro.
+
+     O que sobra é mais forte: uma página que responde UMA pergunta. Quem
+     vende duas coisas divide a atenção de quem chega; quem vende uma pode
+     gastar a página toda provando.
+
+     ⚠️ A seção de Vídeo não foi jogada fora — está no histórico do git
+     (commit a8500b7). Se um dia voltar, volta pronta e medida.
 
      A TESE: RESOLUÇÃO. O nome da marca é pixelmartins e o pixel é a unidade
      da tela. O trabalho dele é levar algo de borrado a resolvido — briefing
@@ -38,10 +44,11 @@
      dos dois mundos (matte em composição, background-clip em CSS). É o único
      lugar onde gasto ousadia — o resto é disciplina.
 
-     A OUSADIA MENOR, uma vez só: a carta de calibração SMPTE abre a seção de
-     VÍDEO — onde é o assunto. Ela chegou a abrir a seção de código e saiu de
-     lá: é o artefato mais reconhecível da produção de vídeo, e anunciava a
-     metade errada no primeiro corte da página.
+     A ATMOSFERA, e só no escuro: um campo de pontos com deriva lenta e um
+     brilho que respira, em canvas. Ele existe porque a página clara é uma
+     sala com a luz acesa e não precisa de nada atrás; a escura é uma tela
+     ligada, e tela ligada tem profundidade. Dorme quando sai de vista e não
+     roda com "reduzir movimento".
 
      O TEMA: a luz aqui é estrutura, não preferência, então o modo escuro não
      inverte — ver o comentário em html.noite. A regra que sobrevive à troca é
@@ -53,12 +60,12 @@
 
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Sora:wght@600;700;800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
 
 <style>
 /* ═══ TOKENS ═══════════════════════════════════════════════════════════════
    Duas luzes, uma tinta, uma marca. Nada além disso — a página tem quatro
-   cores e uma faixa de calibração; toda a variedade vem de peso e escala. */
+   cores; toda a variedade vem de peso e escala. */
 :root{
   /* a sala: cinza frio de luz de trabalho. NÃO é cream — cream com serif de
      alto contraste é o visual que todo gerador entrega, e não é dele. */
@@ -88,7 +95,7 @@
   --marca-2:   #38D6FF;   /* o ciano do monograma — só no gradiente e no escuro */
   --marca-tex: #FFFFFF;
 
-  --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+  --display: "Sora", ui-sans-serif, system-ui, sans-serif;
   --corpo:   "Instrument Sans", ui-sans-serif, system-ui, sans-serif;
   --dado:    "DM Mono", ui-monospace, SFMono-Regular, monospace;
 
@@ -161,17 +168,31 @@ img,canvas,svg{display:block;max-width:100%}
 a{color:inherit;text-decoration:none}
 
 /* ═══ TIPOGRAFIA ═══════════════════════════════════════════════════════════
-   Bricolage Grotesque é variável em tamanho ÓPTICO: nos títulos grandes ela
-   aperta o espacejamento e afina as junções sozinha; no rótulo pequeno, abre.
-   É por isso que ela está aqui e não uma grotesca comum — o mesmo desenho
-   serve os dois extremos da escala sem parecer duas fontes. */
+   SORA no display. A Bricolage Grotesque estava aqui e saiu a pedido dele —
+   ela tem idiossincrasias de desenho (junções irregulares, terminações que
+   variam) que dão caráter e dividem opinião.
+
+   A Sora foi desenhada para representar tipografia da era digital: geometria
+   alta, hastes de espessura constante, terminações limpas e cortadas na
+   horizontal. É o desenho mais próximo do que ele já tinha escolhido antes
+   (Manrope, "geometria alta e terminações macias") sem ser a mesma fonte, e é
+   o oposto do que ele rejeitou na Archivo — que era dura e condensada, com
+   peso de sinalização de rua.
+
+   Ela NÃO é variável em tamanho óptico, então o espacejamento dos títulos
+   grandes passa a ser trabalho do letter-spacing aqui embaixo, e não da
+   fonte. É por isso que a escala tem três valores de aperto em vez de um. */
 .d1,.d2,.d3{
   font-family:var(--display); font-weight:800;
   line-height:.92; letter-spacing:-.035em; text-wrap:balance;
 }
-.d1{ font-size:clamp(2.8rem,10.5vw,8.2rem); font-variation-settings:"opsz" 96 }
-.d2{ font-size:clamp(2rem,5.6vw,4rem);     font-variation-settings:"opsz" 72 }
-.d3{ font-size:clamp(1.35rem,2.6vw,1.9rem);font-variation-settings:"opsz" 40; letter-spacing:-.025em }
+/* Aperto por TAMANHO, que é o trabalho que a fonte anterior fazia sozinha:
+   quanto maior o corpo, mais o espaço entre letras precisa fechar para o
+   bloco não parecer solto. Abaixo de ~20px o aperto some — em corpo pequeno
+   ele custa legibilidade e não devolve nada. */
+.d1{ font-size:clamp(2.6rem,9.6vw,7.4rem); letter-spacing:-.045em }
+.d2{ font-size:clamp(1.9rem,5.2vw,3.7rem); letter-spacing:-.035em }
+.d3{ font-size:clamp(1.3rem,2.5vw,1.8rem); letter-spacing:-.02em }
 
 .rot{
   font-family:var(--dado); font-size:.72rem; font-weight:500;
@@ -206,8 +227,7 @@ a{color:inherit;text-decoration:none}
 }
 .marca{
   display:inline-flex; align-items:center; gap:.55rem; min-height:44px;
-  font-family:var(--display); font-weight:800; font-size:1.02rem;
-  font-variation-settings:"opsz" 14; letter-spacing:-.02em;
+  font-family:var(--display); font-weight:800; font-size:1.02rem; letter-spacing:-.02em;
 }
 .mono-marca{
   width:22px; height:22px; border-radius:3px; flex:none;
@@ -223,6 +243,38 @@ a{color:inherit;text-decoration:none}
   transition:color .18s var(--ease), background .18s var(--ease);
 }
 .nav a:hover{color:var(--tinta); background:var(--sala-alta)}
+
+/* ═══ ATMOSFERA — só no escuro ═════════════════════════════════════════════
+   POR QUE SÓ NO ESCURO, e não é economia: no claro a página é uma sala com a
+   luz acesa, e sala acesa não tem profundidade atrás do papel — um campo de
+   pontos ali seria sujeira sobre texto que precisa ser lido. No escuro a
+   página é uma tela ligada, e tela ligada TEM profundidade. O fundo não é
+   enfeite que sobra: é a metade do sistema que só existe de um lado.
+
+   Fica atrás de tudo com z-index -1 dentro do contexto de empilhamento do
+   próprio wrapper (por isso o isolation), e nunca intercepta clique.
+   ═══════════════════════════════════════════════════════════════════════════ */
+#atmosfera{
+  position:fixed; inset:0; z-index:-1; pointer-events:none;
+  opacity:0; transition:opacity .6s var(--ease);
+}
+html.noite #atmosfera{ opacity:1 }
+#atmosfera canvas{ width:100%; height:100%; display:block }
+/* O brilho é CSS, não canvas: gradiente radial o navegador compõe na GPU sem
+   custar quadro nenhum, e o canvas fica só com o que precisa de laço. */
+.brilho{
+  position:absolute; inset:0;
+  background:
+    radial-gradient(60vw 60vw at 18% 12%, color-mix(in srgb, var(--marca) 22%, transparent), transparent 65%),
+    radial-gradient(50vw 50vw at 85% 78%, color-mix(in srgb, var(--marca-2) 12%, transparent), transparent 62%);
+  filter:blur(30px);
+  animation:respirar 22s ease-in-out infinite alternate;
+}
+@keyframes respirar{
+  from{ transform:translate3d(-2%,-1%,0) scale(1) }
+  to  { transform:translate3d(2%,1.5%,0)  scale(1.12) }
+}
+@media (prefers-reduced-motion:reduce){ .brilho{ animation:none } }
 
 /* ═══ AÇÕES DA BARRA · TEMA · MENU DE CELULAR ══════════════════════════════ */
 .acoes{ display:flex; align-items:center; gap:.5rem }
@@ -262,8 +314,7 @@ html.aberto #menu{ display:block }
   display:flex; align-items:center; justify-content:space-between; gap:1rem;
   min-height:52px; padding-block:.5rem;
   border-block-end:1px solid var(--linha);
-  font-family:var(--display); font-weight:800; font-size:1.3rem;
-  font-variation-settings:"opsz" 24; letter-spacing:-.025em;
+  font-family:var(--display); font-weight:800; font-size:1.3rem; letter-spacing:-.025em;
 }
 #menu li:last-child a{ border-block-end:0 }
 #menu a span{
@@ -323,23 +374,10 @@ html.pintado #tela-titulo{ opacity:1 }
 @media (min-width:44rem){ .dado-item{border-block-end:0} }
 .dado-item b{
   display:block; font-family:var(--display); font-weight:800;
-  font-size:clamp(1.5rem,3.4vw,2.1rem); font-variation-settings:"opsz" 40;
+  font-size:clamp(1.5rem,3.4vw,2.1rem);
   letter-spacing:-.03em; line-height:1;
 }
 .dado-item span{ display:block; margin-block-start:.4rem; font-family:var(--dado); font-size:.7rem; letter-spacing:.12em; text-transform:uppercase; color:var(--tinta-3) }
-
-/* ═══ CALIBRAÇÃO ═══════════════════════════════════════════════════════════
-   As sete barras SMPTE a 75%. É a única cor saturada da página e aparece UMA
-   vez: onde a sala apaga e a tela acende. Como rótulo, não como decoração —
-   uma carta de calibração é literalmente o que se põe antes do material. */
-.calibra{ display:flex; align-items:stretch; background:var(--tela) }
-.calibra .barras{ display:flex; flex:none; width:clamp(140px,26vw,300px) }
-.calibra .barras i{ flex:1; height:34px }
-.calibra .leg{
-  display:flex; align-items:center; padding-inline:1rem;
-  font-family:var(--dado); font-size:.66rem; letter-spacing:.18em;
-  text-transform:uppercase; color:var(--luz-3); white-space:nowrap; overflow:hidden;
-}
 
 /* ═══ TRABALHO ═════════════════════════════════════════════════════════════
    Lista, não grade de cartões. Um portfólio com seis cartões iguais diz "tenho
@@ -358,9 +396,31 @@ html.pintado #tela-titulo{ opacity:1 }
   .item{ grid-template-columns:5.5rem minmax(0,1fr) 12rem auto; align-items:baseline }
 }
 .item-n{ font-family:var(--dado); font-size:.72rem; color:var(--luz-3); letter-spacing:.1em; padding-block-start:.5em }
-.item-nome{ font-family:var(--display); font-weight:800; font-size:clamp(1.45rem,3.6vw,2.5rem); font-variation-settings:"opsz" 48; letter-spacing:-.03em; line-height:1.02 }
-.item-o-que{ grid-column:1/-1; color:var(--luz-2); font-size:.96rem; max-width:52ch }
-@media (min-width:60rem){ .item-o-que{grid-column:2; margin-block-start:.5rem} }
+.item-nome{ font-family:var(--display); font-weight:800; font-size:clamp(1.45rem,3.6vw,2.5rem); letter-spacing:-.03em; line-height:1.02 }
+/* A FICHA DE TRÊS COLUNAS — o problema, a decisão, a prova.
+   Um parágrafo corrido sobre um projeto exige que a pessoa leia tudo para
+   descobrir se lhe interessa. Estas três perguntas são as que um cliente faz
+   sobre qualquer trabalho, e separá-las deixa comparar os cinco na diagonal:
+   dá para ler só "A PROVA" de todos e ter uma leitura inteira da seção.
+
+   A ordem não é decorativa. Problema antes de decisão porque decisão sem
+   problema é opinião; prova por último porque é o que sustenta as duas. */
+.item-caso{
+  grid-column:1/-1; display:grid; gap:1.1rem;
+  margin-block-start:.9rem; padding-block-start:1rem;
+  border-block-start:1px solid var(--linha-tela);
+}
+@media (min-width:60rem){
+  .item-caso{ grid-column:2/-1; grid-template-columns:repeat(3,1fr); gap:1.8rem }
+}
+.item-caso h4{
+  font-family:var(--dado); font-weight:500; font-size:.66rem;
+  letter-spacing:.14em; text-transform:uppercase; color:var(--luz-3);
+  margin-block-end:.4rem;
+}
+.item-caso .prova h4{ color:var(--marca-2) }
+.item-caso p{ color:var(--luz-2); font-size:.92rem; line-height:1.55 }
+.item-caso .prova p{ color:var(--luz) }
 .item-pilha{ grid-column:1/-1; font-family:var(--dado); font-size:.7rem; color:var(--luz-3); letter-spacing:.04em }
 @media (min-width:60rem){ .item-pilha{grid-column:3; grid-row:1/3; padding-block-start:.6em} }
 .item-links{ grid-column:1/-1; display:flex; gap:.9rem; flex-wrap:wrap; margin-block-start:.7rem }
@@ -381,34 +441,6 @@ html.pintado #tela-titulo{ opacity:1 }
   transition:width .5s steps(9,end);
 }
 .item:hover::after,.item:focus-within::after{ width:100% }
-
-/* ═══ VÍDEO ════════════════════════════════════════════════════════════════ */
-.v-grade{ display:grid; gap:clamp(1.8rem,4vw,3rem); margin-block-start:clamp(2rem,4vw,3rem) }
-@media (min-width:58rem){ .v-grade{grid-template-columns:1fr 1fr; align-items:start} }
-
-/* As três saídas, na PROPORÇÃO REAL de cada formato. A forma informa antes de
-   o rótulo ser lido — e é por isso que elas não podem ser normalizadas. */
-.saidas{ display:flex; gap:clamp(.7rem,2vw,1.2rem); align-items:flex-end }
-.saida{ flex:1; display:flex; flex-direction:column; gap:.6rem; min-width:0 }
-/* Os quadros são pretos porque não há material de cliente para mostrar aqui —
-   e preto CHAPADO lê como imagem que não carregou. Um gradiente mínimo basta
-   para dizer "isto é uma superfície, não um buraco". O vertical fica com o
-   azul da marca porque é a peça que o cliente mais pede; a hierarquia entre os
-   três é a única coisa que estas caixas precisam comunicar, além da proporção. */
-.saida .quadro{
-  background:linear-gradient(155deg,var(--tela-2),var(--tela) 72%);
-  border-radius:3px; width:100%; position:relative; overflow:hidden;
-}
-.saida.h .quadro{ aspect-ratio:16/9 }
-.saida.v .quadro{ aspect-ratio:9/16; background:linear-gradient(160deg,var(--marca),var(--tela) 70%) }
-.saida .nome{ font-family:var(--dado); font-size:.68rem; letter-spacing:.12em; text-transform:uppercase; color:var(--tinta-2) }
-.saida .fmt{ font-family:var(--dado); font-size:.66rem; color:var(--tinta-3) }
-
-.ficha{ border-block-start:1px solid var(--linha) }
-.ficha div{ display:grid; grid-template-columns:7.5rem 1fr; gap:1rem; padding-block:.75rem; border-block-end:1px solid var(--linha) }
-.ficha dt{ font-family:var(--dado); font-size:.68rem; letter-spacing:.11em; text-transform:uppercase; color:var(--tinta-3); padding-block-start:.25em }
-.ficha dd{ color:var(--tinta-2); font-size:.95rem }
-@media (max-width:34rem){ .ficha div{grid-template-columns:1fr; gap:.15rem} }
 
 /* ═══ SOBRE — o retrato ════════════════════════════════════════════════════
    O retrato de 150 frames é dele e já existe; aqui ele ganha o enquadramento
@@ -469,7 +501,7 @@ html.pintado #tela-titulo{ opacity:1 }
   font-family:var(--dado); font-size:.7rem; letter-spacing:.14em;
   text-transform:uppercase; color:var(--marca);
 }
-.marco h3{ font-family:var(--display); font-weight:800; font-size:1.2rem; font-variation-settings:"opsz" 24; letter-spacing:-.02em }
+.marco h3{ font-family:var(--display); font-weight:800; font-size:1.2rem; letter-spacing:-.02em }
 .marco p{ color:var(--tinta-2); font-size:.95rem; max-width:58ch; margin-block-start:.35rem }
 @media (min-width:48rem){ .marco h3, .marco p{ grid-column:2 } }
 
@@ -477,7 +509,7 @@ html.pintado #tela-titulo{ opacity:1 }
 .serv{ display:grid; gap:1px; background:var(--linha); border:1px solid var(--linha); border-radius:5px; overflow:hidden; margin-block-start:clamp(2rem,4vw,3rem) }
 @media (min-width:52rem){ .serv{grid-template-columns:repeat(3,1fr)} }
 .serv article{ background:var(--sala-alta); padding:clamp(1.4rem,3vw,2rem); display:flex; flex-direction:column; gap:.7rem }
-.serv h3{ font-family:var(--display); font-weight:800; font-size:1.25rem; font-variation-settings:"opsz" 24; letter-spacing:-.02em }
+.serv h3{ font-family:var(--display); font-weight:800; font-size:1.25rem; letter-spacing:-.02em }
 .serv p{ color:var(--tinta-2); font-size:.95rem }
 .serv ul{ list-style:none; padding:0; display:grid; gap:.45rem; margin-block-start:auto; padding-block-start:.9rem; border-block-start:1px solid var(--linha) }
 .serv li{ font-size:.9rem; color:var(--tinta-2); padding-inline-start:1.1rem; position:relative }
@@ -506,8 +538,7 @@ html.pintado #tela-titulo{ opacity:1 }
   letter-spacing:.14em; color:var(--marca);
 }
 .passo h4{
-  font-family:var(--display); font-weight:800; font-size:1.05rem;
-  font-variation-settings:"opsz" 20; letter-spacing:-.02em; margin-block-start:.5rem;
+  font-family:var(--display); font-weight:800; font-size:1.05rem; letter-spacing:-.02em; margin-block-start:.5rem;
 }
 .passo p{ font-size:.9rem; color:var(--tinta-2); margin-block-start:.35rem }
 
@@ -518,7 +549,7 @@ html.pintado #tela-titulo{ opacity:1 }
    portfólio é um endereço; em azul e neste tamanho, é um convite. */
 .email{
   display:inline-flex; align-items:center; gap:.6rem; margin-block-start:1.5rem;
-  font-family:var(--display); font-weight:800; font-variation-settings:"opsz" 48;
+  font-family:var(--display); font-weight:800;
   font-size:clamp(1.25rem,4.4vw,2.6rem); letter-spacing:-.03em; color:var(--marca);
   min-height:48px;
   border-block-end:3px solid color-mix(in srgb, var(--marca) 25%, transparent);
@@ -560,13 +591,17 @@ html:not(.js) .sobe{ opacity:1; transform:none }
 <body>
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
+<div id="atmosfera" aria-hidden="true">
+  <div class="brilho"></div>
+  <canvas id="poeira"></canvas>
+</div>
+
 <header class="barra faixa">
   <div class="barra-int">
     <a href="#topo" class="marca"><span class="mono-marca" aria-hidden="true"></span>pixelmartins</a>
     <nav class="nav" aria-label="Navegação principal">
       <a href="#trabalho">Trabalho</a>
       <a href="#servicos">Serviços</a>
-      <a href="#video">Vídeo</a>
       <a href="#sobre">Sobre</a>
       <a href="#contato">Contato</a>
     </nav>
@@ -594,7 +629,6 @@ html:not(.js) .sobe{ opacity:1; transform:none }
     <ul>
       <li><a href="#trabalho">Trabalho <span>o que roda</span></a></li>
       <li><a href="#servicos">Serviços <span>o que entrego</span></a></li>
-      <li><a href="#video">Vídeo <span>o diferencial</span></a></li>
       <li><a href="#sobre">Sobre <span>quem faz</span></a></li>
       <li><a href="#contato">Contato <span>próximo passo</span></a></li>
     </ul>
@@ -626,8 +660,8 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         <!--  Três verbos, e o terceiro é o que quase ninguém entrega. A maior
               parte do que se contrata como "site" morre entre o segundo e o
               terceiro: fica pronto e não sobe, ou sobe e ninguém testou. -->
-        <p class="lead">Site, landing page ou aplicativo. Entregue funcionando —
-          e com o vídeo dele já pronto, porque eu também edito.</p>
+        <p class="lead">Site, landing page ou aplicativo. Entregue no ar,
+          testado, e com o código aberto para você conferir.</p>
         <div class="hero-acoes">
           <a href="#contato" class="btn">Começar um projeto
             <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -638,7 +672,7 @@ html:not(.js) .sobe{ opacity:1; transform:none }
 
       <!--  Quatro números, e os quatro se conferem CLICANDO. Um portfólio que
             diz "+100 projetos entregues" pede fé; estes não pedem nada.
-            Nenhum deles fala de vídeo — o hero é do foco, e o foco é código. -->
+            E os quatro falam da mesma coisa: software que existe. -->
       <dl class="hero-dados">
         <div class="dado-item"><b>6</b><span>aplicativos no ar</span></div>
         <div class="dado-item"><b>3</b><span>instalam no celular</span></div>
@@ -648,14 +682,9 @@ html:not(.js) .sobe{ opacity:1; transform:none }
     </div>
   </section>
 
-  <!--# A carta de calibração ficava AQUI, anunciando a seção de código, e saiu
-       daqui em 15/08 junto com a virada de posicionamento. Ela é o artefato
-       mais reconhecível da produção de VÍDEO — pô-la a abrir a prova de
-       programação era anunciar a metade errada no primeiro corte da página.
-       Foi para onde é o assunto: a entrada da seção Vídeo.
-
-       E a entrada do Trabalho não ganhou substituto. Uma mudança de fundo de
-       ponta a ponta já é o sinal; anunciá-la seria explicar a piada. -->
+  <!--# A entrada do Trabalho não tem anúncio nenhum, e é decisão: uma mudança
+       de fundo de ponta a ponta já é o sinal. Anunciá-la seria explicar a
+       piada. -->
 
   <!-- ═══ TRABALHO ═════════════════════════════════════════════════════ -->
   <section id="trabalho" class="escuro secao faixa">
@@ -670,10 +699,11 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         <article class="item sobe">
           <span class="item-n">01</span>
           <h3 class="item-nome">Sistema Solar</h3>
-          <p class="item-o-que">Cem corpos em órbita com física real. O problema não era desenhar —
-            era a escala: numa régua honesta em que Mercúrio apareça, você passa a viagem inteira
-            atravessando vazio. A saída foi uma escala logarítmica, que preserva a ordem e joga
-            fora a distância absoluta.</p>
+          <div class="item-caso">
+            <div><h4>O problema</h4><p>As distâncias reais tornam qualquer visualização honesta inutilizável. Netuno está a 30 unidades astronômicas; Mercúrio, a 0,39. Numa régua linear em que Mercúrio apareça, o visitante passa a viagem inteira atravessando vazio.</p></div>
+            <div><h4>A decisão</h4><p>Escala orbital <em>logarítmica</em>: preserva a ordem e a proporção relativa entre as órbitas, e descarta a distância absoluta. É uma troca consciente — a cena passa a ser sobre a estrutura do sistema, não sobre o tamanho dele.</p></div>
+            <div class="prova"><h4>A prova</h4><p>100 corpos catalogados, incluindo as luas grandes de Júpiter e Saturno e as sondas. Modo infravermelho por temperatura, e modo vórtice — que mostra a espiral helicoidal real de cada planeta.</p></div>
+          </div>
           <span class="item-pilha">Three.js · WebGL<br>arquivo único, sem build</span>
           <span class="item-links">
             <a href="https://skotalexsander.github.io/solarsys/" target="_blank" rel="noopener">Abrir
@@ -685,9 +715,11 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         <article class="item sobe">
           <span class="item-n">02</span>
           <h3 class="item-nome">Vitrola</h3>
-          <p class="item-o-que">Player que lê as etiquetas do arquivo, tira a cor da capa e
-            tematiza a interface inteira com ela. O círculo parado virou toca-discos: o prato gira
-            e para onde estava, o braço desce e caminha.</p>
+          <div class="item-caso">
+            <div><h4>O problema</h4><p>Um player mostra os mesmos controles para qualquer música. A interface não sabe o que está tocando, e por isso não ajuda a pessoa a sentir que está tocando alguma coisa.</p></div>
+            <div><h4>A decisão</h4><p>Extrair a cor dominante da capa e tematizar a interface inteira com ela. O círculo parado virou toca-discos de verdade: o prato gira e para <em>onde estava</em>, o braço desce e caminha.</p></div>
+            <div class="prova"><h4>A prova</h4><p>Web e Android da mesma base de código. Na atualização, o banco migrou da versão 1 para a 2 <em>sem apagar</em> a biblioteca de quem já usava, e a instalação por cima manteve tudo no lugar.</p></div>
+          </div>
           <span class="item-pilha">PWA · IndexedDB<br>web e Android, mesmo código</span>
           <span class="item-links">
             <a href="https://skotalexsander.github.io/vitrola/" target="_blank" rel="noopener">Abrir
@@ -699,10 +731,11 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         <article class="item sobe">
           <span class="item-n">03</span>
           <h3 class="item-nome">Rotina</h3>
-          <p class="item-o-que">Agenda e lembretes que funcionam sem conta e sem servidor. O que eu
-            não sabia antes de construir: embrulhar um site num aplicativo <em>não</em> faz o
-            lembrete tocar com o celular no bolso. Quem toca é o alarme do sistema — e a prova é
-            matar o aplicativo à força e ver o alarme continuar de pé.</p>
+          <div class="item-caso">
+            <div><h4>O problema</h4><p>Embrulhar um site num aplicativo não faz o lembrete tocar com o celular no bolso. Dentro do APK ele continua sendo uma WebView, e WebView fechada não acorda service worker: o alcance seria o mesmo do navegador, com o agravante de <em>parecer</em> resolvido.</p></div>
+            <div><h4>A decisão</h4><p>Registrar o aviso no AlarmManager do sistema operacional, e aplicar o horário de silêncio <em>no ato de agendar</em> — o alarme do Android não reavalia nada depois, então ele tocaria às três da manhã.</p></div>
+            <div class="prova"><h4>A prova</h4><p>O aplicativo é morto à força e o alarme continua registrado no sistema operacional. 408 testes de núcleo puro, mais 11 rodando dentro de um Android de verdade.</p></div>
+          </div>
           <span class="item-pilha">React · TypeScript · Capacitor<br>408 testes de núcleo puro</span>
           <span class="item-links">
             <a href="https://github.com/SkotAlexsander/rotina/releases/latest" target="_blank" rel="noopener">Baixar
@@ -714,9 +747,11 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         <article class="item sobe">
           <span class="item-n">04</span>
           <h3 class="item-nome">Corpo</h3>
-          <p class="item-o-que">Comida, água e treino. A meta de água vira copos com horário, e o
-            plano não é guardado: é recalculado do que falta — por isso <em>“agora não”</em>
-            redistribui o dia sozinho em vez de acumular atraso.</p>
+          <div class="item-caso">
+            <div><h4>O problema</h4><p>Aplicativo de hábito costuma guardar um plano fixo. Quem atrasa um dia vê o plano vencer sozinho — e é aí que a pessoa desiste. Não por falta de disciplina: por falta de perdão do software.</p></div>
+            <div><h4>A decisão</h4><p>Não guardar o plano. Recalcular do que falta, sempre. Por isso <em>“agora não”</em> redistribui o resto do dia em vez de acumular atraso, e a meta de água vira copos com horário que se movem.</p></div>
+            <div class="prova"><h4>A prova</h4><p>344 testes de núcleo mais 157 em navegador real, e validação por mutação: 16 defeitos plantados de propósito, 16 reprovados pela bancada.</p></div>
+          </div>
           <span class="item-pilha">PWA · Android<br>165 alimentos, busca por apelido</span>
           <span class="item-links">
             <a href="https://skotalexsander.github.io/corpo/" target="_blank" rel="noopener">Abrir
@@ -728,9 +763,11 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         <article class="item sobe">
           <span class="item-n">05</span>
           <h3 class="item-nome">Acervo</h3>
-          <p class="item-o-que">Organizador dos arquivos do celular. A camada de arquivos é
-            trocável — memória simulada no computador, sistema real no aparelho — e foi isso que
-            permitiu construir e testar o aplicativo inteiro antes de tocar num celular.</p>
+          <div class="item-caso">
+            <div><h4>O problema</h4><p>Não dá para construir um organizador de arquivos sem arquivos — e reinstalar no celular a cada mudança torna o ciclo inviável. O aparelho vira gargalo do primeiro dia ao último.</p></div>
+            <div><h4>A decisão</h4><p>Deixar a camada de arquivos <em>trocável</em>: memória simulada no computador, sistema real no Android, a mesma interface para os dois. A decisão de arquitetura é o que compra a velocidade.</p></div>
+            <div class="prova"><h4>A prova</h4><p>O aplicativo inteiro foi construído e testado antes de tocar num celular. A criptografia é AES-GCM de 256 bits com PBKDF2 de 210 mil rodadas, conferida contra o <code>node:crypto</code>.</p></div>
+          </div>
           <span class="item-pilha">React · Vite · Capacitor<br>cripto no próprio aparelho</span>
           <span class="item-links">
             <a href="https://github.com/SkotAlexsander/acervo" target="_blank" rel="noopener">Código
@@ -808,53 +845,6 @@ html:not(.js) .sobe{ opacity:1; transform:none }
     </div>
   </section>
 
-  <!-- ═══ VÍDEO — o diferencial, e ele entra DEPOIS da prova ═══════════
-       Não é a metade de nada. Vem depois de Trabalho e de Serviços porque
-       diferencial só vale para quem já acreditou na entrega principal — antes
-       disso é dispersão. E o argumento é COMPARATIVO ("o seu desenvolvedor não
-       faz isso"), não somativo ("também faço isso"), que é a diferença entre
-       vender uma vantagem e listar um hobby. -->
-  <div class="calibra" role="separator" aria-label="Início do bloco de vídeo">
-    <span class="barras" aria-hidden="true">
-      <i style="background:#C0C0C0"></i><i style="background:#C0C000"></i><i style="background:#00C0C0"></i><i style="background:#00C000"></i><i style="background:#C000C0"></i><i style="background:#C00000"></i><i style="background:#0000C0"></i>
-    </span>
-    <span class="leg" aria-hidden="true">carta de calibração</span>
-  </div>
-
-  <section id="video" class="secao faixa">
-    <div class="caixa">
-      <p class="rot sobe">O diferencial</p>
-      <h2 class="d2 sobe" style="margin-block-start:.6rem; max-width:19ch">Seu desenvolvedor não edita vídeo. O seu, edita.</h2>
-
-      <div class="v-grade">
-        <div class="sobe">
-          <p style="color:var(--tinta-2); max-width:48ch">O vídeo da página quase sempre chega
-            por último, de outro fornecedor, no formato errado e pesado demais. Aqui ele nasce
-            junto com a página — no tamanho que ela precisa, no corte que ela aguenta.</p>
-          <p style="color:var(--tinta-2); max-width:48ch; margin-block-start:1rem">E uma gravação
-            de uma hora não vira um vídeo de uma hora: vira a peça longa, as curtas que levam até
-            ela, e o corte vertical que para o dedo de quem ainda não te conhece. Três destinos,
-            três cortes, o mesmo material.</p>
-
-          <dl class="ficha" style="margin-block-start:1.6rem">
-            <div><dt>Formatos</dt><dd>1920×1080 e 2160×3840 — o vertical sai em 4K</dd></div>
-            <div><dt>Entregas</dt><dd>Peça longa de 16 min · apoio de 1 a 2 min · vertical de ~1 min</dd></div>
-            <div><dt>No corte</dt><dd>Ritmo, som nivelado, cor e legenda queimada</dd></div>
-          </dl>
-        </div>
-
-        <div class="sobe">
-          <div class="saidas">
-            <div class="saida h"><div class="quadro"></div><span class="nome">Longa</span><span class="fmt">16:9 · 16 min</span></div>
-            <div class="saida h"><div class="quadro"></div><span class="nome">Apoio</span><span class="fmt">16:9 · 1–2 min</span></div>
-            <div class="saida v"><div class="quadro"></div><span class="nome">Vertical</span><span class="fmt">9:16 · 4K</span></div>
-          </div>
-          <p class="rot" style="margin-block-start:1.2rem">As caixas estão na proporção real de cada formato</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
   <!-- ═══ SOBRE ════════════════════════════════════════════════════════
        Vem depois de tudo o que se contrata, e não logo após o hero: a primeira
        pergunta do visitante é "o que você faz por mim", não "quem é você".
@@ -874,14 +864,14 @@ html:not(.js) .sobe{ opacity:1; transform:none }
         </div>
 
         <div class="sobre-texto sobe">
-          <p class="d3">Sou o Alex. Construo software que fica de pé — e edito o vídeo que vai nele.</p>
+          <p class="d3">Sou o Alex. Construo software que fica de pé depois que eu saio.</p>
           <p>Aprendo fazendo, e o ciclo é sempre o mesmo: quebrar, consertar, refazer
             melhor. É lento no começo e fica rápido depois, porque o que sobra da
             terceira volta não é o resultado — é saber onde aquilo costuma quebrar.</p>
-          <p>Na prática, para quem me contrata, isso significa duas coisas. A primeira é
-            que não existe a conversa de "o site está pronto, agora falta o vídeo": as
-            duas pontas saem do mesmo lugar. A segunda é que o que eu entrego já passou
-            por engano — o meu, antes do seu.</p>
+          <p>Na prática, para quem me contrata, isso significa uma coisa só: o que eu
+            entrego já passou por engano — o meu, antes do seu. Cada projeto aqui em
+            cima tem uma bancada de testes que roda antes de qualquer entrega, e um
+            documento dizendo o que <em>não</em> foi verificado.</p>
           <p>Uso modelos de linguagem no meio do fluxo, não no fim dele. O que me
             interessa aí não é gerar resultado pronto: é encurtar a distância entre ter
             a ideia e conseguir olhar para ela.</p>
@@ -901,8 +891,8 @@ html:not(.js) .sobe{ opacity:1; transform:none }
                 <dd>Three.js · WebGL · Canvas · SVG</dd>
               </div>
               <div>
-                <dt>Vídeo e automação</dt>
-                <dd>Premiere · After Effects · DaVinci Resolve · ffmpeg · modelos de linguagem</dd>
+                <dt>Verificação</dt>
+                <dd>Playwright · testes de núcleo puro · teste de mutação · auditoria de contraste e teclado</dd>
               </div>
             </dl>
           </div>
@@ -912,21 +902,25 @@ html:not(.js) .sobe{ opacity:1; transform:none }
       <div class="marcos">
         <article class="marco sobe">
           <span class="quando">hoje</span>
-          <h3>Desenvolvimento, com vídeo do lado</h3>
-          <p>Construo web e aplicativos, e edito. Entrego mais rápido sem baixar o padrão,
-            porque a parte repetitiva virou automação e a decisão continuou humana.</p>
+          <h3>Aplicativo, não só página</h3>
+          <p>React e TypeScript com núcleo puro — a lógica que decide fica separada da tela,
+            então ela é testável sem navegador. É o que permite os 408 testes do Rotina
+            rodarem em segundos, e é o que faz um app sobreviver a mudar de plataforma.</p>
         </article>
         <article class="marco sobe">
           <span class="quando">a virada</span>
-          <h3>Quando as duas áreas se cruzaram</h3>
-          <p>Código e edição falam a mesma língua: estrutura e tempo. Um componente e um
-            corte respondem à mesma pergunta — o que fica, em que ordem, e por quanto tempo.</p>
+          <h3>Quando parei de entregar tela</h3>
+          <p>O primeiro projeto que precisou funcionar <em>sem internet</em> mudou tudo:
+            deixou de ser "o que aparece" e passou a ser "o que acontece quando dá errado".
+            Bateria acabando, arquivo grande, o usuário fechando no meio. É aí que mora a
+            diferença entre um site bonito e um produto.</p>
         </article>
         <article class="marco sobe">
           <span class="quando">o começo</span>
-          <h3>Primeiros projetos</h3>
-          <p>Aprender fazendo. Foi assim que o interesse virou ofício, e é por isso que
-            tudo que está aqui em cima roda de verdade em vez de ser demonstração.</p>
+          <h3>HTML, CSS e JavaScript puros</h3>
+          <p>Sem framework, sem build, sem nada para se esconder atrás. Aprender assim é
+            lento, e é a razão de eu conseguir hoje tirar uma biblioteca de um projeto
+            quando ela não está pagando o próprio peso — este site não usa nenhuma.</p>
         </article>
       </div>
     </div>
@@ -946,8 +940,8 @@ html:not(.js) .sobe{ opacity:1; transform:none }
     <div class="caixa contato">
       <p class="rot sobe">Próximo passo</p>
       <h2 class="d2 sobe" style="margin-block-start:.7rem; max-width:16ch; margin-inline:auto">Me conta o que você precisa</h2>
-      <p class="lead sobe" style="margin-block-start:1rem; margin-inline:auto">Site, aplicativo ou vídeo.
-        Respondo no mesmo dia útil.</p>
+      <p class="lead sobe" style="margin-block-start:1rem; margin-inline:auto">Site, landing page ou
+        aplicativo. Respondo no mesmo dia útil.</p>
 
       <div class="sobe">
         <a class="email" href="mailto:alexsandermmj@gmail.com">alexsandermmj@gmail.com</a>
@@ -1221,6 +1215,106 @@ html:not(.js) .sobe{ opacity:1; transform:none }
        sozinho — o canvas guarda pixels, não regras de CSS. Sem este aviso, o
        gradiente do tema anterior ficaria preso ali até o próximo resize. */
     window.dispatchEvent(new Event("pm-tema"));
+  });
+})();
+
+/* ─── a poeira: o campo de pontos do fundo escuro ───────────────────────────
+   Canvas puro, sem biblioteca. As quatro decisões que fazem isto não pesar:
+
+   1. SÓ RODA NO ESCURO. No claro o laço é desligado de verdade, não escondido
+      por opacidade — canvas desenhando invisível é bateria indo embora sem
+      contrapartida, e foi um defeito real na direção anterior deste site.
+   2. DORME COM A ABA ESCONDIDA (visibilitychange). Um laço de requestAnimation
+      Frame já pausa em aba oculta na maioria dos navegadores, mas não em
+      todos, e o estado interno continuaria avançando aos saltos ao voltar.
+   3. DENSIDADE POR ÁREA, não número fixo: 1 ponto a cada ~16 mil px². Num
+      celular dá ~20, num monitor grande ~110. Número fixo enche a tela pequena
+      e esvazia a grande.
+   4. NADA DE prefers-reduced-motion. Aí os pontos são desenhados uma vez,
+      parados: quem pediu menos movimento continua tendo a textura.
+   ─────────────────────────────────────────────────────────────────────────── */
+(function () {
+  "use strict";
+  var tela = document.getElementById("poeira");
+  if (!tela || !tela.getContext) return;
+  var ctx = tela.getContext("2d");
+  var raiz = document.documentElement;
+
+  var quieto = false;
+  try { quieto = matchMedia("(prefers-reduced-motion: reduce)").matches; } catch (e) {}
+
+  var pontos = [], rodando = false, dpr = 1, L = 0, A = 0;
+
+  function medir() {
+    dpr = Math.min(window.devicePixelRatio || 1, 2);
+    L = tela.clientWidth; A = tela.clientHeight;
+    tela.width = Math.max(1, Math.round(L * dpr));
+    tela.height = Math.max(1, Math.round(A * dpr));
+    ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+
+    var quantos = Math.round((L * A) / 16000);
+    quantos = Math.max(14, Math.min(120, quantos));
+    pontos = [];
+    for (var i = 0; i < quantos; i++) {
+      pontos.push({
+        x: Math.random() * L,
+        y: Math.random() * A,
+        r: 0.6 + Math.random() * 1.5,
+        vx: (Math.random() - 0.5) * 0.12,
+        vy: -0.05 - Math.random() * 0.16,       /* sobem: poeira em contraluz */
+        o: 0.10 + Math.random() * 0.30,
+        f: Math.random() * Math.PI * 2          /* fase do cintilar */
+      });
+    }
+  }
+
+  function desenhar(t) {
+    ctx.clearRect(0, 0, L, A);
+    for (var i = 0; i < pontos.length; i++) {
+      var p = pontos[i];
+      var brilho = p.o * (0.65 + 0.35 * Math.sin(t / 1400 + p.f));
+      ctx.beginPath();
+      ctx.arc(p.x, p.y, p.r, 0, 6.283);
+      ctx.fillStyle = "rgba(190,214,255," + brilho.toFixed(3) + ")";
+      ctx.fill();
+    }
+  }
+
+  function passo(p) {
+    p.x += p.vx; p.y += p.vy;
+    /* reentra pelo lado oposto em vez de sumir: o campo nunca esvazia */
+    if (p.y < -4) { p.y = A + 4; p.x = Math.random() * L; }
+    if (p.x < -4) p.x = L + 4;
+    if (p.x > L + 4) p.x = -4;
+  }
+
+  function laco(agora) {
+    if (!rodando) return;
+    for (var i = 0; i < pontos.length; i++) passo(pontos[i]);
+    desenhar(agora);
+    requestAnimationFrame(laco);
+  }
+
+  function avaliar() {
+    var escuro = raiz.classList.contains("noite");
+    var visivel = document.visibilityState !== "hidden";
+    var deveria = escuro && visivel && !quieto;
+    if (deveria && !rodando) { rodando = true; requestAnimationFrame(laco); }
+    else if (!deveria) {
+      rodando = false;
+      /* Com movimento reduzido a textura continua existindo — parada. */
+      if (escuro && quieto) desenhar(0);
+      else if (!escuro) ctx.clearRect(0, 0, L, A);
+    }
+  }
+
+  medir(); avaliar();
+  window.addEventListener("pm-tema", avaliar);
+  document.addEventListener("visibilitychange", avaliar);
+  var prazo;
+  window.addEventListener("resize", function () {
+    clearTimeout(prazo);
+    prazo = setTimeout(function () { medir(); if (!rodando) avaliar(); }, 160);
   });
 })();
 
