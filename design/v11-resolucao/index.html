@@ -439,6 +439,20 @@ html.pintado #tela-titulo{ opacity:1 }
 .sobre-texto p + p{ margin-block-start:1rem }
 .sobre-texto .d3{ margin-block-end:1rem }
 
+/* AS FERRAMENTAS, e por que uma LISTA e não a fita rolando que a direção
+   anterior tinha: fita em movimento infinito pede que a pessoa espere o nome
+   passar para saber se o que ela usa está ali. Quem procura "WordPress" quer
+   varrer com o olho, não assistir. Movimento aqui custaria a única coisa que
+   esta informação faz. */
+.ferramentas{ margin-block-start:1.6rem; border-block-start:1px solid var(--linha); padding-block-start:1.1rem }
+.ferramentas dl{ display:grid; gap:.7rem }
+@media (min-width:34rem){ .ferramentas dl{ grid-template-columns:repeat(2,1fr); gap:1rem } }
+.ferramentas dt{
+  font-family:var(--dado); font-size:.66rem; letter-spacing:.14em;
+  text-transform:uppercase; color:var(--tinta-3);
+}
+.ferramentas dd{ margin:0; margin-block-start:.2rem; font-size:.88rem; color:var(--tinta-2) }
+
 /* ═══ TRAJETÓRIA ═══════════════════════════════════════════════════════════
    Sem datas, de propósito: ano em portfólio envelhece sozinho e convida a
    comparar tempo de estrada, que não é o argumento. E sem numeração 01/02/03 —
@@ -468,6 +482,34 @@ html.pintado #tela-titulo{ opacity:1 }
 .serv ul{ list-style:none; padding:0; display:grid; gap:.45rem; margin-block-start:auto; padding-block-start:.9rem; border-block-start:1px solid var(--linha) }
 .serv li{ font-size:.9rem; color:var(--tinta-2); padding-inline-start:1.1rem; position:relative }
 .serv li::before{ content:""; position:absolute; inset-inline-start:0; inset-block-start:.62em; width:6px; height:6px; background:var(--marca); border-radius:1px }
+
+/* ═══ COMO FUNCIONA ════════════════════════════════════════════════════════
+   AQUI a numeração 01–04 é legítima, e é o único lugar da página onde ela
+   aparece: isto é uma sequência de verdade, e a ordem carrega informação que
+   o leitor precisa — não dá para entregar antes de produzir. Nos marcos da
+   trajetória ela seria decoração, e por isso não está lá.
+
+   A seção existe para matar a objeção que ninguém escreve no e-mail: "e se eu
+   contratar e o cara sumir?". Quatro etapas com nome dizem mais que qualquer
+   adjetivo — e a quarta diz que a rodada de ajustes está inclusa, que é a
+   segunda coisa que a pessoa quer saber e nunca pergunta. */
+.processo{ margin-block-start:clamp(2.6rem,6vw,4rem) }
+.passos{
+  display:grid; gap:1px; margin-block-start:1.2rem;
+  background:var(--linha); border-block:1px solid var(--linha);
+}
+@media (min-width:44rem){ .passos{ grid-template-columns:repeat(2,1fr) } }
+@media (min-width:64rem){ .passos{ grid-template-columns:repeat(4,1fr) } }
+.passo{ background:var(--sala); padding:clamp(1.1rem,2.4vw,1.5rem) }
+.passo b{
+  display:block; font-family:var(--dado); font-size:.72rem; font-weight:500;
+  letter-spacing:.14em; color:var(--marca);
+}
+.passo h4{
+  font-family:var(--display); font-weight:800; font-size:1.05rem;
+  font-variation-settings:"opsz" 20; letter-spacing:-.02em; margin-block-start:.5rem;
+}
+.passo p{ font-size:.9rem; color:var(--tinta-2); margin-block-start:.35rem }
 
 /* ═══ CONTATO ══════════════════════════════════════════════════════════════ */
 .contato{ text-align:center }
@@ -737,6 +779,32 @@ html:not(.js) .sobe{ opacity:1; transform:none }
           </ul>
         </article>
       </div>
+
+      <div class="processo sobe">
+        <p class="rot">Como funciona</p>
+        <div class="passos">
+          <article class="passo">
+            <b>01</b>
+            <h4>Briefing</h4>
+            <p>Uma conversa: objetivo, público, referências. Sem formulário quilométrico.</p>
+          </article>
+          <article class="passo">
+            <b>02</b>
+            <h4>Proposta</h4>
+            <p>Escopo, prazo e valor por escrito. Sem surpresa depois.</p>
+          </article>
+          <article class="passo">
+            <b>03</b>
+            <h4>Produção</h4>
+            <p>Mão na massa, com atualizações no caminho. Nada de sumir por semanas.</p>
+          </article>
+          <article class="passo">
+            <b>04</b>
+            <h4>Entrega e ajustes</h4>
+            <p>Revisamos juntos, e a rodada de ajustes já está inclusa.</p>
+          </article>
+        </div>
+      </div>
     </div>
   </section>
 
@@ -817,6 +885,27 @@ html:not(.js) .sobe{ opacity:1; transform:none }
           <p>Uso modelos de linguagem no meio do fluxo, não no fim dele. O que me
             interessa aí não é gerar resultado pronto: é encurtar a distância entre ter
             a ideia e conseguir olhar para ela.</p>
+
+          <div class="ferramentas">
+            <dl>
+              <div>
+                <dt>Web</dt>
+                <dd>React · TypeScript · Next.js · Vite · HTML e CSS · WordPress e Elementor</dd>
+              </div>
+              <div>
+                <dt>Aplicativo</dt>
+                <dd>PWA · Capacitor · Android · IndexedDB</dd>
+              </div>
+              <div>
+                <dt>3D e movimento</dt>
+                <dd>Three.js · WebGL · Canvas · SVG</dd>
+              </div>
+              <div>
+                <dt>Vídeo e automação</dt>
+                <dd>Premiere · After Effects · DaVinci Resolve · ffmpeg · modelos de linguagem</dd>
+              </div>
+            </dl>
+          </div>
         </div>
       </div>
 
