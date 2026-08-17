@@ -34,6 +34,12 @@ const ok = (b, m) => { console.log(`   ${b ? "✓" : "✗"} ${m}`); if (!b) falh
   const erros = [];
   p.on("console", m => m.type() === "error" && erros.push(m.text()));
   p.on("pageerror", e => erros.push("pageerror: " + e.message));
+
+  /* A URL de verdade vem daqui, não do texto do console — que às vezes não a
+     traz. Sem isto, o filtro de ruído é um chute sobre uma string. */
+  const urlsFalhas = [];
+  p.on("requestfailed", r => urlsFalhas.push(r.url()));
+  p.on("response", r => { if (r.status() >= 400) urlsFalhas.push(r.url()); });
   await p.goto(U, { waitUntil: "networkidle" });
   await p.waitForTimeout(2600);
 
@@ -112,13 +118,15 @@ const ok = (b, m) => { console.log(`   ${b ? "✓" : "✗"} ${m}`); if (!b) falh
   ok(n.fora === "rgb(34, 34, 34)", `o tema do WordPress NÃO foi afetado (${n.fora})`);
   ok(n.atmosfera === "1", `a atmosfera acendeu junto (opacidade ${n.atmosfera})`);
 
-  /* Mesmo ruído declarado dos outros dois verificadores: a logo vem do
-     pixelmartins.com, fora do ar em 17/08/2026. Dentro do site real a URL é do
-     mesmo domínio e sempre resolve; aqui o monograma de mesma largura assume.
-     Impresso, não silenciado — outro erro qualquer continua reprovando. */
-  const RUIDO = /wp-content\/uploads|ERR_CONNECTION_REFUSED|ERR_NAME_NOT_RESOLVED/;
-  const conhecidos = erros.filter(e => RUIDO.test(e));
-  const reais = erros.filter(e => !RUIDO.test(e));
+  /* RUÍDO CONHECIDO: a logo vem do pixelmartins.com, fora do ar em 17/08/2026.
+     Uma mensagem de "Failed to load resource" só é perdoada se TODAS as
+     requisições que falharam forem dela. Qualquer outra URL na lista e a
+     mensagem deixa de estar explicada. */
+  const daLogo = u => /wp-content\/uploads|pixelmartins\.com/.test(u);
+  const soAlogo = urlsFalhas.length > 0 && urlsFalhas.every(daLogo);
+  const deRecurso = e => /Failed to load resource/.test(e);
+  const conhecidos = erros.filter(e => deRecurso(e) && soAlogo);
+  const reais = erros.filter(e => !(deRecurso(e) && soAlogo));
   if (conhecidos.length) {
     console.log(`   · ruído conhecido (logo do WordPress, site fora do ar): ${conhecidos.length}`);
   }

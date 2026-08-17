@@ -194,6 +194,11 @@ async function abrir(p, rota) {
     const p=await b.newPage({viewport:{width:1440,height:900}});
     const erros=[]; p.on("console",m=>m.type()==="error"&&erros.push(m.text()));
     p.on("pageerror",e=>erros.push("pageerror: "+e.message));
+    /* A URL de verdade vem daqui, não do texto do console — que às vezes não
+       a traz. Sem isto o filtro de ruído é um chute sobre uma string. */
+    const urlsFalhas=[];
+    p.on("requestfailed",r=>urlsFalhas.push(r.url()));
+    p.on("response",r=>{ if(r.status()>=400) urlsFalhas.push(r.url()); });
     await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(2400);
     await p.evaluate(`window.scrollTo(0,document.body.scrollHeight)`); await p.waitForTimeout(900);
     /* RUÍDO CONHECIDO, declarado e IMPRESSO — nunca silenciado.
@@ -204,9 +209,16 @@ async function abrir(p, rota) {
        salta. Qualquer erro que não seja esse continua reprovando.
        (Filtro que esconde é filtro que um dia engole um defeito de verdade —
        por isso a contagem aparece no relatório em vez de sumir.) */
-    const RUIDO = /wp-content\/uploads|ERR_CONNECTION_REFUSED|ERR_NAME_NOT_RESOLVED/;
-    const conhecidos = erros.filter(e => RUIDO.test(e));
-    const reais = erros.filter(e => !RUIDO.test(e));
+    /* O FILTRO JULGA PELA URL, não pelo texto. O Chromium loga "Failed to load
+       resource: the server responded with a status of 404 ()" SEM a URL, e um
+       filtro que procurava "wp-content" na mensagem simplesmente não casava —
+       o ruído conhecido voltava a reprovar como se fosse defeito novo. Só é
+       perdoado se TODAS as requisições falhas forem da logo. */
+    const daLogo = u => /wp-content\/uploads|pixelmartins\.com/.test(u);
+    const soAlogo = urlsFalhas.length > 0 && urlsFalhas.every(daLogo);
+    const deRecurso = e => /Failed to load resource/.test(e);
+    const conhecidos = erros.filter(e => deRecurso(e) && soAlogo);
+    const reais = erros.filter(e => !(deRecurso(e) && soAlogo));
     if (conhecidos.length) {
       console.log(`   · ruído conhecido (logo do WordPress, site fora do ar): ${conhecidos.length}`);
     }

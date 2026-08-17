@@ -32,6 +32,12 @@ const ROTAS = [
   p.on("console", m => m.type() === "error" && erros.push(m.text()));
   p.on("pageerror", e => erros.push("pageerror: " + e.message));
 
+  /* A URL de verdade vem daqui, não do texto do console — que às vezes não a
+     traz. Sem isto, o filtro de ruído é um chute sobre uma string. */
+  const urlsFalhas = [];
+  p.on("requestfailed", r => urlsFalhas.push(r.url()));
+  p.on("response", r => { if (r.status() >= 400) urlsFalhas.push(r.url()); });
+
   await p.goto(U, { waitUntil: "networkidle" });
   await p.waitForTimeout(2400);
 
@@ -50,6 +56,51 @@ const ROTAS = [
   ok(s.abertas === s.total, `as ${s.total} seções aparecem em sequência (${s.abertas} abertas)`);
   ok(s.classe, "o <html> ganhou a classe .home");
   ok(s.voltar === 0, `nenhum botão "Voltar ao início" visível na própria home (${s.voltar})`);
+
+  /* ═══════════════════════════════════════════════════════════════════════
+     A PROVA QUE FALTAVA, e a falta dela custou a home inteira.
+
+     Em 17/08 o usuário reportou "não consigo visualizar a página principal,
+     as informações somem". Estava certo: 23 dos 25 blocos ficavam invisíveis,
+     quatro das cinco seções em branco. A causa foi um querySelector no
+     singular pegando só a primeira das cinco páginas ativas.
+
+     TODAS as bancadas passaram — porque TODAS forçavam `.dentro` antes de
+     medir. Elas testavam o estado que eu queria, não o que a página produz
+     sozinha. Um teste que prepara o cenário que vai medir não mede nada.
+
+     Este bloco ROLA e NÃO AJUDA: nenhum classList.add, nenhum atalho. É o
+     único jeito de provar que a revelação funciona sozinha.
+     ═══════════════════════════════════════════════════════════════════════ */
+  console.log("\n== a home revela ao rolar (sem ajuda nenhuma) ==");
+  {
+    const q = await b.newPage({ viewport: { width: 1440, height: 900 } });
+    await q.goto(U, { waitUntil: "networkidle" });
+    await q.waitForTimeout(2400);
+    await q.evaluate(async () => {
+      for (let y = 0; y < document.body.scrollHeight; y += 350) {
+        window.scrollTo(0, y);
+        await new Promise(r => setTimeout(r, 110));
+      }
+    });
+    await q.waitForTimeout(1400);
+    const r = await q.evaluate(() => {
+      const fora = [];
+      let total = 0;
+      document.querySelectorAll(".pagina").forEach(pg => {
+        pg.querySelectorAll(".sobe").forEach(e => {
+          total++;
+          if (parseFloat(getComputedStyle(e).opacity) < 0.1) {
+            fora.push((pg.dataset.rota || "?") + " " + String(e.className).slice(0, 22));
+          }
+        });
+      });
+      return { total, fora: fora.slice(0, 6), quantos: fora.length };
+    });
+    ok(r.quantos === 0,
+       `os ${r.total} blocos da home apareceram (${r.quantos} invisíveis${r.quantos ? ": " + r.fora.join(", ") : ""})`);
+    await q.close();
+  }
 
   console.log("\n== cada rota ==");
   for (const [rota, marca] of ROTAS) {
@@ -138,12 +189,15 @@ const ROTAS = [
   ok(semJs.texto > 4000, `e o texto todo está lá (${semJs.texto} caracteres)`);
   await ctx.close();
 
-  /* Mesmo ruído declarado do auditar.js: a logo vem do pixelmartins.com, que
-     em 17/08/2026 estava fora do ar. A página trata com o monograma de mesma
-     largura. Continua IMPRESSO — o dia em que sobrar outro erro, reprova. */
-  const RUIDO = /wp-content\/uploads|ERR_CONNECTION_REFUSED|ERR_NAME_NOT_RESOLVED/;
-  const conhecidos = erros.filter(e => RUIDO.test(e));
-  const reais = erros.filter(e => !RUIDO.test(e));
+  /* RUÍDO CONHECIDO: a logo vem do pixelmartins.com, fora do ar em 17/08/2026.
+     Uma mensagem de "Failed to load resource" só é perdoada se TODAS as
+     requisições que falharam forem dela. Qualquer outra URL na lista e a
+     mensagem deixa de estar explicada. */
+  const daLogo = u => /wp-content\/uploads|pixelmartins\.com/.test(u);
+  const soAlogo = urlsFalhas.length > 0 && urlsFalhas.every(daLogo);
+  const deRecurso = e => /Failed to load resource/.test(e);
+  const conhecidos = erros.filter(e => deRecurso(e) && soAlogo);
+  const reais = erros.filter(e => !(deRecurso(e) && soAlogo));
   if (conhecidos.length) {
     console.log(`   · ruído conhecido (logo do WordPress, site fora do ar): ${conhecidos.length}`);
   }

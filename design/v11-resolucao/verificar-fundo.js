@@ -8,6 +8,12 @@ const px=`(function(){var c=document.getElementById("poeira"),x=c.getContext("2d
   const b=await chromium.launch();
   const p=await b.newPage({viewport:{width:1440,height:900}});
   const erros=[]; p.on("pageerror",e=>erros.push(e.message));
+
+  /* A URL de verdade vem daqui, não do texto do console — que às vezes não a
+     traz. Sem isto, o filtro de ruído é um chute sobre uma string. */
+  const urlsFalhas = [];
+  p.on("requestfailed", r => urlsFalhas.push(r.url()));
+  p.on("response", r => { if (r.status() >= 400) urlsFalhas.push(r.url()); });
   p.on("console",m=>m.type()==="error"&&erros.push(m.text()));
   await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(2200);
   await p.evaluate(()=>{document.documentElement.classList.add("noite");window.dispatchEvent(new Event("pm-tema"))});
@@ -53,10 +59,19 @@ const px=`(function(){var c=document.getElementById("poeira"),x=c.getContext("2d
   const nCel=await q.evaluate(px); ok(nCel>60, `mas a poeira roda no celular (${nCel} pixels)`);
   await cel.close();
 
-  const RUIDO=/wp-content|ERR_CONNECTION_REFUSED/;
-  const reais=erros.filter(function(e){return !RUIDO.test(e)});
-  if(erros.length-reais.length) console.log("   · ruido conhecido (logo, site fora do ar): "+(erros.length-reais.length));
-  ok(reais.length===0, "sem erro "+(reais.length?"("+reais.join(" | ")+")":"(nenhum alem do ruido declarado)"));
+  /* RUÍDO CONHECIDO: a logo vem do pixelmartins.com, fora do ar em 17/08/2026.
+     Uma mensagem de "Failed to load resource" só é perdoada se TODAS as
+     requisições que falharam forem dela. Qualquer outra URL na lista e a
+     mensagem deixa de estar explicada. */
+  const daLogo = u => /wp-content\/uploads|pixelmartins\.com/.test(u);
+  const soAlogo = urlsFalhas.length > 0 && urlsFalhas.every(daLogo);
+  const deRecurso = e => /Failed to load resource/.test(e);
+  const conhecidos = erros.filter(e => deRecurso(e) && soAlogo);
+  const reais = erros.filter(e => !(deRecurso(e) && soAlogo));
+  if (conhecidos.length) {
+    console.log(`   · ruído conhecido (logo do WordPress, site fora do ar): ${conhecidos.length}`);
+  }
+  ok(reais.length === 0, `sem erro de console ${reais.length ? "(" + reais.join(" | ") + ")" : "(nenhum além do ruído declarado)"}`);
   await b.close();
   console.log(mau? `\nREPROVOU (${mau})` : "\nPASSOU");
   process.exit(mau?1:0);

@@ -1741,12 +1741,17 @@ window.pmMola = (function () {
        segue a leitura na ordem em que ela deve ser lida. Só os de cima —
        animar o que está fora da tela é gastar quadro em quem não olha, e o
        revelar-ao-rolar já cuida do resto. */
+    /* querySelector SINGULAR aqui é DE PROPÓSITO (≠ do defeito do observador
+       lá embaixo): quero animar a entrada da primeira página da rota, e numa
+       rota interna só existe uma. Voltando para a home, animar o topo dela e
+       deixar o resto para o revelar-ao-rolar é exatamente o certo. */
     var nova = document.querySelector(".pagina.ativa");
     if (nova && window.pmMola && !quieto) {
       var topo = [].slice.call(nova.querySelectorAll(":scope > .secao > .caixa > *")).slice(0, 4);
       if (topo.length) window.pmMola.sequencia(topo, 45, 22);
     }
 
+    /* singular de propósito: o foco vai para UM lugar, o primeiro título */
     var alvo = document.querySelector(".pagina.ativa h1, .pagina.ativa h2");
     if (alvo) {
       /* tabindex -1 para poder receber foco sem entrar na ordem de tabulação */
@@ -2078,9 +2083,32 @@ window.pmMola = (function () {
    ─────────────────────────────────────────────────────────────────────────── */
 (function () {
   "use strict";
+  /* ⚠️ ESTE ERRO APAGOU QUATRO QUINTOS DA HOME, e nenhuma bancada viu.
+     A versão anterior era:
+
+         var pag = document.querySelector(".pagina.ativa");
+         return (pag || document).querySelectorAll(".sobe:not(.dentro)");
+
+     querySelector — no SINGULAR — devolve a PRIMEIRA correspondência. Numa
+     rota interna há só uma página ativa e funcionava; na home há CINCO, e ele
+     pegava só o hero. Os 23 blocos das outras quatro nunca entravam no
+     observador e ficavam em opacity:0 para sempre. A pessoa rolava e via
+     seções em branco.
+
+     E as bancadas passaram porque FORÇAVAM .dentro antes de medir — elas
+     testavam o estado que eu queria, não o que a página produz sozinha.
+     Nenhum teste rolava a home de verdade. É por isso que existe agora o
+     bloco "a home revela ao rolar" em verificar-rotas.js: ele rola e não
+     ajuda ninguém. */
   function todos() {
-    var pag = document.querySelector(".pagina.ativa");
-    return (pag || document).querySelectorAll(".sobe:not(.dentro)");
+    var ativas = document.querySelectorAll(".pagina.ativa");
+    if (!ativas.length) return document.querySelectorAll(".sobe:not(.dentro)");
+    var fora = [];
+    for (var i = 0; i < ativas.length; i++) {
+      var achados = ativas[i].querySelectorAll(".sobe:not(.dentro)");
+      for (var j = 0; j < achados.length; j++) fora.push(achados[j]);
+    }
+    return fora;
   }
   if (!("IntersectionObserver" in window)) {
     var t = document.querySelectorAll(".sobe");
