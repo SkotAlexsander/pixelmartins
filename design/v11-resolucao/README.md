@@ -52,13 +52,30 @@ das letras*. Máscara é palavra dos dois ofícios — matte em composição,
 - **O fundo atmosférico saiu.** Se voltar, entra no bloco escuro.
 - **O azul da marca ficou.** Trocar a cor do logo é rebranding, não design.
 
-## O que a proposta ainda NÃO tem
+## Está completa
 
-Trajetória · Sobre com o retrato de 150 frames · alternância de tema ·
-menu de celular · empacotamento para o widget do Elementor.
+Entraram em 17/08: **Sobre** com o retrato de 150 quadros (jsDelivr) ·
+**Trajetória** · **modo escuro** · **menu de celular** · âncoras compensando a
+barra fixa · **empacotamento** para o widget.
 
-É uma direção, não a página portada — e portar antes de ele ver seria gastar
-horas numa aposta.
+### O modo escuro não é uma inversão
+
+Nesta direção a luz é **estrutura**, não preferência — inverter tudo faria o
+bloco de trabalho sumir no meio dos outros. A regra que sobrevive à troca é a
+verdadeira: **o trabalho é sempre a superfície destacada.** No claro ele é mais
+escuro que a sala; no escuro, mais claro que o fundo. É como um monitor ligado
+se comporta em qualquer das duas luzes.
+
+### O empacotamento
+
+`empacotar.js` gera dois arquivos e **para com erro** se um seletor global
+mudar de forma no fonte e a troca não bater mais — porque um `a{color:inherit}`
+colado sem prefixo apaga a cor de todos os links do WordPress.
+
+| | |
+|---|---|
+| `fragmento.html` | é isto que se cola no widget |
+| `preview-wp.html` | o fragmento dentro de um tema **agressivo de propósito** (Georgia, links vermelhos, margens próprias) — porque sozinho ele sempre funciona; o que quebra é o convívio |
 
 ## O que a bancada mediu
 
@@ -67,7 +84,7 @@ horas numa aposta.
 · **teclado** (21 focáveis, todos com anel) · **movimento reduzido** (o título
 pinta direto) · **console** limpo. Tudo **PASSOU**.
 
-Três defeitos foram achados por medição, não por leitura:
+Seis defeitos foram achados por medição, não por leitura:
 
 1. **No celular o título perdia a última linha.** O canvas quebrava as linhas
    por conta própria; o navegador quebrava diferente. Agora ele *pergunta* ao
@@ -79,3 +96,11 @@ Três defeitos foram achados por medição, não por leitura:
    `color(srgb …)` como 0–255 quando vão de 0 a 1, e reprovou `.nav a` com 3,10
    onde o real era 5,62. Sem conferir, o "conserto" teria escurecido uma cor
    que já passava.
+4. **A barra não cabia em 320px.** Marca + tema + menu + "Começar" somavam
+   372px numa tela de 320 — 52px cortados em silêncio pelo `overflow-x: clip`.
+   O teste antigo só encolhia a partir de 1440 e não via; agora ele **carrega já
+   na largura**, que é o que o visitante faz, e diz **quem** vaza.
+5. **O canvas do retrato ficava contaminado** por imagem de outra origem. O
+   desenho estava certo — o defeito só existia para quem tentasse *medir*.
+6. **Clicar na navegação deixava a seção atrás da barra fixa.** `scroll-padding-top`
+   resolve para toda âncora de uma vez.

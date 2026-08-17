@@ -17,3 +17,7 @@ node_modules/
 Thumbs.db
 .DS_Store
 preview-cdn.html
+
+# Gerados por design/v11-resolucao/empacotar.js — o fonte é o index.html de lá.
+# O fragmento sobe (é o entregável); o preview do WordPress simulado, não.
+design/v11-resolucao/preview-wp.html

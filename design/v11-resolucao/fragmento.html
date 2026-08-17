@@ -1,61 +1,15 @@
-<!DOCTYPE html>
-<html lang="pt-BR">
-<head>
-<meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1">
-<title>pixelmartins.com — direção RESOLUÇÃO (v11, proposta)</title>
-<meta name="description" content="Site e vídeo, feitos pela mesma pessoa. Alex Martins — Porto Alegre, remoto.">
+<!-- ═══════════════════════════════════════════════════════════════════════
+     pixelmartins.com — direção RESOLUÇÃO (v11)
+     GERADO por design/v11-resolucao/empacotar.js — não editar à mão.
+     O fonte é design/v11-resolucao/index.html.
 
-<!-- ─────────────────────────────────────────────────────────────────────────
-     DIREÇÃO: RESOLUÇÃO                                   proposta · 15/08/2026
-
-     O POSICIONAMENTO (corrigido pelo Alex em 15/08, e é a decisão que manda
-     em tudo aqui): o FOCO é PROGRAMAÇÃO. Edição de vídeo é DIFERENCIAL.
-
-     Isso derruba a frase que o site usava desde julho — "seu site E seu vídeo,
-     feitos pela mesma pessoa". Um "e" põe as duas coisas no mesmo peso, e
-     quem oferece duas profissões com o mesmo peso lê como quem não fechou
-     nenhuma. Diferencial não divide o palco: ele entra depois da prova, quando
-     o visitante já decidiu que o sujeito constrói, e vira a razão de escolher
-     este e não outro. Por isso Vídeo desceu para depois de Serviços, e o
-     argumento dela agora é comparativo, não somativo.
-
-     A TESE: RESOLUÇÃO. O nome da marca é pixelmartins e o pixel é a unidade
-     da tela. O trabalho dele é levar algo de borrado a resolvido — briefing
-     vira produto no ar. A Sala de Edição (v5–v10) escolhia o vocabulário de
-     mesa de corte (régua, timecode, playhead, monitor de programa) e encaixava
-     o código lá dentro como conteúdo; com o foco em programação, essa metáfora
-     passou a vender a metade errada.
-
-     O SISTEMA: a página se organiza por LUZ.
-       claro   o argumento — quem fala, o que entrega, quanto custa de risco
-       escuro  o produto rodando — software se vê numa tela acesa no escuro
-     Portfólio de dev é escuro do começo ao fim por hábito, não por decisão.
-     Aqui o escuro é reservado, então quando ele chega significa alguma coisa.
-     E o claro ganha a leitura no celular de dia, que é onde o cliente está.
-
-     A ASSINATURA: o hero resolve POR DENTRO DAS LETRAS. Máscara é vocabulário
-     dos dois mundos (matte em composição, background-clip em CSS). É o único
-     lugar onde gasto ousadia — o resto é disciplina.
-
-     A OUSADIA MENOR, uma vez só: a carta de calibração SMPTE abre a seção de
-     VÍDEO — onde é o assunto. Ela chegou a abrir a seção de código e saiu de
-     lá: é o artefato mais reconhecível da produção de vídeo, e anunciava a
-     metade errada no primeiro corte da página.
-
-     O TEMA: a luz aqui é estrutura, não preferência, então o modo escuro não
-     inverte — ver o comentário em html.noite. A regra que sobrevive à troca é
-     "o trabalho é sempre a superfície destacada".
-
-     O QUE NÃO MUDEI, e por quê: o azul da marca. Trocar a cor do logo não é
-     reformular design, é rebranding — não me cabe sem ele pedir.
-     ───────────────────────────────────────────────────────────────────────── -->
-
+     Cole ISTO num widget HTML do Elementor, numa página com o template
+     "Elementor Canvas". Tudo mora dentro de #pm; nada aqui altera o resto
+     do site.
+     ═══════════════════════════════════════════════════════════════════════ -->
 <link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,600;12..96,800&family=Instrument+Sans:wght@400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet">
-
 <style>
+
 /* ═══ TOKENS ═══════════════════════════════════════════════════════════════
    Duas luzes, uma tinta, uma marca. Nada além disso — a página tem quatro
    cores e uma faixa de calibração; toda a variedade vem de peso e escala. */
@@ -138,7 +92,7 @@ html.noite{
   --marca-tex: #05070C;
 }
 
-*,*::before,*::after{box-sizing:border-box}
+#pm,#pm *,#pm *::before,#pm *::after{box-sizing:border-box}
 html{
   -webkit-text-size-adjust:100%;
   /* A barra é sticky, então uma âncora leva o topo da seção para DEBAIXO dela:
@@ -150,15 +104,15 @@ html{
   scroll-behavior:smooth;
 }
 @media (prefers-reduced-motion:reduce){ html{ scroll-behavior:auto } }
-body{
+#pm{
   margin:0; background:var(--sala); color:var(--tinta);
   font-family:var(--corpo); font-size:clamp(1rem,.97rem + .18vw,1.075rem);
   line-height:1.6; -webkit-font-smoothing:antialiased;
   overflow-x:clip;
 }
-h1,h2,h3,h4,p,ul,ol,figure,dl,dd{margin:0}
-img,canvas,svg{display:block;max-width:100%}
-a{color:inherit;text-decoration:none}
+#pm h1,#pm h2,#pm h3,#pm h4,#pm p,#pm ul,#pm ol,#pm figure,#pm dl,#pm dd{margin:0}
+#pm img,#pm canvas,#pm svg{display:block;max-width:100%}
+#pm a{color:inherit;text-decoration:none}
 
 /* ═══ TIPOGRAFIA ═══════════════════════════════════════════════════════════
    Bricolage Grotesque é variável em tamanho ÓPTICO: nos títulos grandes ela
@@ -498,7 +452,7 @@ html.pintado #tela-titulo{ opacity:1 }
 .rodape-int{ display:flex; flex-wrap:wrap; gap:.6rem 1.5rem; justify-content:space-between; font-family:var(--dado); font-size:.7rem; letter-spacing:.06em; color:var(--tinta-3) }
 
 /* ═══ PISO DE QUALIDADE ════════════════════════════════════════════════════ */
-:focus-visible{ outline:2px solid var(--marca); outline-offset:3px; border-radius:2px }
+#pm :focus-visible{ outline:2px solid var(--marca); outline-offset:3px; border-radius:2px }
 .escuro :focus-visible{ outline-color:var(--marca-2) }
 .pular{ position:absolute; left:-9999px; top:0; z-index:99; background:var(--marca); color:#fff; padding:.75rem 1.1rem; font-family:var(--dado); font-size:.8rem }
 .pular:focus{ left:.5rem; top:.5rem }
@@ -509,13 +463,18 @@ html.pintado #tela-titulo{ opacity:1 }
 html:not(.js) .sobe{ opacity:1; transform:none }
 
 @media (prefers-reduced-motion:reduce){
-  *,*::before,*::after{ animation-duration:.01ms !important; transition-duration:.01ms !important }
+  #pm *,#pm *::before,#pm *::after{ animation-duration:.01ms !important; transition-duration:.01ms !important }
   .sobe{ opacity:1; transform:none }
 }
-</style>
-</head>
 
-<body>
+/* ---- defesa contra o CSS do tema do WordPress ---------------------------- */
+#pm{ isolation:isolate; overflow-x:clip }
+#pm ul{ list-style:none; padding:0 }
+#pm p, #pm li{ text-transform:none; letter-spacing:normal }
+#pm .btn, #pm .quadrado{ box-shadow:none; text-decoration:none }
+</style>
+
+<div id="pm">
 <a class="pular" href="#conteudo">Pular para o conteúdo</a>
 
 <header class="barra faixa">
@@ -880,8 +839,10 @@ html:not(.js) .sobe{ opacity:1; transform:none }
   </section>
 
 </main>
+</div>
 
 <script>
+
 /* ═══════════════════════════════════════════════════════════════════════════
    O TÍTULO QUE RESOLVE
 
@@ -1274,6 +1235,5 @@ html:not(.js) .sobe{ opacity:1; transform:none }
 })();
 
 document.getElementById("ano").textContent = new Date().getFullYear();
+
 </script>
-</body>
-</html>

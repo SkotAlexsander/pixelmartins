@@ -23,7 +23,9 @@ const CONTRASTE=`(function(){
     return getComputedStyle(document.body).backgroundColor||"rgb(255,255,255)"}
   var sel=[".lead",".rot",".nav a",".dado-item span",".dado-item b",".item-o-que",".item-pilha",
            ".item-n",".item-links a",".item-links a.sec",".serv p",".serv li",".ficha dd",".ficha dt",
-           ".saida .nome",".saida .fmt",".rodape-int",".sociais a",".email",".calibra .leg",".btn",".btn-vazio"];
+           ".saida .nome",".saida .fmt",".rodape-int",".sociais a",".email",".calibra .leg",".btn",".btn-vazio",
+           ".sobre-texto p",".sobre-texto .d3",".marco .quando",".marco p",".marco h3",
+           "#menu a","#menu a span",".retrato-tarja",".serv h3",".item-nome"];
   var out=[];
   for(var i=0;i<sel.length;i++){
     var el=document.querySelector(sel[i]); if(!el) continue;
@@ -50,11 +52,21 @@ const TOQUE=`(function(){
 (async()=>{
   const b=await chromium.launch();
 
-  for(const claro of [false]){
-    console.log("\n== contraste (AA: 4.5 normal · 3 grande) ==");
+  /* OS DOIS TEMAS. Auditar um e chamar de auditado foi o que quase deixou
+     passar o azul da marca: #1B3AE0 dá 2,2 de contraste sobre preto. Um tema
+     que ninguém mediu é um tema que ninguém aprovou.
+     O menu de celular é aberto à força porque ele nasce display:none e um
+     querySelector nele devolveria a cor certa de um elemento que ninguém vê —
+     ou nada, que é pior: o teste "passaria" por ausência. */
+  for(const noite of [false,true]){
+    console.log(`\n== contraste — tema ${noite?"escuro":"claro"} (AA: 4.5 normal · 3 grande) ==`);
     const p=await b.newPage({viewport:{width:1440,height:900}});
-    await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(2400);
-    await p.evaluate(`document.querySelectorAll(".sobe").forEach(function(e){e.classList.add("dentro")})`);
+    await p.goto(U,{waitUntil:"networkidle"});
+    await p.evaluate(`document.documentElement.classList.toggle("noite", ${noite})`);
+    await p.waitForTimeout(2200);
+    await p.evaluate(`document.querySelectorAll(".sobe").forEach(function(e){e.classList.add("dentro")});
+                      document.documentElement.classList.add("aberto")`);
+    await p.waitForTimeout(250);
     const r=await p.evaluate(CONTRASTE);
     for(const x of r) ok(x.r>=x.min, `${x.s.padEnd(22)} ${x.r.toFixed(2)}  (${x.fs}px, min ${x.min})`);
     await p.close();
@@ -70,14 +82,34 @@ const TOQUE=`(function(){
     await p.close();
   }
 
-  console.log("\n== rolagem lateral ==");
+  /* DOIS CASOS, e eles são diferentes. Carregar já na largura é o que o
+     visitante faz; redimensionar é o que acontece quando ele gira o aparelho.
+     A versão anterior testava só o segundo, e por isso o `.acoes` da barra —
+     que estourava 52px em 320 desde o primeiro pixel — passou batido: ao
+     encolher a partir de 1440 o layout já tinha assentado de outro jeito.
+     Quando falha, o teste diz QUEM vaza: sem o nome, o número manda a gente
+     procurar no escuro. */
+  console.log("\n== rolagem lateral (carregado já na largura) ==");
+  for(const w of [320,360,390,430,768,1024,1440,1920]){
+    const p=await b.newPage({viewport:{width:w,height:900}});
+    await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(2000);
+    await p.evaluate(`document.querySelectorAll(".sobe").forEach(function(e){e.classList.add("dentro")})`);
+    const r=await p.evaluate(`(function(){var lim=document.documentElement.clientWidth,fora=[];
+      document.querySelectorAll("*").forEach(function(e){var b=e.getBoundingClientRect();
+        if(b.right>lim+1) fora.push(e.tagName+"."+String(e.className).slice(0,22))});
+      return {o:document.documentElement.scrollWidth-lim, quem:fora.slice(0,3)}})()`);
+    ok(r.o===0, `${w}px -> overflow-x ${r.o}px${r.quem.length?"  vaza: "+r.quem.join(", "):""}`);
+    await p.close();
+  }
+
+  console.log("\n== rolagem lateral (girando o aparelho) ==");
   {
     const p=await b.newPage({viewport:{width:1440,height:900}});
     await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(2200);
-    for(const w of [320,360,390,430,768,1024,1440,1920]){
-      await p.setViewportSize({width:w,height:900}); await p.waitForTimeout(350);
+    for(const w of [320,390,768,1440]){
+      await p.setViewportSize({width:w,height:900}); await p.waitForTimeout(400);
       const o=await p.evaluate(`document.documentElement.scrollWidth-document.documentElement.clientWidth`);
-      ok(o===0, `${w}px -> overflow-x ${o}px`);
+      ok(o===0, `1440 -> ${w}px: overflow-x ${o}px`);
     }
     await p.close();
   }
