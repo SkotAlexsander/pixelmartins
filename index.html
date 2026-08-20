@@ -83,17 +83,24 @@
 
 
 <!-- ═══════════════════════════════════════════════════════════════════════
-     ATUALIZAÇÃO 20/08/2026 — hero centralizado com máquina de escrever,
-     barra em pílula flutuante e fundo "malha" (constelação) trazidos de
-     volta da direção anterior, a pedido do Alex. Foram corrigidos aqui dois
-     bugs achados por MEDIÇÃO (Playwright, não leitura): (1) o nav da barra
-     sobrepunha as ações em zoom de texto 200% entre ~896px e ~1440px de
-     viewport — corrigido voltando o nav para o fluxo normal de flex (com
-     flex-wrap), abrindo mão da centralização geométrica perfeita em troca
-     de nunca sobrepor; (2) "#pm .hero-conteudo > *" (52rem) vencia por
-     especificidade o max-width próprio de .hero-sub (38rem) e .hero-dados
-     (44rem) em silêncio — o parágrafo de abertura estava saindo com 832px
-     de largura em vez dos 608px pedidos. Ver commit para o detalhe.
+     ATUALIZAÇÃO 20/08/2026 (duas rodadas no mesmo dia), a pedido do Alex.
+
+     RODADA 1 — hero centralizado com máquina de escrever e fundo "malha"
+     (constelação) trazidos de volta da direção anterior. Dois bugs achados
+     por MEDIÇÃO (Playwright, não leitura): (1) o nav da barra sobrepunha as
+     ações em zoom de texto 200% entre ~896px e ~1440px de viewport —
+     corrigido voltando o nav para o fluxo normal de flex (com flex-wrap);
+     (2) "#pm .hero-conteudo > *" (52rem) vencia por especificidade o
+     max-width próprio de .hero-sub (38rem) e .hero-dados (44rem) em
+     silêncio — o parágrafo de abertura saía com 832px em vez de 608px.
+
+     RODADA 2 — a barra E os botões do cabeçalho voltaram ao estilo antigo
+     também: barra reta grudada no topo (não mais pílula flutuante) e botões
+     quadrados de 44px (não mais redondos de 36.8px — que já tinha reprovado
+     a bancada de alvo de toque). O hero centralizado, o fundo "malha" e a
+     posição do nav (fluxo normal de flex, sem sobrepor) da rodada 1
+     continuam como estão. Bancada inteira re-rodada depois das duas
+     rodadas: PASSOU. Ver commits para o detalhe.
      ═══════════════════════════════════════════════════════════════════════ -->
 
 
@@ -275,32 +282,21 @@ a{color:inherit;text-decoration:none}
 .escuro{ background:var(--tela); color:var(--luz) }
 .escuro a{color:var(--luz)}
 
-/* ═══ BARRA — pílula flutuante ═══════════════════════════════════════════
-   Trazida da direção anterior a pedido: em vez de uma faixa presa ao topo,
-   a barra flutua com respiro em volta e cantos bem arredondados, como um
-   cartão de vidro pousado sobre a página. Continua sticky (mesma altura
-   reservada, mesmo scroll-padding), só que o "corpo" que a pessoa vê é o
-   .barra-int por dentro — a .barra em si vira só um contêiner transparente. */
+/* ═══ BARRA ════════════════════════════════════════════════════════════════
+   ESTILO ANTIGO, de volta a pedido: barra reta grudada no topo (sticky),
+   sem pílula flutuante nem borda arredondada — igual à direção anterior. */
 .barra{
   position:sticky; top:0; z-index:50;
-  padding-block-start:.85rem;
-  background:transparent; border-block-end:0;
-  pointer-events:none;
-}
-.barra-int{
-  position:relative;
-  max-width:var(--larg); margin-inline:auto; pointer-events:auto;
-  display:flex; align-items:center; justify-content:space-between;
-  gap:.6rem 1rem; flex-wrap:wrap; min-height:60px;
-  padding:.5rem .6rem .5rem 1rem;
-  border-radius:var(--r-pilula, 9999px);
-  background:color-mix(in srgb, var(--sala-alta) 88%, transparent);
+  background:color-mix(in srgb, var(--sala) 88%, transparent);
   backdrop-filter:saturate(1.4) blur(10px);
   -webkit-backdrop-filter:saturate(1.4) blur(10px);
-  border:1px solid var(--linha);
-  transition:background-color .3s var(--ease), border-color .3s var(--ease);
+  border-block-end:1px solid var(--linha);
 }
-html.noite .barra-int{ background:color-mix(in srgb, var(--tela-2) 78%, transparent) }
+.barra-int{
+  max-width:var(--larg); margin-inline:auto;
+  display:flex; align-items:center; justify-content:space-between;
+  gap:.6rem 1rem; flex-wrap:wrap; min-height:60px;
+}
 /* min-width:0 libera o flex a encolher a marca; sem isso ela guarda a
    largura do conteudo e empurra o resto pra fora. */
 .marca{ min-width:0 }
@@ -351,11 +347,10 @@ html.noite .barra-int{ background:color-mix(in srgb, var(--tela-2) 78%, transpar
   font-family:var(--dado); font-size:.76rem; letter-spacing:.1em;
   text-transform:uppercase; color:var(--tinta-2);
   display:inline-flex; align-items:center; min-height:44px;
-  padding:.6rem .7rem; border-radius:9999px;
+  padding:.6rem .7rem; border-radius:4px;
   transition:color .18s var(--ease), background .18s var(--ease);
 }
-.nav a:hover{color:var(--tinta); background:var(--sala)}
-html.noite .nav a:hover{ background:var(--tela) }
+.nav a:hover{color:var(--tinta); background:var(--sala-alta)}
 
 /* ═══ AS PÁGINAS ═══════════════════════════════════════════════════════════
    Cinco páginas dentro de um arquivo só, trocadas sem recarregar.
@@ -566,49 +561,39 @@ html.noite #atmosfera{ opacity:1 }
 @media (max-width:33.999rem){ .acoes > .btn{ display:none } }
 .menu-cta{ margin-block-start:1.1rem }
 .menu-cta .btn{ width:100%; justify-content:center }
-/* .redondo: o botão pílula circular do header flutuante — substitui o
-   .quadrado nesta direção, mas mantém os mesmos ids/eventos JS.
-   BUG MEDIDO pela própria bancada deste projeto (auditar.js, alvo de toque):
-   2.3rem = 36.8px, abaixo do mínimo de 40px que a página cobra de si mesma
-   em todo o resto. 2.75rem = 44px é o valor que o .quadrado já usava antes
-   e já tinha passado nessa mesma bancada. */
-.redondo,.quadrado{
-  position:relative;
+/* ESTILO ANTIGO, de volta a pedido: botão quadrado (não mais o "redondo"
+   pílula), 44px — já era o valor que passava na bancada de alvo de toque
+   (o "redondo" tinha encolhido para 2.3rem/36.8px, abaixo do piso de 40px
+   que a própria página cobra; não repetir esse erro). */
+.quadrado{
   display:inline-flex; align-items:center; justify-content:center;
-  width:2.75rem; height:2.75rem; flex:none; padding:0; cursor:pointer;
-  background:transparent; color:var(--tinta-2);
-  border:1px solid var(--linha); border-radius:9999px;
-  transition:color .18s var(--ease), border-color .18s var(--ease);
+  width:44px; height:44px; flex:none; padding:0; cursor:pointer;
+  background:transparent; color:var(--tinta);
+  border:1px solid var(--linha); border-radius:4px;
+  transition:border-color .18s var(--ease), background .18s var(--ease);
 }
-.redondo:hover,.quadrado:hover{ border-color:var(--marca); color:var(--tinta) }
-.redondo svg,.quadrado svg{ width:16px; height:16px }
+.quadrado:hover{ background:var(--sala-alta); border-color:var(--tinta-3) }
+.quadrado svg{ width:18px; height:18px }
 /* Um ícone por estado, e o estado mora no <html>. Sem isto os dois aparecem
    sobrepostos — o defeito que o site atual já teve por especificidade. */
 /* #pm eleva a especificidade acima de "#pm svg{display:block}" (0-1-1), que
    senão força os DOIS ícones visíveis ao mesmo tempo — bug real: o sol e a
-   lua apareciam lado a lado no botão de tema. */
+   lua apareciam lado a lado no botão de tema. Isto não é do estilo antigo:
+   é um bug que já existia lá (na fonte crua, sem o #pm gerado pelo
+   empacotar.js, ele nunca aparecia — só se manifestava no fragmento
+   publicado) e continua corrigido aqui mesmo voltando ao visual quadrado. */
 #pm .i-lua,  html.noite #pm .i-sol{ display:none }
 #pm .i-sol,  html.noite #pm .i-lua{ display:block }
 #pm .i-x,    html.aberto #pm .i-menu{ display:none }
 #pm .i-menu, html.aberto #pm .i-x{ display:block }
 @media (min-width:56rem){ #menu-btn{ display:none } }
 
-/* menu de celular: agora um cartão próprio, solto abaixo da pílula, no
-   mesmo espírito visual do header — não mais colado embaixo de uma barra
-   reta. O respiro lateral já vem do padding-inline do próprio <header
-   class="faixa">, então aqui só a margem vertical. */
 #menu{
-  display:none;
-  margin-block-start:.5rem; max-width:var(--larg);
-  border-radius:20px; border:1px solid var(--linha);
-  background:color-mix(in srgb, var(--sala-alta) 92%, transparent);
-  backdrop-filter:blur(10px); -webkit-backdrop-filter:blur(10px);
-  padding:.4rem 1rem 1.1rem; overflow:hidden;
+  display:none; border-block-start:1px solid var(--linha);
+  padding:.4rem var(--gutter) 1.1rem;
 }
-html.noite #menu{ background:color-mix(in srgb, var(--tela-2) 85%, transparent) }
 html.aberto #menu{ display:block }
 @media (min-width:56rem){ html.aberto #menu{ display:none } }
-@media (min-width:76rem){ #menu{ margin-inline:auto } }
 #menu ul{ list-style:none; padding:0; margin:0; max-width:var(--larg); margin-inline:auto }
 #menu a{
   display:flex; align-items:center; justify-content:space-between; gap:1rem;
@@ -1003,12 +988,12 @@ html:not(.js) .sobe{ opacity:1; transform:none }
     </nav>
 
     <div class="acoes">
-      <button type="button" id="tema-btn" class="redondo" aria-label="Ativar o modo escuro">
+      <button type="button" id="tema-btn" class="quadrado" aria-label="Ativar o modo escuro">
         <svg class="i-sol" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><circle cx="12" cy="12" r="4"/><path d="M12 2v2M12 20v2M4.93 4.93l1.41 1.41M17.66 17.66l1.41 1.41M2 12h2M20 12h2M6.34 17.66l-1.41 1.41M19.07 4.93l-1.41 1.41"/></svg>
         <svg class="i-lua" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M12 3a6 6 0 0 0 9 9 9 9 0 1 1-9-9Z"/></svg>
       </button>
 
-      <button type="button" id="menu-btn" class="redondo" aria-label="Abrir o menu" aria-expanded="false" aria-controls="menu">
+      <button type="button" id="menu-btn" class="quadrado" aria-label="Abrir o menu" aria-expanded="false" aria-controls="menu">
         <svg class="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
