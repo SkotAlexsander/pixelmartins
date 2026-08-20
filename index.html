@@ -496,7 +496,7 @@ html.home .pagina.ativa{ animation:none }
    barra de 12px no topo — e no celular, atrás de um botão de menu.
 
    Cada linha diz o QUE tem lá dentro, com um número real, e não só o nome da
-   seção. "Trabalho" é um rótulo; "cinco projetos, todos no ar" é um motivo. */
+   seção. "Trabalho" é um rótulo; "seis projetos, todos no ar" é um motivo. */
 .indice{
   margin-block-start:clamp(3rem,7vw,5rem);
   border-block-start:1px solid var(--linha);
@@ -1170,7 +1170,7 @@ html{overflow-x:hidden}
           <a href="#/trabalho">
             <span class="n">01</span>
             <span class="nome">Trabalho</span>
-            <span class="oque">Cinco projetos, todos no ar. Cada um contado pelo problema
+            <span class="oque">Seis projetos, todos no ar. Cada um contado pelo problema
               que tinha, pela decisão que resolveu e pela prova de que funciona.</span>
             <span class="seta">Ver
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 12h14M13 6l6 6-6 6"/></svg>
@@ -1217,7 +1217,7 @@ html{overflow-x:hidden}
       <div class="caixa">
         <div class="cabeca-pag sobe">
           <a href="#/" class="volta"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M19 12H5M11 18l-6-6 6-6"/></svg>Início</a>
-          <p class="rot" style="margin-block-start:.9rem">Cinco projetos</p>
+          <p class="rot" style="margin-block-start:.9rem">Seis projetos</p>
           <h2 class="d2" style="margin-block-start:.6rem">Tudo aqui roda</h2>
           <p class="lead">Ou tem endereço para abrir agora, ou tem instalador assinado.
             Nenhum é maquete — e cada um diz, no próprio README, o que <em>não</em> foi
@@ -1302,6 +1302,22 @@ html{overflow-x:hidden}
             <span class="item-links">
               <a href="https://github.com/SkotAlexsander/acervo" target="_blank" rel="noopener">Código
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+            </span>
+          </article>
+
+          <article class="item sobe">
+            <span class="item-n">06</span>
+            <h3 class="item-nome">Come-Come</h3>
+            <div class="item-caso">
+              <div><h4>O problema</h4><p>Jogo de perseguição tem um jeito fácil de parecer que funciona e um jeito difícil de provar que funciona: cada fantasma persegue por uma lógica própria, e testar isso jogando manualmente significa repetir a fase dezenas de vezes prestando atenção nos cantos que ninguém nota — exatamente onde mora o bug de colisão.</p></div>
+              <div><h4>A decisão</h4><p>Uma bancada headless <em>joga sozinha</em>: carrega o jogo inteiro num DOM falso e simula partidas aleatórias, cobrindo o ciclo comer → fantasma virar perseguível → voltar para casa, e conferindo que toda pastilha do labirinto é alcançável.</p></div>
+              <div class="prova"><h4>A prova</h4><p>244 pastilhas — o número do fliperama original — e 4 fantasmas, cada um com alvo próprio. Fase inteira limpa numa partida simulada de 12 minutos ao acaso. HTML, CSS e JS puros, três arquivos servidos direto.</p></div>
+            </div>
+            <span class="item-pilha">HTML · CSS · JS puros<br>bancada joga sozinha, sem gente</span>
+            <span class="item-links">
+              <a href="https://skotalexsander.github.io/come-come/" target="_blank" rel="noopener">Abrir
+                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M7 7h10v10M7 17 17 7"/></svg></a>
+              <a class="sec" href="https://github.com/SkotAlexsander/come-come" target="_blank" rel="noopener">Código</a>
             </span>
           </article>
         </div>
