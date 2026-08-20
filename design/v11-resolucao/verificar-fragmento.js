@@ -52,7 +52,7 @@ const ok = (b, m) => { console.log(`   ${b ? "✓" : "✗"} ${m}`); if (!b) falh
        depende de uma escolha estética envelhece junto com ela. */
     const tokenDisplay = getComputedStyle(document.documentElement)
       .getPropertyValue("--display").split(",")[0].trim().replace(/["']/g, "");
-    const doTitulo = g(".hero-titulo .d1").fontFamily.split(",")[0].trim().replace(/["']/g, "");
+    const doTitulo = g("#hero-titulo").fontFamily.split(",")[0].trim().replace(/["']/g, "");
     return {
       existe: !!document.getElementById("pm"),
       fundoPM: g("#pm").backgroundColor,
@@ -62,9 +62,19 @@ const ok = (b, m) => { console.log(`   ${b ? "✓" : "✗"} ${m}`); if (!b) falh
          termina em "sans-serif", e /serif/ casa dentro dela. A primeira versão
          reprovava a página por causa do próprio fallback correto. */
       caiuNoTema: /^(Georgia|Times|"?Times New Roman"?)$/i
-        .test(g(".hero-titulo .d1").fontFamily.split(",")[0].trim().replace(/["']/g, "")),
-      titPintado: document.documentElement.classList.contains("pintado"),
-      margemP: g(".lead").marginTop,
+        .test(g("#hero-titulo").fontFamily.split(",")[0].trim().replace(/["']/g, "")),
+      /* "pintado" era da direção anterior (canvas resolvendo o título em
+         pixels) e não existe mais: o hero atual é a máquina de escrever, e
+         "terminou" aqui significa a frase inteira já no lugar. */
+      titPintado: (document.getElementById("pm-datilo") || {}).textContent === "Eu construo, testo e ponho no ar.",
+      /* margin-BOTTOM, não -top: nesta direção todo .lead que existe no DOM
+         (o do hero, o de cada cabeça de página) já pede margin-block-START
+         de propósito — testar marginTop aqui mediria o espaçamento
+         intencional, não o reset. Nenhum deles mexe em margin-bottom, então
+         ele continua sendo o canário correto: se o p{margin:1em 0} do tema
+         do WordPress vazasse por cima de "#pm p{margin:0}", era aqui que
+         apareceria. */
+      margemP: g(".lead").marginBottom,
       linkInterno: g(".item-links a").textDecorationLine,
       listaServ: g(".serv ul").listStyleType,
       barraPos: g(".barra").position,
@@ -75,8 +85,8 @@ const ok = (b, m) => { console.log(`   ${b ? "✓" : "✗"} ${m}`); if (!b) falh
   ok(a.fundoPM === "rgb(237, 237, 240)", `o fundo da sala está aplicado (${a.fundoPM})`);
   ok(a.doTitulo === a.tokenDisplay && !a.caiuNoTema,
      `o título usa a fonte do token --display, não a do tema (${a.doTitulo})`);
-  ok(a.titPintado, "o título pintou no canvas");
-  ok(a.margemP === "0px", `o reset de margem venceu o tema (.lead margin-top ${a.margemP})`);
+  ok(a.titPintado, "o título terminou de \"digitar\" e está completo");
+  ok(a.margemP === "0px", `o reset de margem venceu o tema (.lead margin-bottom ${a.margemP})`);
   ok(a.linkInterno === "none", `os links de dentro não herdaram o sublinhado do tema (${a.linkInterno})`);
   ok(a.listaServ === "none", `as listas de dentro não herdaram o marcador do tema (${a.listaServ})`);
   ok(a.barraPos === "sticky", `a barra continua sticky dentro do widget (${a.barraPos})`);

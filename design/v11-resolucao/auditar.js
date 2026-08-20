@@ -174,17 +174,21 @@ async function abrir(p, rota) {
 
   console.log("\n== movimento reduzido ==");
   {
+    /* O hero desta direção não tem canvas: o título "resolve" da direção
+       anterior (que pintava #tela-titulo em pixels) saiu, e entrou a máquina
+       de escrever (JS troca o texto de #pm-datilo). Com movimento reduzido,
+       "sem animar" aqui significa a frase inteira já no lugar de imediato,
+       sem esperar o efeito de digitação terminar. */
     const c=await b.newContext({viewport:{width:1440,height:900},reducedMotion:"reduce"});
     const p=await c.newPage();
-    const t0=Date.now();
-    await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(1600);
-    const a=await p.evaluate(`(function(){var c=document.getElementById("tela-titulo"),x=c.getContext("2d");
-      var d=x.getImageData(0,0,c.width,c.height).data,n=0;
-      for(var i=3;i<d.length;i+=4) if(d[i]>10) n++;
-      return {pintados:n, pintado:document.documentElement.classList.contains("pintado"),
+    await p.goto(U,{waitUntil:"networkidle"}); await p.waitForTimeout(600);
+    const a=await p.evaluate(`(function(){
+      var alvo=document.getElementById("pm-datilo");
+      var FRASE="Eu construo, testo e ponho no ar.";
+      return {tituloCompleto:alvo && alvo.textContent===FRASE,
               revelados:document.querySelectorAll(".sobe:not(.dentro)").length,
               opacidade:getComputedStyle(document.querySelector(".lead")).opacity}})()`);
-    ok(a.pintado && a.pintados>3000, `o titulo e pintado direto, sem animar (${a.pintados} pixels)`);
+    ok(a.tituloCompleto, `o titulo ja aparece pronto, sem esperar a maquina de escrever`);
     ok(a.opacidade==="1", `nada fica invisivel esperando animacao (opacidade ${a.opacidade})`);
     await c.close();
   }

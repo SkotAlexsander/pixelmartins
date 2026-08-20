@@ -1,7 +1,7 @@
 const {chromium}=require(process.env.PLAYWRIGHT_DIR);
 const U="file:///A:/github-trabalhos/pixelmartins-site/design/v11-resolucao/index.html";
 let mau=0; const ok=(b,m)=>{console.log(`   ${b?"\u2713":"\u2717"} ${m}`); if(!b)mau++;};
-const px=`(function(){var c=document.getElementById("poeira"),x=c.getContext("2d");
+const px=`(function(){var c=document.getElementById("malha"),x=c.getContext("2d");
   var d=x.getImageData(0,0,c.width,c.height).data,n=0;
   for(var i=3;i<d.length;i+=4) if(d[i]>6) n++; return n})()`;
 (async()=>{
@@ -21,14 +21,13 @@ const px=`(function(){var c=document.getElementById("poeira"),x=c.getContext("2d
 
   console.log("\n== as camadas ==");
   const c=await p.evaluate(()=>{
-    // le do proprio estado interno via amostragem: 3 raios distintos esperados
-    const cv=document.getElementById("poeira");
+    const cv=document.getElementById("malha");
     return { larg:cv.width, alt:cv.height, brilhos:document.querySelectorAll("#atmosfera .brilho, #atmosfera .brilho-2").length,
              vinheta:!!document.querySelector(".vinheta") };
   });
   ok(c.brilhos===2, `dois brilhos em ritmos diferentes (${c.brilhos})`);
   ok(c.vinheta, "a vinheta fecha as bordas");
-  const n1=await p.evaluate(px); ok(n1>300, `a poeira desenha (${n1} pixels)`);
+  const n1=await p.evaluate(px); ok(n1>300, `a malha desenha (${n1} pixels)`);
 
   console.log("\n== o ponteiro empurra o fundo, com atraso ==");
   await p.mouse.move(1400,850); await p.waitForTimeout(140);
@@ -37,7 +36,12 @@ const px=`(function(){var c=document.getElementById("poeira"),x=c.getContext("2d
   const fim=await p.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue("--px").trim());
   ok(parseFloat(meio)<parseFloat(fim), `o deslocamento chega devagar (${meio} -> ${fim}), nao instantaneo`);
   ok(parseFloat(fim)>0.5, `e alcanca o ponteiro (${fim})`);
-  await p.mouse.move(40,40); await p.waitForTimeout(1800);
+  /* 1800ms bastava para o damping da "poeira" (3 camadas, --px * 22 * profundidade).
+     A "malha" amortece mais devagar (--px * 18, sem camadas) e sob rAF
+     throttled em Chromium headless a convergência medida foi: 1000ms=-0.08,
+     1800ms=-0.35, 3000ms=-0.62, 5000ms=-0.80 — monotônica, só mais lenta.
+     3000ms dá folga real sem inflar o teste. */
+  await p.mouse.move(40,40); await p.waitForTimeout(3000);
   const volta=await p.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue("--px").trim());
   ok(parseFloat(volta)<-0.45, `e acompanha de volta (${volta})`);
 
@@ -56,7 +60,7 @@ const px=`(function(){var c=document.getElementById("poeira"),x=c.getContext("2d
   await q.touchscreen.tap(300,700); await q.waitForTimeout(1200);
   const t=await q.evaluate(()=>getComputedStyle(document.documentElement).getPropertyValue("--px").trim());
   ok(t==="" || Math.abs(parseFloat(t)||0)<0.02, `o toque nao empurra o fundo (--px "${t||"nao definido"}")`);
-  const nCel=await q.evaluate(px); ok(nCel>60, `mas a poeira roda no celular (${nCel} pixels)`);
+  const nCel=await q.evaluate(px); ok(nCel>60, `mas a malha roda no celular (${nCel} pixels)`);
   await cel.close();
 
   /* RUÍDO CONHECIDO: a logo vem do pixelmartins.com, fora do ar em 17/08/2026.
