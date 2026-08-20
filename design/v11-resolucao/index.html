@@ -363,22 +363,21 @@ a{color:inherit;text-decoration:none}
 .marca.com-logo .logo{ display:block }
 .marca.com-logo .mono-marca{ display:none }
 .nav{display:none; gap:.3rem}
-/* BUG MEDIDO (Playwright, não suposição): a versão anterior desta regra
-   centralizava o nav com position:absolute + left:50%, ignorando a largura
-   real de marca/ações. Em zoom de texto 200% (html{font-size:32px}) o nav
-   passou a sobrepor as ações em toda a faixa de 896px até ~1440px — ex.: em
-   896px, nav[252,644] contra ações[534,821], 110px de sobreposição.
-   Tentei resolver com CSS Grid (1fr auto 1fr) e MEDI de novo: a coluna
-   "auto" do nav se recusa a encolher mesmo com flex-wrap no filho — ela usa
-   o max-content do nav inteiro, não o mínimo, e a sobreposição continuou
-   idêntica. A correção real é a que esta página já tinha provado antes,
-   na direção anterior: nav como filho de flex NORMAL (sem position, sem
-   grid), com flex-wrap. Marca/nav/ações nunca se sobrepõem porque são
-   irmãos de flex de verdade — o preço é abrir mão da centralização
-   geométrica perfeita (o nav fica no meio do espaço que sobra entre marca e
-   ações, não no centro exato da barra), o que é MUITO melhor que texto
-   ilegível por cima de outro texto. */
-@container pm (min-width:56rem){ .nav{display:flex; flex-wrap:wrap; justify-content:center} }
+/* CENTRALIZAÇÃO GEOMÉTRICA DE VERDADE, retomada agora que ".acoes" perdeu o
+   botão "Começar": a versão anterior (grid 1fr auto 1fr) tinha sido
+   abandonada porque a coluna "auto" do nav não encolhia mesmo com
+   flex-wrap — ela usa o max-content do nav inteiro, e com ".acoes" largo
+   (2 ícones + botão) isso sobrepunha as ações em zoom de texto 200%.
+   Com ".acoes" reduzido a 2 ícones, o nav cabe inteiro (sem quebrar linha)
+   dentro do espaço que sobra mesmo nesse zoom — MEDIDO, não suposto: ver
+   verificar-cabecalho.js e o histórico do commit. Se um dia ".acoes" voltar
+   a crescer, remedir antes de confiar nisto de novo. */
+@container pm (min-width:56rem){
+  .barra-int{ display:grid; grid-template-columns:1fr auto 1fr; align-items:center }
+  .marca{ justify-self:start }
+  .acoes{ justify-self:end }
+  .nav{ display:flex; justify-self:center }
+}
 .nav a{
   font-family:var(--dado); font-size:.76rem; letter-spacing:.1em;
   text-transform:uppercase; color:var(--tinta-2);
@@ -456,9 +455,18 @@ html.js .pagina.ativa{ animation:entrar-pagina .42s var(--ease) both }
 html.home .pagina.ativa{ animation:none }
 @media (prefers-reduced-motion:reduce){ html.js .pagina.ativa{ animation:none } }
 
-/* o link da página atual, na barra e no menu */
+/* o link da página atual, na barra e no menu.
+   BUG MEDIDO: o roteador marca aria-current="page" em QUALQUER <a href="#/…">
+   dentro de #menu cujo destino bata com a rota atual — inclusive o .btn de
+   "Começar um projeto" do rodapé do menu, que também aponta pra #/contato.
+   Sem o :not(.btn) aqui, esta regra (especificidade 1-1-1) vencia o
+   "color:var(--marca-tex)" do próprio .btn (0-1-0): ao abrir o menu na
+   página /contato, o texto do botão ficava exatamente da cor do fundo dele
+   — var(--marca) nos dois — invisível. Achado pela bancada de contraste
+   depois que o "Começar" saiu da barra e o primeiro .btn do documento
+   passou a ser este. */
 .nav a[aria-current="page"]{ color:var(--marca); background:var(--sala-alta) }
-#menu a[aria-current="page"]{ color:var(--marca) }
+#menu a[aria-current="page"]:not(.btn){ color:var(--marca) }
 
 /* ═══ O PONTO DE STATUS DO HERO ════════════════════════════════════════════
    O painel de status (lista de projetos "no ar") saiu a pedido, voltando ao
@@ -588,13 +596,12 @@ html.noite #atmosfera{ opacity:1 }
 }
 
 /* ═══ AÇÕES DA BARRA · TEMA · MENU DE CELULAR ══════════════════════════════ */
+/* O "Começar" saiu da barra a pedido — ficam só os dois ícones (tema/menu).
+   O convite pra começar um projeto continua em dois lugares: o hero (a uma
+   tela de distância em qualquer largura) e o fecho do menu de celular
+   (.menu-cta, logo abaixo). A barra mais leve nos dois lados também é o que
+   deixa o nav central de verdade — ver a nota em ".nav" mais abaixo. */
 .acoes{ display:flex; align-items:center; gap:.5rem }
-/* Abaixo de 34rem a barra tem marca + tema + menu + "Começar", e os quatro
-   somam 372px numa tela de 320: vazavam 52px, cortados em silêncio pelo
-   overflow-x: clip. O CTA sai da barra — ele não some, vira o fecho do menu,
-   e o hero já tem o principal a uma tela de distância. Espremer um botão de
-   ação até ele caber é pior que movê-lo para onde há espaço. */
-@container pm (max-width:33.999rem){ .acoes > .btn{ display:none } }
 #pm .menu-cta{ margin-block-start:1.1rem }
 .menu-cta .btn{ width:100%; justify-content:center }
 /* ESTILO ANTIGO, de volta a pedido: botão quadrado (não mais o "redondo"
@@ -1063,8 +1070,6 @@ html{overflow-x:hidden}
         <svg class="i-menu" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M4 7h16M4 12h16M4 17h16"/></svg>
         <svg class="i-x" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" aria-hidden="true"><path d="M18 6 6 18M6 6l12 12"/></svg>
       </button>
-
-      <a href="#/contato" class="btn">Começar</a>
     </div>
   </div>
 
